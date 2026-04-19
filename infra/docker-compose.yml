@@ -1,0 +1,62 @@
+# Nox — infra local para desenvolvimento
+# Sobe Postgres 16 + Redis 7. Produção usa Supabase + Upstash Redis.
+#
+# Uso:
+#   pnpm docker:up      (docker compose -f infra/docker-compose.yml up -d)
+#   pnpm docker:down
+#   pnpm docker:logs
+#
+# Os valores default aqui só servem em dev local — nunca em produção.
+
+name: nox
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nox-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nox}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nox_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-nox}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C.UTF-8"
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - nox_pg_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nox} -d ${POSTGRES_DB:-nox}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: nox-redis
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory
+      - "256mb"
+      - --maxmemory-policy
+      - "allkeys-lru"
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - nox_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  nox_pg_data:
+    name: nox_pg_data
+  nox_redis_data:
+    name: nox_redis_data

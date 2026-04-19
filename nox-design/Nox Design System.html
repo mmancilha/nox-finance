@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nox — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --bg-primary: #0A0A0A;
+    --bg-secondary: #111111;
+    --bg-elevated: #1A1A1A;
+    --text-primary: #F5F5F7;
+    --text-secondary: #A1A1A6;
+    --text-muted: #6C6C70;
+    --accent: #F0A854;
+    --accent-success: #30D158;
+    --accent-danger: #FF453A;
+    --border: #2C2C2E;
+    --border-subtle: #1C1C1E;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  .ds-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 40px;
+    height: 52px;
+  }
+
+  .ds-nav-logo { display: flex; align-items: center; gap: 10px; margin-right: 24px; }
+  .ds-nav-logo span { font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+
+  .ds-nav a {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .ds-nav a:hover { color: var(--text-primary); background: var(--border-subtle); }
+
+  /* SECTIONS */
+  .ds-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .ds-section:last-child { border-bottom: none; }
+
+  .ds-section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .ds-section-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .ds-section-sub {
+    color: var(--text-secondary);
+    font-size: 16px;
+    margin-bottom: 52px;
+    max-width: 560px;
+  }
+
+  .ds-row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .ds-col { flex: 1; min-width: 200px; }
+
+  /* HERO BANNER */
+  .ds-hero {
+    padding: 60px 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+  .ds-hero-text { flex: 1; }
+  .ds-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(240,168,84,0.1);
+    border: 1px solid rgba(240,168,84,0.25);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+  }
+  .ds-hero h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    margin-bottom: 16px;
+  }
+  .ds-hero h1 .accent { color: var(--accent); }
+  .ds-hero p { color: var(--text-secondary); font-size: 18px; font-weight: 300; }
+
+  /* TWEAKS PANEL */
+  #tweaks-panel {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    width: 240px;
+    z-index: 999;
+    display: none;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+  }
+  #tweaks-panel.visible { display: block; }
+  .tweaks-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+  .tweaks-row { margin-bottom: 14px; }
+  .tweaks-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 400; }
+  .tweaks-row input[type=range] { width: 100%; accent-color: var(--accent); }
+  .tweaks-row select {
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+  }
+  .tweaks-swatch-row { display: flex; gap: 6px; }
+  .tweaks-swatch {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.1s;
+  }
+  .tweaks-swatch:hover { transform: scale(1.1); }
+  .tweaks-swatch.active { border-color: white; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="ds-nav">
+  <div class="ds-nav-logo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <circle cx="11" cy="11" r="11" fill="#0A0A0A"/>
+      <path d="M14.5 4.2A7.8 7.8 0 1 0 14.5 19.8 7 7 0 0 1 14.5 4.2Z" fill="#F0A854"/>
+    </svg>
+    <span>nox</span>
+  </div>
+  <a href="#logos">Logo</a>
+  <a href="#tokens">Tokens</a>
+  <a href="#type">Tipografia</a>
+  <a href="#login">Login</a>
+  <a href="#hero">Hero</a>
+  <a href="#components">Componentes</a>
+</nav>
+
+<div id="app"></div>
+
+<div id="tweaks-panel">
+  <div class="tweaks-title">Tweaks</div>
+  <div class="tweaks-row">
+    <div class="tweaks-label">Accent color</div>
+    <div class="tweaks-swatch-row">
+      <div class="tweaks-swatch active" style="background:#F0A854" data-color="#F0A854" title="Âmbar"></div>
+      <div class="tweaks-swatch" style="background:#E8C97A" data-color="#E8C97A" title="Ouro"></div>
+      <div class="tweaks-swatch" style="background:#F07854" data-color="#F07854" title="Cobre"></div>
+      <div class="tweaks-swatch" style="background:#B0F054" data-color="#B0F054" title="Lima"></div>
+      <div class="tweaks-swatch" style="background:#54C5F0" data-color="#54C5F0" title="Gelo"></div>
+    </div>
+  </div>
+  <div class="tweaks-row">
+    <div class="tweaks-label">Logo variant</div>
+    <select id="tweak-logo">
+      <option value="crescent">Crescent</option>
+      <option value="eye">Eye</option>
+      <option value="shield">Shield</option>
+    </select>
+  </div>
+  <div class="tweaks-row">
+    <div class="tweaks-label">Login layout</div>
+    <select id="tweak-login">
+      <option value="a">Opção A — Centrado</option>
+      <option value="b">Opção B — Bottom sheet</option>
+      <option value="c">Opção C — Minimalista</option>
+    </select>
+  </div>
+</div>
+
+<script type="text/babel">
+
+const { useState, useEffect, useRef } = React;
+
+// ─── TOKENS ──────────────────────────────────────────────────────────────────
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#F07854",
+  "logoVariant": "shield",
+  "loginLayout": "c"
+}/*EDITMODE-END*/;
+
+// ─── LOGO MARKS ──────────────────────────────────────────────────────────────
+function LogoCrescent({ size = 40, color = '#F0A854', bg = '#0A0A0A' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="20" fill={bg}/>
+      <path d="M25 7.5A12.5 12.5 0 1 0 25 32.5 11 11 0 0 1 25 7.5Z" fill={color}/>
+    </svg>
+  );
+}
+
+function LogoEye({ size = 40, color = '#F0A854', bg = '#0A0A0A' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="20" fill={bg}/>
+      {/* Eye outline */}
+      <path d="M6 20C6 20 11 11 20 11C29 11 34 20 34 20C34 20 29 29 20 29C11 29 6 20 6 20Z" stroke={color} strokeWidth="1.5" fill="none"/>
+      {/* Moon crescent inside eye */}
+      <path d="M23 15.5A4.5 4.5 0 1 0 23 24.5 3.5 3.5 0 0 1 23 15.5Z" fill={color}/>
+    </svg>
+  );
+}
+
+function LogoShield({ size = 40, color = '#F0A854', bg = '#0A0A0A' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="20" fill={bg}/>
+      <path d="M20 8L30 12V20C30 25.5 25.5 30.5 20 32C14.5 30.5 10 25.5 10 20V12L20 8Z" stroke={color} strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
+      <path d="M23.5 14A3.5 3.5 0 1 0 23.5 21.5 2.8 2.8 0 0 1 23.5 14Z" fill={color}/>
+    </svg>
+  );
+}
+
+function AppIcon({ variant = 'crescent', size = 60, accent = '#F0A854', elevated = false }) {
+  const r = size * 0.22;
+  const Mark = variant === 'eye' ? LogoEye : variant === 'shield' ? LogoShield : LogoCrescent;
+  return (
+    <div style={{
+      width: size, height: size,
+      borderRadius: r,
+      background: elevated ? '#1C1C1E' : '#0A0A0A',
+      border: '1px solid #2C2C2E',
+      borderTop: elevated ? '1px solid #3A3A3C' : '1px solid #2C2C2E',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      boxShadow: `0 0 0 1px rgba(0,0,0,0.5), 0 8px 32px rgba(0,0,0,0.5)`,
+      flexShrink: 0,
+    }}>
+      <Mark size={size * 0.62} color={accent} bg="transparent" />
+    </div>
+  );
+}
+
+// ─── LOGO SECTION ────────────────────────────────────────────────────────────
+function LogoSection({ accent, logoVariant }) {
+  const marks = [
+    { id: 'crescent', label: 'Crescent', desc: 'Fase lunar — simples, reconhecível, funciona em 16px' },
+    { id: 'eye',      label: 'Eye',      desc: 'Olho guardião com lua interna — mais narrativo' },
+    { id: 'shield',   label: 'Shield',   desc: 'Escudo-guardião com crescent — confiança + proteção' },
+  ];
+
+  return (
+    <section className="ds-section" id="logos">
+      <div className="ds-section-label">01 — Logo System</div>
+      <h2 className="ds-section-title">Identidade visual</h2>
+      <p className="ds-section-sub">Três direções para o símbolo. Todas funcionam em 16px e como ícone de app. O wordmark usa DM Sans 800, lowercase, tracking −0.04em.</p>
+
+      {/* MARK VARIATIONS */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginBottom: 48 }}>
+        {marks.map(m => {
+          const Mark = m.id === 'eye' ? LogoEye : m.id === 'shield' ? LogoShield : LogoCrescent;
+          const active = m.id === logoVariant;
+          return (
+            <div key={m.id} style={{
+              background: active ? 'rgba(240,168,84,0.06)' : '#111',
+              border: `1px solid ${active ? 'rgba(240,168,84,0.3)' : '#1C1C1E'}`,
+              borderRadius: 20,
+              padding: '36px 28px',
+              transition: 'all 0.2s',
+            }}>
+              {/* Dark bg version */}
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center', marginBottom: 24 }}>
+                <Mark size={64} color={accent} bg="transparent" />
+                <Mark size={40} color={accent} bg="transparent" />
+                <Mark size={24} color={accent} bg="transparent" />
+                <Mark size={16} color={accent} bg="transparent" />
+              </div>
+              {/* Wordmark */}
+              <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 20 }}>
+                <Mark size={32} color={accent} bg="transparent" />
+                <span style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 28, letterSpacing: '-0.04em' }}>nox</span>
+              </div>
+              {/* Light variant */}
+              <div style={{
+                background: '#F5F5F7', borderRadius: 12, padding: '16px 20px',
+                display: 'flex', gap: 12, alignItems: 'center', marginBottom: 16,
+              }}>
+                <Mark size={28} color="#0A0A0A" bg="transparent" />
+                <span style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 22, letterSpacing: '-0.04em', color: '#0A0A0A' }}>nox</span>
+              </div>
+              <div style={{ color: active ? accent : '#6C6C70', fontSize: 12, fontWeight: 500, marginBottom: 4 }}>
+                {m.label} {active && '← selecionado'}
+              </div>
+              <div style={{ color: '#6C6C70', fontSize: 12 }}>{m.desc}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* APP ICONS */}
+      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+        {[120, 80, 60, 44, 32, 20].map(sz => (
+          <div key={sz} style={{ textAlign: 'center' }}>
+            <AppIcon variant={logoVariant} size={sz} accent={accent} />
+            <div style={{ color: '#6C6C70', fontSize: 11, marginTop: 8 }}>{sz}px</div>
+          </div>
+        ))}
+        <div style={{ marginLeft: 'auto', background: '#F5F5F7', borderRadius: 20, padding: '16px 20px', display: 'flex', gap: 12, alignItems: 'center' }}>
+          {[60, 44, 32].map(sz => (
+            <div key={sz} style={{ textAlign: 'center' }}>
+              <AppIcon variant={logoVariant} size={sz} accent="#0A0A0A" />
+              <div style={{ color: '#A1A1A6', fontSize: 11, marginTop: 6 }}>{sz}px</div>
+            </div>
+          ))}
+          <div style={{ marginLeft: 8 }}>
+            <div style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 11, color: '#6C6C70', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Light</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── COLOR TOKENS ─────────────────────────────────────────────────────────────
+function ColorTokens({ accent }) {
+  const tokens = [
+    { name: 'bg-primary',     value: '#0A0A0A', label: 'Fundo principal' },
+    { name: 'bg-secondary',   value: '#111111', label: 'Fundo secundário' },
+    { name: 'bg-elevated',    value: '#1A1A1A', label: 'Cartões e modais' },
+    { name: 'text-primary',   value: '#F5F5F7', label: 'Texto principal' },
+    { name: 'text-secondary', value: '#A1A1A6', label: 'Texto de apoio' },
+    { name: 'text-muted',     value: '#6C6C70', label: 'Placeholder / hint' },
+    { name: 'accent',         value: accent,    label: 'Âmbar — CTA, links' },
+    { name: 'accent-success', value: '#30D158', label: 'Receita / positivo' },
+    { name: 'accent-danger',  value: '#FF453A', label: 'Despesa / negativo' },
+    { name: 'border',         value: '#2C2C2E', label: 'Borda padrão' },
+    { name: 'border-subtle',  value: '#1C1C1E', label: 'Divisórias suaves' },
+  ];
+
+  return (
+    <section className="ds-section" id="tokens">
+      <div className="ds-section-label">02 — Color Tokens</div>
+      <h2 className="ds-section-title">Paleta & tokens</h2>
+      <p className="ds-section-sub">Todos os tokens usados no sistema. O âmbar é o único acento — quente contra o preto absoluto, nunca frio.</p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
+        {tokens.map(t => {
+          const isLight = ['#F5F5F7','#A1A1A6'].includes(t.value);
+          return (
+            <div key={t.name} style={{ background: '#111', border: '1px solid #1C1C1E', borderRadius: 16, overflow: 'hidden' }}>
+              <div style={{
+                height: 72,
+                background: t.value,
+                borderBottom: '1px solid #1C1C1E',
+                position: 'relative',
+              }}>
+                {t.value === '#0A0A0A' && <div style={{ position: 'absolute', inset: 0, border: '1px solid #2C2C2E', borderRadius: 0 }} />}
+              </div>
+              <div style={{ padding: '12px 14px' }}>
+                <div style={{ fontFamily: 'DM Sans', fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{t.name}</div>
+                <div style={{ color: '#6C6C70', fontSize: 12, marginBottom: 4 }}>{t.label}</div>
+                <div style={{ color: accent, fontSize: 11, fontFamily: 'monospace' }}>{t.value}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+// ─── TYPOGRAPHY ───────────────────────────────────────────────────────────────
+function Typography({ accent }) {
+  return (
+    <section className="ds-section" id="type">
+      <div className="ds-section-label">03 — Tipografia</div>
+      <h2 className="ds-section-title">Escala tipográfica</h2>
+      <p className="ds-section-sub">DM Sans em toda a hierarquia — 800 para títulos, 300 para corpo. Contraste máximo de peso, família única.</p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        {[
+          { label: 'Display', font: 'DM Sans', weight: 800, size: 56, tracking: '-0.04em', text: 'Seu dinheiro. Sob controle.' },
+          { label: 'H1', font: 'DM Sans', weight: 800, size: 40, tracking: '-0.03em', text: 'Finanças pessoais inteligentes' },
+          { label: 'H2', font: 'DM Sans', weight: 700, size: 28, tracking: '-0.02em', text: 'Resumo do mês' },
+          { label: 'H3', font: 'DM Sans', weight: 600, size: 20, tracking: '-0.01em', text: 'Despesas por categoria' },
+          { label: 'Body', font: 'DM Sans', weight: 300, size: 16, tracking: '0', text: 'Conecte suas contas bancárias e veja tudo em um lugar. O Nox analisa seus gastos automaticamente.' },
+          { label: 'Caption', font: 'DM Sans', weight: 400, size: 13, tracking: '0.01em', text: 'Última atualização: agora mesmo' },
+          { label: 'Label', font: 'DM Sans', weight: 500, size: 12, tracking: '0.08em', text: 'RECEITA DO MÊS', upper: true },
+        ].map((t, i) => (
+          <div key={i} style={{
+            padding: '24px 0',
+            borderBottom: '1px solid #1C1C1E',
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: 32,
+          }}>
+            <div style={{ width: 64, flexShrink: 0 }}>
+              <div style={{ color: accent, fontSize: 11, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{t.label}</div>
+              <div style={{ color: '#6C6C70', fontSize: 11, marginTop: 2 }}>{t.font} {t.weight} / {t.size}px</div>
+            </div>
+            <div style={{
+              fontFamily: t.font,
+              fontWeight: t.weight,
+              fontSize: t.size,
+              letterSpacing: t.tracking,
+              textTransform: t.upper ? 'uppercase' : 'none',
+              color: '#F5F5F7',
+              lineHeight: 1.2,
+              flex: 1,
+            }}>{t.text}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── LOGIN SCREENS ────────────────────────────────────────────────────────────
+function LoginA({ accent }) {
+  const [email, setEmail] = useState('');
+  const [focused, setFocused] = useState(false);
+
+  return (
+    <div style={{
+      background: '#0A0A0A',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '0 28px',
+      paddingBottom: 40,
+    }}>
+      {/* Status bar */}
+      <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
+        <span style={{ fontSize: 15, fontWeight: 600, color: '#F5F5F7' }}>9:41</span>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="#F5F5F7"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity="0.3"/></svg>
+          <svg width="15" height="12" viewBox="0 0 15 12" fill="#F5F5F7"><path d="M7.5 2.5L13 7.5H2L7.5 2.5Z"/><circle cx="7.5" cy="9.5" r="1.5"/></svg>
+          <div style={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            <div style={{ width: 22, height: 11, border: '1.5px solid #F5F5F7', borderRadius: 3, position: 'relative', display: 'flex', alignItems: 'center', padding: '0 2px' }}>
+              <div style={{ width: '80%', height: 6, background: '#F5F5F7', borderRadius: 1 }} />
+              <div style={{ position: 'absolute', right: -4, width: 2.5, height: 5, background: '#F5F5F7', borderRadius: 1 }} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* App icon + brand */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: 20 }}>
+        <div style={{ marginBottom: 32 }}>
+          <AppIcon variant="crescent" size={72} accent={accent} />
+        </div>
+        <h1 style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 34, letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: 12, color: '#F5F5F7' }}>
+          Qual é o seu<br />e-mail?
+        </h1>
+        <p style={{ color: '#6C6C70', fontSize: 15, fontWeight: 300, marginBottom: 40, lineHeight: 1.4 }}>
+          O Nox cuida do seu dinheiro enquanto você dorme.
+        </p>
+
+        {/* Email input */}
+        <div style={{
+          background: '#1A1A1A',
+          border: `1.5px solid ${focused ? accent : '#2C2C2E'}`,
+          borderRadius: 16,
+          padding: '16px 18px',
+          marginBottom: 12,
+          transition: 'border-color 0.2s',
+        }}>
+          <div style={{ color: '#6C6C70', fontSize: 11, fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4 }}>E-mail</div>
+          <input
+            type="email"
+            placeholder="voce@exemplo.com"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            style={{
+              background: 'transparent', border: 'none', outline: 'none',
+              color: '#F5F5F7', fontSize: 17, fontFamily: 'DM Sans', fontWeight: 300,
+              width: '100%',
+            }}
+          />
+        </div>
+
+        {/* Primary CTA */}
+        <button style={{
+          width: '100%',
+          padding: '18px',
+          background: '#F5F5F7',
+          color: '#0A0A0A',
+          border: 'none',
+          borderRadius: 50,
+          fontFamily: 'DM Sans',
+          fontWeight: 700,
+          fontSize: 17,
+          letterSpacing: '-0.01em',
+          cursor: 'pointer',
+          marginBottom: 20,
+        }}>
+          Continuar
+        </button>
+
+        {/* Divider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+          <div style={{ flex: 1, height: 1, background: '#2C2C2E' }} />
+          <span style={{ color: '#6C6C70', fontSize: 13 }}>ou</span>
+          <div style={{ flex: 1, height: 1, background: '#2C2C2E' }} />
+        </div>
+
+        {/* Google */}
+        <button style={{
+          width: '100%',
+          padding: '16px',
+          background: 'transparent',
+          color: '#F5F5F7',
+          border: '1.5px solid #2C2C2E',
+          borderRadius: 50,
+          fontFamily: 'DM Sans',
+          fontWeight: 400,
+          fontSize: 16,
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 10,
+        }}>
+          <svg width="18" height="18" viewBox="0 0 18 18">
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+            <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
+            <path d="M9 3.576c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.576 9 3.576z" fill="#EA4335"/>
+          </svg>
+          Continuar com Google
+        </button>
+      </div>
+
+      {/* Footer */}
+      <p style={{ color: '#6C6C70', fontSize: 12, textAlign: 'center', lineHeight: 1.5, paddingBottom: 8 }}>
+        Ao continuar você concorda com os{' '}
+        <span style={{ color: accent }}>Termos de uso</span>
+      </p>
+    </div>
+  );
+}
+
+function LoginB({ accent }) {
+  // Bottom sheet variant — background shows a glimpse of the app
+  const [email, setEmail] = useState('');
+
+  return (
+    <div style={{ background: '#0A0A0A', height: '100%', position: 'relative', overflow: 'hidden' }}>
+      {/* Background — mock app glimpse */}
+      <div style={{ padding: '60px 28px 0' }}>
+        <div style={{ color: '#6C6C70', fontSize: 12, marginBottom: 4 }}>Patrimônio total</div>
+        <div style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 38, letterSpacing: '-0.03em', color: '#1A1A1A', filter: 'blur(12px)', userSelect: 'none' }}>R$ 24.580,00</div>
+        <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+          {['Receitas', 'Despesas', 'Metas'].map(l => (
+            <div key={l} style={{ background: '#111', borderRadius: 12, padding: '12px 14px', flex: 1, filter: 'blur(8px)' }}>
+              <div style={{ background: '#1A1A1A', height: 8, borderRadius: 4, marginBottom: 6 }} />
+              <div style={{ background: '#1A1A1A', height: 6, borderRadius: 4, width: '60%' }} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Gradient fade */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '70%', background: 'linear-gradient(to bottom, transparent, #0A0A0A 40%)' }} />
+
+      {/* Sheet */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: '#111', borderRadius: '28px 28px 0 0', padding: '28px 28px 40px', border: '1px solid #1C1C1E', borderBottom: 'none' }}>
+        <div style={{ width: 36, height: 4, background: '#2C2C2E', borderRadius: 2, margin: '0 auto 28px' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
+          <AppIcon variant="crescent" size={48} accent={accent} />
+          <div>
+            <div style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 22, letterSpacing: '-0.02em' }}>Entrar no Nox</div>
+            <div style={{ color: '#6C6C70', fontSize: 13 }}>Guardião das suas finanças</div>
+          </div>
+        </div>
+
+        <div style={{ background: '#1A1A1A', border: '1.5px solid #2C2C2E', borderRadius: 14, padding: '14px 16px', marginBottom: 10 }}>
+          <input type="email" placeholder="Seu e-mail" value={email} onChange={e => setEmail(e.target.value)}
+            style={{ background: 'transparent', border: 'none', outline: 'none', color: '#F5F5F7', fontSize: 16, fontFamily: 'DM Sans', fontWeight: 300, width: '100%' }} />
+        </div>
+
+        <button style={{ width: '100%', padding: '17px', background: '#F5F5F7', color: '#0A0A0A', border: 'none', borderRadius: 50, fontFamily: 'DM Sans', fontWeight: 700, fontSize: 16, cursor: 'pointer', marginBottom: 12 }}>
+          Continuar
+        </button>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <div style={{ flex: 1, height: 1, background: '#2C2C2E' }} />
+          <span style={{ color: '#6C6C70', fontSize: 12 }}>ou</span>
+          <div style={{ flex: 1, height: 1, background: '#2C2C2E' }} />
+        </div>
+
+        <button style={{ width: '100%', padding: '15px', background: 'transparent', color: '#F5F5F7', border: '1.5px solid #2C2C2E', borderRadius: 50, fontFamily: 'DM Sans', fontWeight: 400, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+          <svg width="16" height="16" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.576c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.576 9 3.576z" fill="#EA4335"/></svg>
+          Continuar com Google
+        </button>
+
+        <p style={{ color: '#6C6C70', fontSize: 11, textAlign: 'center', marginTop: 16, lineHeight: 1.5 }}>
+          Ao continuar você concorda com os <span style={{ color: accent }}>Termos de uso</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function LoginC({ accent }) {
+  // Ultra-minimal variant
+  const [email, setEmail] = useState('');
+  const [step, setStep] = useState(0); // 0 = email, 1 = confirm
+
+  return (
+    <div style={{ background: '#0A0A0A', height: '100%', display: 'flex', flexDirection: 'column', padding: '0 28px 40px' }}>
+      {/* Status bar */}
+      <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
+        <span style={{ fontSize: 15, fontWeight: 600, color: '#F5F5F7' }}>9:41</span>
+        <div style={{ display: 'flex', gap: 5 }}>
+          <div style={{ width: 16, height: 11, border: '1.5px solid #F5F5F7', borderRadius: 2, display: 'flex', alignItems: 'center', padding: '0 2px' }}><div style={{ width: '75%', height: 5, background: '#F5F5F7', borderRadius: 1 }}/></div>
+        </div>
+      </div>
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingTop: 48 }}>
+        {/* Minimal wordmark */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 64 }}>
+          <LogoCrescent size={20} color={accent} bg="transparent" />
+          <span style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 20, letterSpacing: '-0.04em' }}>nox</span>
+        </div>
+
+        <h1 style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 40, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: 48, color: '#F5F5F7' }}>
+          {step === 0 ? <>Bem-vindo<br /><span style={{ color: accent }}>de volta.</span></> : <>Verifique<br />seu e-mail.</>}
+        </h1>
+
+        {step === 0 ? (
+          <>
+            <div style={{ borderBottom: `2px solid ${accent}`, paddingBottom: 12, marginBottom: 12 }}>
+              <input type="email" placeholder="voce@email.com" value={email} onChange={e => setEmail(e.target.value)}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#F5F5F7', fontSize: 22, fontFamily: 'DM Sans', fontWeight: 300, width: '100%' }} />
+            </div>
+            <p style={{ color: '#6C6C70', fontSize: 13, marginBottom: 48 }}>Digite seu e-mail para entrar ou criar sua conta.</p>
+            <button onClick={() => setStep(1)} style={{ width: '100%', padding: '18px', background: accent, color: '#0A0A0A', border: 'none', borderRadius: 50, fontFamily: 'DM Sans', fontWeight: 800, fontSize: 17, cursor: 'pointer', letterSpacing: '-0.01em', marginBottom: 14 }}>
+              Continuar →
+            </button>
+            <button style={{ width: '100%', padding: '16px', background: 'transparent', color: '#F5F5F7', border: '1px solid #2C2C2E', borderRadius: 50, fontFamily: 'DM Sans', fontWeight: 400, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+              <svg width="16" height="16" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.576c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.576 9 3.576z" fill="#EA4335"/></svg>
+              Google
+            </button>
+          </>
+        ) : (
+          <>
+            <p style={{ color: '#A1A1A6', fontSize: 16, marginBottom: 48, lineHeight: 1.5 }}>
+              Enviamos um link mágico para<br />
+              <span style={{ color: accent }}>{email || 'voce@email.com'}</span>
+            </p>
+            <button onClick={() => setStep(0)} style={{ width: '100%', padding: '18px', background: '#1A1A1A', color: '#F5F5F7', border: '1px solid #2C2C2E', borderRadius: 50, fontFamily: 'DM Sans', fontWeight: 400, fontSize: 16, cursor: 'pointer' }}>
+              ← Usar outro e-mail
+            </button>
+          </>
+        )}
+      </div>
+
+      <p style={{ color: '#6C6C70', fontSize: 11, textAlign: 'center', lineHeight: 1.5 }}>
+        Ao continuar você concorda com os <span style={{ color: accent }}>Termos de uso</span>
+      </p>
+    </div>
+  );
+}
+
+function LoginSection({ accent, loginLayout }) {
+  const variants = [
+    { id: 'a', label: 'A — Centrado', desc: 'Padrão Apple — ícone + título + inputs empilhados' },
+    { id: 'b', label: 'B — Bottom Sheet', desc: 'Vislumbre do app desfocado + sheet sobreposta' },
+    { id: 'c', label: 'C — Minimalista', desc: 'Ultra-limpo, âmbar no underline + CTA' },
+  ];
+
+  const PhoneFrame = ({ children, label, active }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+      <div style={{
+        width: 390,
+        height: 680,
+        background: '#0A0A0A',
+        borderRadius: 52,
+        overflow: 'hidden',
+        border: `2px solid ${active ? accent : '#2C2C2E'}`,
+        boxShadow: active ? `0 0 40px rgba(240,168,84,0.15)` : '0 20px 60px rgba(0,0,0,0.6)',
+        position: 'relative',
+        flexShrink: 0,
+        transition: 'border-color 0.3s, box-shadow 0.3s',
+      }}>
+        {/* Notch */}
+        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 120, height: 34, background: '#0A0A0A', borderRadius: '0 0 20px 20px', zIndex: 10 }} />
+        <div style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none' }}>
+          {children}
+        </div>
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ color: active ? accent : '#A1A1A6', fontFamily: 'DM Sans', fontWeight: 700, fontSize: 13 }}>{label}</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <section className="ds-section" id="login">
+      <div className="ds-section-label">04 — Login & Onboarding</div>
+      <h2 className="ds-section-title">Telas de acesso</h2>
+      <p className="ds-section-sub">Três variações de layout para a tela de login. Todas funcionais e interativas. Use o Tweaks para alternar.</p>
+      <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center' }}>
+        <PhoneFrame label="A — Centrado" active={loginLayout === 'a'}>
+          <LoginA accent={accent} />
+        </PhoneFrame>
+        <PhoneFrame label="B — Bottom Sheet" active={loginLayout === 'b'}>
+          <LoginB accent={accent} />
+        </PhoneFrame>
+        <PhoneFrame label="C — Minimalista" active={loginLayout === 'c'}>
+          <LoginC accent={accent} />
+        </PhoneFrame>
+      </div>
+    </section>
+  );
+}
+
+// ─── LANDING PAGE HERO ────────────────────────────────────────────────────────
+function HeroSection({ accent, logoVariant }) {
+  return (
+    <section className="ds-section" id="hero" style={{ paddingTop: 60, paddingBottom: 60 }}>
+      <div className="ds-section-label">05 — Landing Page Hero</div>
+      <h2 className="ds-section-title">Hero section</h2>
+      <p className="ds-section-sub">Preview do hero da landing page. Fundo preto absoluto, headline bold, tom quente e confiante.</p>
+
+      {/* Hero preview container */}
+      <div style={{
+        background: '#0A0A0A',
+        borderRadius: 24,
+        border: '1px solid #1C1C1E',
+        overflow: 'hidden',
+        position: 'relative',
+      }}>
+        {/* Subtle radial glow */}
+        <div style={{
+          position: 'absolute', top: -100, right: -100,
+          width: 600, height: 600,
+          background: `radial-gradient(circle, ${accent}14 0%, transparent 65%)`,
+          pointerEvents: 'none',
+        }} />
+
+        {/* Nav bar */}
+        <div style={{ padding: '20px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #1C1C1E' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {logoVariant === 'eye' ? <LogoEye size={28} color={accent} bg="transparent" /> :
+             logoVariant === 'shield' ? <LogoShield size={28} color={accent} bg="transparent" /> :
+             <LogoCrescent size={28} color={accent} bg="transparent" />}
+            <span style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 20, letterSpacing: '-0.03em' }}>nox</span>
+          </div>
+          <div style={{ display: 'flex', gap: 32 }}>
+            {['Recursos', 'Preços', 'Blog'].map(l => (
+              <a key={l} href="#" style={{ color: '#A1A1A6', fontSize: 14, textDecoration: 'none' }}>{l}</a>
+            ))}
+          </div>
+          <button style={{ padding: '10px 24px', background: '#F5F5F7', color: '#0A0A0A', border: 'none', borderRadius: 50, fontFamily: 'DM Sans', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
+            Entrar
+          </button>
+        </div>
+
+        {/* Hero content */}
+        <div style={{ padding: '96px 48px 80px', maxWidth: 800 }}>
+          {/* Badge */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: `rgba(240,168,84,0.08)`,
+            border: `1px solid rgba(240,168,84,0.2)`,
+            color: accent, fontSize: 13, fontWeight: 500,
+            padding: '6px 14px', borderRadius: 50, marginBottom: 32,
+          }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
+            Inteligência artificial para suas finanças
+          </div>
+
+          <h1 style={{
+            fontFamily: 'DM Sans', fontWeight: 800,
+            fontSize: 'clamp(48px, 6vw, 80px)',
+            letterSpacing: '-0.04em', lineHeight: 0.95,
+            marginBottom: 28, color: '#F5F5F7',
+            textWrap: 'pretty',
+          }}>
+            Seu dinheiro<br />
+            nunca dorme.{' '}
+            <span style={{ color: accent }}>Agora você<br />
+            também não precisa<br />se preocupar.</span>
+          </h1>
+
+          <p style={{
+            color: '#A1A1A6', fontSize: 20, fontWeight: 300,
+            marginBottom: 48, maxWidth: 480, lineHeight: 1.5,
+          }}>
+            O Nox monitora, analisa e organiza tudo — enquanto você vive.
+          </p>
+
+          <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
+            <button style={{
+              padding: '18px 36px',
+              background: '#F5F5F7', color: '#0A0A0A',
+              border: 'none', borderRadius: 50,
+              fontFamily: 'DM Sans', fontWeight: 700, fontSize: 17,
+              cursor: 'pointer', letterSpacing: '-0.01em',
+            }}>
+              Começar grátis
+            </button>
+            <button style={{
+              padding: '17px 28px',
+              background: 'transparent', color: '#F5F5F7',
+              border: '1px solid #2C2C2E', borderRadius: 50,
+              fontFamily: 'DM Sans', fontWeight: 300, fontSize: 16,
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              Ver como funciona <span style={{ opacity: 0.5 }}>→</span>
+            </button>
+          </div>
+
+          {/* Social proof */}
+          <div style={{ marginTop: 52, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex' }}>
+              {[accent, '#F5F5F7', '#A1A1A6', '#6C6C70', '#3A3A3C'].map((c, i) => (
+                <div key={i} style={{ width: 32, height: 32, borderRadius: '50%', background: c, border: '2px solid #0A0A0A', marginLeft: i === 0 ? 0 : -8 }} />
+              ))}
+            </div>
+            <div>
+              <div style={{ display: 'flex', gap: 2 }}>
+                {[1,2,3,4,5].map(s => <span key={s} style={{ color: accent, fontSize: 14 }}>★</span>)}
+              </div>
+              <div style={{ color: '#6C6C70', fontSize: 13, marginTop: 2 }}>+2.400 brasileiros já usam</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── COMPONENTS SHOWCASE ──────────────────────────────────────────────────────
+function ComponentsSection({ accent }) {
+  const [activeTab, setActiveTab] = useState(0);
+
+  return (
+    <section className="ds-section" id="components">
+      <div className="ds-section-label">06 — Componentes</div>
+      <h2 className="ds-section-title">UI Components</h2>
+      <p className="ds-section-sub">Elementos reutilizáveis do design system — botões, inputs, tags, cards de transação.</p>
+
+      {/* Buttons */}
+      <div style={{ marginBottom: 48 }}>
+        <div style={{ color: '#6C6C70', fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20 }}>Botões</div>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+          {[
+            { label: 'Primário', bg: '#F5F5F7', color: '#0A0A0A', border: 'none' },
+            { label: 'Acento', bg: accent, color: '#0A0A0A', border: 'none' },
+            { label: 'Secundário', bg: 'transparent', color: '#F5F5F7', border: '1.5px solid #2C2C2E' },
+            { label: 'Ghost', bg: 'transparent', color: accent, border: `1.5px solid ${accent}30` },
+            { label: 'Destrutivo', bg: '#FF453A15', color: '#FF453A', border: '1.5px solid #FF453A30' },
+          ].map(b => (
+            <button key={b.label} style={{
+              padding: '12px 24px', background: b.bg, color: b.color, border: b.border,
+              borderRadius: 50, fontFamily: 'DM Sans', fontWeight: 700, fontSize: 14,
+              cursor: 'pointer', letterSpacing: '-0.01em',
+            }}>{b.label}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Transaction cards */}
+      <div style={{ marginBottom: 48 }}>
+        <div style={{ color: '#6C6C70', fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20 }}>Transações</div>
+        <div style={{ background: '#111', borderRadius: 20, border: '1px solid #1C1C1E', overflow: 'hidden', maxWidth: 420 }}>
+          {[
+            { label: 'Salário', cat: 'Receita', amount: '+R$ 6.200,00', color: '#30D158', icon: '↑', date: 'Hoje' },
+            { label: 'Mercado Extra', cat: 'Alimentação', amount: '−R$ 187,40', color: '#FF453A', icon: '↓', date: 'Ontem' },
+            { label: 'Nubank', cat: 'Cartão de crédito', amount: '−R$ 1.420,00', color: '#FF453A', icon: '↓', date: '15 abr' },
+            { label: 'Freelance', cat: 'Renda extra', amount: '+R$ 800,00', color: '#30D158', icon: '↑', date: '12 abr' },
+          ].map((t, i) => (
+            <div key={i} style={{ padding: '16px 20px', borderBottom: i < 3 ? '1px solid #1C1C1E' : 'none', display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 40, height: 40, borderRadius: 12, background: t.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.color, fontSize: 16, fontWeight: 700, flexShrink: 0 }}>{t.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 500, fontSize: 15 }}>{t.label}</div>
+                <div style={{ color: '#6C6C70', fontSize: 12 }}>{t.cat} · {t.date}</div>
+              </div>
+              <div style={{ color: t.color, fontFamily: 'DM Sans', fontWeight: 700, fontSize: 15 }}>{t.amount}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tags */}
+      <div>
+        <div style={{ color: '#6C6C70', fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20 }}>Tags & badges</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {[
+            { label: 'Alimentação', color: accent },
+            { label: 'Moradia', color: '#30D158' },
+            { label: 'Transporte', color: '#FF453A' },
+            { label: 'Lazer', color: '#A1A1A6' },
+            { label: 'Saúde', color: '#54C5F0' },
+          ].map(tag => (
+            <div key={tag.label} style={{ padding: '6px 14px', background: tag.color + '15', border: `1px solid ${tag.color}30`, borderRadius: 50, color: tag.color, fontSize: 13, fontWeight: 500 }}>{tag.label}</div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── MAIN APP ─────────────────────────────────────────────────────────────────
+function App() {
+  const stored = (() => { try { return JSON.parse(localStorage.getItem('nox-ds-tweaks') || '{}'); } catch { return {}; } })();
+  const defaults = { ...TWEAK_DEFAULTS, ...stored };
+
+  const [accent, setAccent] = useState(defaults.accentColor);
+  const [logoVariant, setLogoVariant] = useState(defaults.logoVariant);
+  const [loginLayout, setLoginLayout] = useState(defaults.loginLayout);
+
+  // Update CSS var
+  useEffect(() => {
+    document.documentElement.style.setProperty('--accent', accent);
+    const save = { accentColor: accent, logoVariant, loginLayout };
+    localStorage.setItem('nox-ds-tweaks', JSON.stringify(save));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: save }, '*');
+  }, [accent, logoVariant, loginLayout]);
+
+  // Tweaks panel wiring
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.data?.type === '__activate_edit_mode') {
+        document.getElementById('tweaks-panel').classList.add('visible');
+      } else if (e.data?.type === '__deactivate_edit_mode') {
+        document.getElementById('tweaks-panel').classList.remove('visible');
+      }
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+    // Swatch clicks
+    document.querySelectorAll('.tweaks-swatch').forEach(s => {
+      s.addEventListener('click', () => {
+        document.querySelectorAll('.tweaks-swatch').forEach(x => x.classList.remove('active'));
+        s.classList.add('active');
+        setAccent(s.dataset.color);
+      });
+    });
+
+    document.getElementById('tweak-logo').addEventListener('change', e => setLogoVariant(e.target.value));
+    document.getElementById('tweak-login').addEventListener('change', e => setLoginLayout(e.target.value));
+
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  return (
+    <>
+      {/* Hero banner */}
+      <div className="ds-hero">
+        <div className="ds-hero-text" style={{flex:1}}>
+          <div className="ds-hero-badge">
+            <svg width="14" height="14" viewBox="0 0 22 22"><path d="M14.5 4.2A7.8 7.8 0 1 0 14.5 19.8 7 7 0 0 1 14.5 4.2Z" fill="currentColor"/></svg>
+            Brand Identity & Design System
+          </div>
+          <h1 style={{ display: 'block', fontFamily: 'DM Sans', fontWeight: 800, fontSize: 68, letterSpacing: '-0.04em', lineHeight: 0.95, marginBottom: 16 }}>
+            <span style={{ color: 'var(--accent)' }}>nox</span><br />
+            design system
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 17, fontWeight: 300, maxWidth: 400, lineHeight: 1.5 }}>
+            Identidade visual, tokens, componentes e telas para o app de finanças pessoais com IA.
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: 20, flexShrink: 0 }}>
+          <AppIcon variant={logoVariant} size={120} accent={accent} elevated />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <AppIcon variant={logoVariant} size={60} accent={accent} elevated />
+            <AppIcon variant={logoVariant} size={44} accent={accent} elevated />
+            <AppIcon variant={logoVariant} size={32} accent={accent} elevated />
+          </div>
+        </div>
+      </div>
+
+      <LogoSection accent={accent} logoVariant={logoVariant} />
+      <ColorTokens accent={accent} />
+      <Typography accent={accent} />
+      <LoginSection accent={accent} loginLayout={loginLayout} />
+      <HeroSection accent={accent} logoVariant={logoVariant} />
+      <ComponentsSection accent={accent} />
+
+      {/* Footer */}
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 40px 80px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <LogoCrescent size={18} color={accent} bg="transparent" />
+          <span style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 16, letterSpacing: '-0.03em' }}>nox</span>
+          <span style={{ color: '#6C6C70', fontSize: 13 }}>/ Design System v1.0</span>
+        </div>
+        <div style={{ color: '#6C6C70', fontSize: 12 }}>DM Sans 800/300 · True Black #0A0A0A · Âmbar {accent}</div>
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+</script>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#0A0A0A"/>
+    <path d="M62 25A22 22 0 1 0 62 75 18 18 0 0 1 62 25Z" fill="#F0A854"/>
+    <text x="50" y="90" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="14" fill="#F5F5F7" letter-spacing="-1">nox</text>
+  </svg>
+</template>
+</body>
+</html>

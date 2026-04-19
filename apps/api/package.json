@@ -1,0 +1,18 @@
+{
+  "name": "@nox/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stub do backend FastAPI para integrar com pnpm scripts. O código Python é gerenciado via Poetry (pyproject.toml).",
+  "scripts": {
+    "dev": "poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    "worker": "poetry run celery -A app.core.celery_app worker --loglevel=info",
+    "beat": "poetry run celery -A app.core.celery_app beat --loglevel=info",
+    "lint": "poetry run ruff check app tests",
+    "lint:fix": "poetry run ruff check --fix app tests && poetry run ruff format app tests",
+    "typecheck": "poetry run mypy app",
+    "test": "poetry run pytest",
+    "migration": "poetry run alembic revision --autogenerate -m",
+    "migrate": "poetry run alembic upgrade head",
+    "downgrade": "poetry run alembic downgrade -1"
+  }
+}

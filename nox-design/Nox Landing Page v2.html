@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nox — Guardião das suas finanças</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & TOKENS ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #080808;
+  --bg2: #101010;
+  --bg3: #181818;
+  --txt: #F5F5F7;
+  --txt2: #A1A1A6;
+  --txt3: #6C6C70;
+  --accent: #F07854;
+  --green: #30D158;
+  --red: #FF453A;
+  --border: #222222;
+  --border2: #161616;
+}
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ── NAV PILL ── */
+.nav-outer {
+  position: fixed; top: 20px; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: center;
+  pointer-events: none;
+  padding: 0 20px;
+}
+.nav {
+  pointer-events: all;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0;
+  background: rgba(14,14,14,0.92);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 50px;
+  padding: 8px 10px 8px 20px;
+  max-width: 780px;
+  width: 100%;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5);
+}
+.nav-logo { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+.nav-logo-text { font-weight: 800; font-size: 18px; letter-spacing: -0.04em; }
+.nav-links { display: flex; gap: 4px; align-items: center; flex: 1; justify-content: center; }
+.nav-links a { color: var(--txt3); font-size: 14px; font-weight: 500; transition: color .15s; padding: 6px 14px; border-radius: 50px; }
+.nav-links a:hover { color: var(--txt); background: rgba(255,255,255,.05); }
+.nav-links a.active { color: var(--txt); font-weight: 600; }
+.btn-nav { background: var(--txt); color: var(--bg); font-family: 'DM Sans'; font-weight: 700; font-size: 14px; border: none; border-radius: 50px; padding: 10px 24px; cursor: pointer; letter-spacing: -0.01em; transition: opacity .15s; flex-shrink: 0; }
+.btn-nav:hover { opacity: .85; }
+
+/* ── HERO ── */
+.hero {
+  padding: 140px clamp(20px, 5vw, 72px) 80px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.hero-glow {
+  position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 700px;
+  background: radial-gradient(ellipse, rgba(240,120,84,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-stage {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 640px;
+}
+@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes floatY2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.float-card { animation: floatY 5s ease-in-out infinite; }
+.float-card2 { animation: floatY2 6s ease-in-out infinite; }
+.agent-bubble {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(20,20,20,0.95); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 50px; padding: 6px 14px 6px 6px;
+  backdrop-filter: blur(12px);
+  white-space: nowrap;
+  font-size: 13px; font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+}
+.agent-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(240,120,84,.1); border: 1px solid rgba(240,120,84,.22);
+  color: var(--accent); font-size: 12px; font-weight: 500; letter-spacing: .06em;
+  padding: 5px 14px; border-radius: 50px; margin-bottom: 28px;
+}
+.dot-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: dp 2s infinite; }
+@keyframes dp { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
+
+.hero-title {
+  font-weight: 800;
+  font-size: clamp(44px, 5vw, 72px);
+  letter-spacing: -0.045em;
+  line-height: .95;
+  margin-bottom: 20px;
+}
+.hero-title .accent { color: var(--accent); }
+.hero-sub { color: var(--txt2); font-size: 18px; font-weight: 300; line-height: 1.65; max-width: 420px; margin-bottom: 40px; }
+
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+.btn-cta { padding: 17px 36px; background: var(--txt); color: var(--bg); border: none; border-radius: 50px; font-family: 'DM Sans'; font-weight: 700; font-size: 17px; cursor: pointer; letter-spacing: -.01em; transition: opacity .15s; }
+.btn-cta:hover { opacity: .87; }
+.btn-cta-ghost { padding: 16px 28px; background: transparent; color: var(--txt); border: 1px solid var(--border); border-radius: 50px; font-family: 'DM Sans'; font-weight: 300; font-size: 16px; cursor: pointer; transition: border-color .15s; }
+.btn-cta-ghost:hover { border-color: var(--txt3); }
+
+.hero-proof { display: flex; align-items: center; gap: 16px; }
+.avatars { display: flex; }
+.av { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--bg); margin-left: -7px; }
+.av:first-child { margin-left: 0; }
+.stars { color: var(--accent); font-size: 12px; letter-spacing: 1px; }
+.proof-text { color: var(--txt3); font-size: 12px; margin-top: 2px; }
+
+/* Phone mockup (hero) */
+.phone-hero {
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 9/18;
+  background: var(--bg);
+  border-radius: 48px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 48px 120px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.05);
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+.phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 28px; background: var(--bg); border-radius: 0 0 18px 18px; z-index: 10; }
+.phone-content { padding: 38px 16px 16px; height: 100%; overflow: hidden; }
+
+/* ── BANKS STRIP ── */
+.banks-strip {
+  border-top: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border2);
+  background: var(--bg2);
+  padding: 28px clamp(20px, 5vw, 72px);
+  overflow: hidden;
+}
+.banks-inner {
+  display: flex; align-items: center; gap: 0;
+  max-width: 1280px; margin: 0 auto;
+}
+.banks-label { color: var(--txt3); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; margin-right: 40px; flex-shrink: 0; }
+.banks-logos { display: flex; gap: 32px; align-items: center; overflow: hidden; }
+.bank-logo { display: flex; align-items: center; gap: 6px; opacity: .45; transition: opacity .2s; flex-shrink: 0; }
+.bank-logo:hover { opacity: .7; }
+.bank-logo svg { display: block; }
+.bank-name { font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+
+/* ── FEATURE SECTIONS ── */
+.feature-section {
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 560px;
+  border-bottom: 1px solid var(--border2);
+  overflow: hidden;
+}
+.feature-section.reverse { direction: rtl; }
+.feature-section.reverse > * { direction: ltr; }
+.feature-img-side {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg2);
+  min-height: 560px;
+}
+.feature-img-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: .55;
+}
+.feature-img-gradient {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, transparent 40%, var(--bg) 100%);
+}
+.feature-img-gradient-rev {
+  position: absolute; inset: 0;
+  background: linear-gradient(to left, transparent 40%, var(--bg) 100%);
+}
+.feature-floating-cards {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 40px 32px;
+  gap: 10px;
+}
+.feature-text-side {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px clamp(32px, 5vw, 72px);
+}
+
+.feature-eyebrow {
+  font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 14px;
+}
+.feature-title {
+  font-weight: 800; font-size: clamp(32px, 3.5vw, 50px);
+  letter-spacing: -.04em; line-height: 1.0;
+  margin-bottom: 20px;
+}
+.feature-body { color: var(--txt2); font-size: 17px; font-weight: 300; line-height: 1.7; margin-bottom: 32px; }
+.btn-feature { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: var(--bg); font-family: 'DM Sans'; font-weight: 700; font-size: 15px; border: none; border-radius: 50px; padding: 13px 28px; cursor: pointer; transition: opacity .15s; }
+.btn-feature:hover { opacity: .88; }
+
+/* UI preview cards */
+.ui-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  overflow: hidden;
+  padding: 24px;
+}
+.ui-phone-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.ui-phone {
+  width: 260px;
+  background: var(--bg);
+  border-radius: 38px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 32px 80px rgba(0,0,0,.7);
+  overflow: hidden;
+  padding: 28px 14px 14px;
+  position: relative;
+}
+.ui-phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 22px; background: var(--bg); border-radius: 0 0 14px 14px; z-index: 5; }
+
+/* ── SECURITY ── */
+.security-section {
+  padding: 120px clamp(20px, 5vw, 72px);
+  background: var(--bg2);
+  border-top: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border2);
+}
+.security-inner { max-width: 1280px; margin: 0 auto; }
+.security-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 60px; }
+.security-card {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 24px;
+  padding: 28px;
+}
+.security-icon { font-size: 28px; margin-bottom: 16px; }
+.security-title { font-weight: 700; font-size: 17px; letter-spacing: -.02em; margin-bottom: 8px; }
+.security-desc { color: var(--txt3); font-size: 14px; font-weight: 300; line-height: 1.6; }
+
+/* ── STATS ── */
+.stats-section { padding: 100px clamp(20px, 5vw, 72px); max-width: 1280px; margin: 0 auto; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--border2); border-radius: 28px; overflow: hidden; }
+.stat-cell { padding: 40px 36px; border-right: 1px solid var(--border2); }
+.stat-cell:last-child { border-right: none; }
+.stat-val { font-weight: 800; font-size: 52px; letter-spacing: -.05em; line-height: 1; margin-bottom: 8px; }
+.stat-lbl { color: var(--txt3); font-size: 14px; font-weight: 400; }
+
+/* ── MEDIA ── */
+.media-section { padding: 80px clamp(20px, 5vw, 72px); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); background: var(--bg2); }
+.media-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 40px; }
+.media-label { color: var(--txt3); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+.media-logos { display: flex; gap: 40px; align-items: center; }
+.media-logo { color: var(--txt3); font-weight: 800; font-size: 16px; letter-spacing: -.02em; opacity: .4; transition: opacity .2s; }
+.media-logo:hover { opacity: .7; }
+
+/* ── PRICING ── */
+.pricing-section { padding: 120px clamp(20px, 5vw, 72px); max-width: 1280px; margin: 0 auto; }
+.pricing-toggle { display: flex; align-items: center; gap: 14px; margin-bottom: 56px; }
+.toggle-opt { font-size: 15px; font-weight: 400; color: var(--txt3); cursor: pointer; transition: color .15s; }
+.toggle-opt.active { color: var(--txt); font-weight: 600; }
+.toggle-btn {
+  width: 52px; height: 28px; border-radius: 50px; background: var(--bg3); border: 1px solid var(--border);
+  position: relative; cursor: pointer; transition: background .2s;
+}
+.toggle-btn.annual { background: var(--accent); }
+.toggle-knob {
+  position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px; border-radius: 50%; background: white;
+  transition: left .2s;
+}
+.toggle-btn.annual .toggle-knob { left: 27px; }
+.discount-tag { background: rgba(48,209,88,.15); color: var(--green); font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 50px; }
+
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.pricing-card {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 28px; padding: 36px; position: relative;
+  transition: border-color .2s;
+}
+.pricing-card:hover { border-color: var(--border); }
+.pricing-card.popular {
+  background: var(--accent); border-color: var(--accent);
+}
+.pricing-card.popular * { color: rgba(8,8,8,.85) !important; }
+.popular-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--bg); color: var(--accent); border: 1px solid var(--accent);
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; padding: 4px 14px; border-radius: 50px;
+  white-space: nowrap;
+}
+.pricing-plan-name { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--txt3); margin-bottom: 10px; }
+.pricing-price { font-weight: 800; font-size: 52px; letter-spacing: -.05em; line-height: 1; margin-bottom: 4px; }
+.pricing-price sup { font-size: 22px; font-weight: 600; vertical-align: top; margin-top: 8px; margin-right: 1px; }
+.pricing-period { color: var(--txt3); font-size: 14px; margin-bottom: 32px; }
+.pricing-divider { height: 1px; background: var(--border2); margin-bottom: 24px; }
+.pricing-card.popular .pricing-divider { background: rgba(8,8,8,.15); }
+.pricing-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.pricing-features li { font-size: 14px; font-weight: 400; display: flex; align-items: flex-start; gap: 10px; }
+.pricing-features li::before { content: '✓'; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.pricing-features li.off { opacity: .3; }
+.pricing-features li.off::before { content: '—'; font-weight: 400; }
+.btn-plan { width: 100%; padding: 15px; border-radius: 50px; font-family: 'DM Sans'; font-weight: 700; font-size: 15px; cursor: pointer; transition: opacity .15s; border: none; }
+.btn-plan:hover { opacity: .88; }
+.btn-plan-ghost { background: transparent; color: var(--txt); border: 1px solid var(--border); }
+.btn-plan-ghost:hover { border-color: var(--txt3); background: transparent; }
+.btn-plan-filled { background: var(--bg); color: var(--txt); }
+
+/* ── FAQ ── */
+.faq-section { padding: 120px clamp(20px, 5vw, 72px); max-width: 900px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid var(--border2); }
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 0; cursor: pointer; gap: 16px;
+  font-weight: 600; font-size: 17px; letter-spacing: -.01em;
+}
+.faq-icon { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .25s, background .25s; color: var(--txt3); font-size: 18px; font-weight: 300; }
+.faq-item.open .faq-icon { transform: rotate(45deg); background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.faq-a-inner { color: var(--txt2); font-size: 15px; font-weight: 300; line-height: 1.75; padding-bottom: 24px; }
+.faq-item.open .faq-a { max-height: 300px; }
+
+/* ── CTA FINAL ── */
+.final-cta {
+  margin: 0 clamp(20px, 5vw, 72px) 0;
+  border-radius: 32px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  padding: 100px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.final-cta-glow {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(240,120,84,.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+.final-cta-inner { position: relative; max-width: 600px; margin: 0 auto; }
+.final-title { font-weight: 800; font-size: clamp(40px, 5vw, 64px); letter-spacing: -.045em; line-height: .95; margin-bottom: 20px; }
+.final-sub { color: var(--txt2); font-size: 18px; font-weight: 300; margin-bottom: 40px; line-height: 1.6; }
+.app-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 48px; }
+.app-btn {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 14px; padding: 12px 20px;
+  cursor: pointer; transition: border-color .15s;
+}
+.app-btn:hover { border-color: var(--border); background: var(--bg2); }
+.app-btn-label { font-size: 11px; color: var(--txt3); font-weight: 400; }
+.app-btn-store { font-size: 15px; font-weight: 700; color: var(--txt); letter-spacing: -.01em; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 60px clamp(20px, 5vw, 72px) 40px;
+  border-top: 1px solid var(--border2);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.footer-logo { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+.footer-logo-text { font-weight: 800; font-size: 18px; letter-spacing: -.04em; }
+.footer-tagline { color: var(--txt3); font-size: 13px; max-width: 280px; line-height: 1.6; }
+.footer-links { display: flex; gap: 40px; align-self: start; padding-top: 8px; }
+.footer-col-title { font-weight: 700; font-size: 13px; margin-bottom: 14px; color: var(--txt); }
+.footer-col { display: flex; flex-direction: column; gap: 10px; }
+.footer-col a { color: var(--txt3); font-size: 13px; font-weight: 400; transition: color .15s; }
+.footer-col a:hover { color: var(--txt); }
+.footer-bottom { border-top: 1px solid var(--border2); padding: 24px clamp(20px, 5vw, 72px); display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: 0 auto; }
+.footer-bottom p { color: var(--txt3); font-size: 12px; }
+
+/* ── TWEAKS ── */
+#tweaks-panel {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px; width: 220px;
+  z-index: 999; display: none;
+  box-shadow: 0 24px 60px rgba(0,0,0,.6);
+  font-family: 'DM Sans';
+}
+#tweaks-panel.visible { display: block; }
+.t-title { font-weight: 700; font-size: 13px; margin-bottom: 14px; color: var(--txt); }
+.t-row { margin-bottom: 12px; }
+.t-label { font-size: 11px; color: var(--txt3); margin-bottom: 6px; }
+.t-swatches { display: flex; gap: 6px; }
+.t-swatch { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform .1s; }
+.t-swatch:hover { transform: scale(1.1); }
+.t-swatch.active { border-color: white; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  .hero { padding-top: 120px; }
+  .phone-hero { max-width: 280px; }
+  .feature-section, .feature-section.reverse { grid-template-columns: 1fr; direction: ltr; }
+  .security-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+@media (max-width: 600px) {
+  .security-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV PILL ═══════════════ -->
+<div class="nav-outer">
+  <header class="nav">
+    <a href="#" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 40 40" fill="none">
+        <path d="M20 7L31 11.5V21C31 27 27 32.5 20 34C13 32.5 9 27 9 21V11.5L20 7Z" stroke="var(--accent)" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+        <path d="M24 14A4 4 0 1 0 24 22A3.2 3.2 0 0 1 24 14Z" fill="var(--accent)"/>
+      </svg>
+      <span class="nav-logo-text">nox</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#recursos" class="active">Recursos</a>
+      <a href="#precos">Preços</a>
+      <a href="#seguranca">Como funciona</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <button class="btn-nav">Entrar</button>
+  </header>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <!-- Top copy -->
+  <div class="hero-eyebrow" style="display:inline-flex;margin-bottom:28px;">
+    <div class="dot-pulse"></div>
+    Olá, eu sou o Nox
+  </div>
+  <h1 class="hero-title" style="margin-bottom:16px;">
+    Enquanto você dorme,<br>
+    eu cuido <span class="accent">do seu dinheiro.</span>
+  </h1>
+  <p class="hero-sub" style="margin:0 auto 40px;text-align:center;max-width:480px;">
+    Conecta suas contas, entendo seus padrões e te aviso antes do problema aparecer. Sem planilha, sem esforço.
+  </p>
+  <div class="hero-actions" style="justify-content:center;margin-bottom:72px;">
+    <button class="btn-cta">Começar grátis</button>
+    <button class="btn-cta-ghost">Ver como funciona →</button>
+  </div>
+
+  <!-- Animated stage -->
+  <div class="hero-stage">
+    <!-- Left cards -->
+    <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:10;">
+      <div class="agent-bubble float-card" style="margin-bottom:8px;">
+        <div class="agent-avatar" style="background:linear-gradient(135deg,#a78bfa,#7c3aed);">💫</div>
+        Luna
+      </div>
+      <div class="float-card" style="animation-delay:.5s;background:rgba(16,16,16,.97);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px 16px;width:210px;box-shadow:0 12px 40px rgba(0,0,0,.6);backdrop-filter:blur(12px);">
+        <div style="color:var(--txt3);font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;">🏦 Últimas transações</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:32px;height:32px;border-radius:10px;background:rgba(255,69,58,.15);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🛵</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Delivery de comida</div><div style="color:var(--txt3);font-size:11px;">Alimentação · 28 abr</div></div>
+            <div style="color:#FF453A;font-size:13px;font-weight:700;">R$42</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:32px;height:32px;border-radius:10px;background:rgba(255,69,58,.15);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🏨</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Hospedagem</div><div style="color:var(--txt3);font-size:11px;">Viagens · 24 abr</div></div>
+            <div style="color:#FF453A;font-size:13px;font-weight:700;">R$120</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER phone -->
+    <div style="position:relative;z-index:20;flex-shrink:0;">
+      <div class="phone-hero" style="width:280px;">
+        <div class="phone-notch"></div>
+        <div class="phone-content" style="padding:38px 14px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;opacity:.5;">
+            <span style="font-size:13px;font-weight:600;">9:41</span>
+            <svg width="14" height="10" viewBox="0 0 17 12" fill="#F5F5F7"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;padding:24px 0 20px;">
+            <div style="width:60px;height:60px;border-radius:50%;background:rgba(240,120,84,.12);border:1.5px solid rgba(240,120,84,.3);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+              <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><path d="M20 7L31 11.5V21C31 27 27 32.5 20 34C13 32.5 9 27 9 21V11.5L20 7Z" stroke="#F07854" stroke-width="1.8" fill="none" stroke-linejoin="round"/><path d="M24 14A4 4 0 1 0 24 22A3.2 3.2 0 0 1 24 14Z" fill="#F07854"/></svg>
+            </div>
+            <div style="font-weight:800;font-size:17px;letter-spacing:-.02em;margin-bottom:4px;">Ola, Pedro</div>
+            <div style="color:#6C6C70;font-size:12px;">Como eu posso te ajudar hoje?</div>
+          </div>
+          <div style="display:flex;gap:7px;margin-bottom:10px;">
+            <div style="flex:1;background:#101010;border:1px solid #222;border-radius:10px;padding:9px 6px;text-align:center;font-size:10px;font-weight:500;color:#A1A1A6;">&#x1F4B3; Gastos cartao</div>
+            <div style="flex:1;background:#101010;border:1px solid #222;border-radius:10px;padding:9px 6px;text-align:center;font-size:10px;font-weight:500;color:#A1A1A6;">&#x1F3E6; Contas</div>
+          </div>
+          <div style="background:#101010;border:1px solid #222;border-radius:12px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:#6C6C70;font-size:11px;">Converse com o Nox</span>
+            <div style="width:24px;height:24px;border-radius:50%;background:#F07854;display:flex;align-items:center;justify-content:center;font-size:11px;">&#x2191;</div>
+          </div>
+        </div>
+      </div>
+    <div class="phone-hero">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+        <!-- Status -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;opacity:.55;">
+          <span style="font-size:13px;font-weight:600;">9:41</span>
+          <div style="display:flex;gap:4px;align-items:center;">
+            <div style="width:18px;height:10px;border:1.5px solid #F5F5F7;border-radius:2px;display:flex;align-items:center;padding:0 2px;"><div style="width:70%;height:5px;background:#F5F5F7;border-radius:1px;"></div></div>
+          </div>
+        </div>
+        <!-- Greeting -->
+        <div style="color:var(--txt3);font-size:12px;margin-bottom:2px;">Bom dia,</div>
+        <div style="font-weight:700;font-size:19px;letter-spacing:-.02em;margin-bottom:16px;">Lucas 👋</div>
+        <!-- Balance -->
+        <div style="background:var(--bg2);border-radius:20px;padding:18px;margin-bottom:10px;border:1px solid var(--border);position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(240,120,84,.07);pointer-events:none;"></div>
+          <div style="color:var(--txt3);font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:500;margin-bottom:6px;">Patrimônio total</div>
+          <div style="font-weight:800;font-size:28px;letter-spacing:-.03em;margin-bottom:8px;">R$ 12.430,60</div>
+          <span style="background:rgba(48,209,88,.15);border-radius:50px;padding:3px 10px;color:#30D158;font-size:11px;font-weight:600;">↑ 3,2% este mês</span>
+        </div>
+        <!-- Cards -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div style="background:var(--bg2);border-radius:14px;padding:12px;border:1px solid var(--border);">
+            <div style="color:var(--txt3);font-size:9px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Receitas</div>
+            <div style="color:#30D158;font-weight:700;font-size:15px;">+R$ 7.250</div>
+          </div>
+          <div style="background:var(--bg2);border-radius:14px;padding:12px;border:1px solid var(--border);">
+            <div style="color:var(--txt3);font-size:9px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Despesas</div>
+            <div style="color:#FF453A;font-weight:700;font-size:15px;">−R$ 2.468</div>
+          </div>
+        </div>
+        <!-- AI Insight -->
+        <div style="background:rgba(240,120,84,.1);border:1px solid rgba(240,120,84,.25);border-radius:16px;padding:13px;">
+          <div style="color:var(--accent);font-size:11px;font-weight:600;margin-bottom:5px;">💡 Eu percebi algo</div>
+          <div style="color:var(--txt);font-size:12px;font-weight:300;line-height:1.5;">Você gastou <strong style="font-weight:600;">R$ 187</strong> a mais no mercado essa semana. Quer que eu ajuste o orçamento?</div>
+        </div>
+        <!-- Transactions -->
+        <div style="margin-top:12px;">
+          <div style="color:var(--txt3);font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:500;margin-bottom:8px;">Recentes</div>
+          <div style="background:var(--bg2);border-radius:14px;overflow:hidden;border:1px solid var(--border);">
+            <div style="padding:10px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border2);">
+              <div style="width:28px;height:28px;border-radius:8px;background:rgba(48,209,88,.15);display:flex;align-items:center;justify-content:center;font-size:14px;">💼</div>
+              <div style="flex:1;font-size:12px;font-weight:500;">Salário</div>
+              <div style="color:#30D158;font-size:12px;font-weight:700;">+6.200</div>
+            </div>
+            <div style="padding:10px 12px;display:flex;align-items:center;gap:8px;">
+              <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,69,58,.15);display:flex;align-items:center;justify-content:center;font-size:14px;">🛵</div>
+              <div style="flex:1;font-size:12px;font-weight:500;">iFood</div>
+              <div style="color:#FF453A;font-size:12px;font-weight:700;">−87,50</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Right cards -->
+    <div style="position:absolute;right:0;top:50%;transform:translateY(-55%);display:flex;flex-direction:column;gap:10px;z-index:10;align-items:flex-end;">
+      <div class="agent-bubble float-card2" style="animation-delay:.8s;margin-bottom:8px;">
+        <div class="agent-avatar" style="background:linear-gradient(135deg,#f0a854,#e05c2e);">⚡</div>
+        Eclipse
+      </div>
+      <div class="float-card2" style="animation-delay:.3s;background:rgba(16,16,16,.97);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px 16px;width:200px;box-shadow:0 12px 40px rgba(0,0,0,.6);backdrop-filter:blur(12px);">
+        <div style="color:var(--txt3);font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">Gastos essa semana</div>
+        <div style="font-weight:800;font-size:18px;letter-spacing:-.03em;margin-bottom:2px;">R$ 1.200,00</div>
+        <div style="color:#30D158;font-size:11px;font-weight:600;margin-bottom:12px;">↑ 60%</div>
+        <div style="display:flex;align-items:flex-end;gap:5px;height:36px;">
+          <div style="flex:1;background:#30D158;border-radius:3px 3px 0 0;height:40%;"></div>
+          <div style="flex:1;background:#30D158;border-radius:3px 3px 0 0;height:55%;"></div>
+          <div style="flex:1;background:#30D158;border-radius:3px 3px 0 0;height:100%;"></div>
+          <div style="flex:1;background:var(--border);border-radius:3px 3px 0 0;height:20%;"></div>
+          <div style="flex:1;background:var(--border);border-radius:3px 3px 0 0;height:20%;"></div>
+          <div style="flex:1;background:var(--border);border-radius:3px 3px 0 0;height:20%;"></div>
+          <div style="flex:1;background:var(--border);border-radius:3px 3px 0 0;height:20%;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+          <span style="color:var(--txt3);font-size:9px;">Seg</span><span style="color:var(--txt3);font-size:9px;">Ter</span><span style="color:var(--txt3);font-size:9px;">Qua</span><span style="color:var(--txt3);font-size:9px;">Qui</span><span style="color:var(--txt3);font-size:9px;">Sex</span><span style="color:var(--txt3);font-size:9px;">Sáb</span><span style="color:var(--txt3);font-size:9px;">Dom</span>
+        </div>
+      </div>
+      <div class="float-card" style="animation-delay:1s;background:rgba(240,120,84,.1);border:1px solid rgba(240,120,84,.25);border-radius:14px;padding:12px 14px;width:200px;">
+        <div style="color:var(--accent);font-size:11px;font-weight:600;margin-bottom:3px;">💡 Insights financeiros</div>
+        <div style="color:var(--txt);font-size:12px;font-weight:300;line-height:1.5;">Você pode economizar R$ 320 esse mês.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Proof -->
+  <div class="hero-proof" style="justify-content:center;margin-top:48px;">
+    <div class="avatars">
+      <div class="av" style="background:var(--accent)"></div>
+      <div class="av" style="background:#F5F5F7"></div>
+      <div class="av" style="background:#A1A1A6"></div>
+      <div class="av" style="background:#6C6C70"></div>
+      <div class="av" style="background:#3A3A3C"></div>
+    </div>
+    <div>
+      <div class="stars">★★★★★</div>
+      <div class="proof-text">+2.400 brasileiros já usam</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ BANKS ═══════════════ -->
+<div class="banks-strip">
+  <div class="banks-inner">
+    <div class="banks-label">Via Open Finance</div>
+    <div class="banks-logos">
+      <div class="bank-logo"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#8B5CF6"/></svg><span class="bank-name">Nubank</span></div>
+      <div class="bank-logo"><svg width="18" height="18" viewBox="0 0 18 18"><rect width="18" height="18" rx="4" fill="#003087"/></svg><span class="bank-name">Itaú</span></div>
+      <div class="bank-logo"><svg width="18" height="18" viewBox="0 0 18 18"><rect width="18" height="18" rx="4" fill="#CC0000"/></svg><span class="bank-name">Bradesco</span></div>
+      <div class="bank-logo"><svg width="18" height="18" viewBox="0 0 18 18"><rect width="18" height="18" rx="4" fill="#F9A820"/></svg><span class="bank-name">Santander</span></div>
+      <div class="bank-logo"><svg width="18" height="18" viewBox="0 0 18 18"><rect width="18" height="18" rx="4" fill="#005CA9"/></svg><span class="bank-name">BB</span></div>
+      <div class="bank-logo"><svg width="18" height="18" viewBox="0 0 18 18"><rect width="18" height="18" rx="4" fill="#07689F"/></svg><span class="bank-name">C6 Bank</span></div>
+      <div class="bank-logo"><svg width="18" height="18" viewBox="0 0 18 18"><rect width="18" height="18" rx="4" fill="#00CC99"/></svg><span class="bank-name">Inter</span></div>
+      <div class="bank-logo" style="font-size:13px; gap:0; opacity:.3;"><span style="color:var(--txt3);font-size:13px;">+200 bancos</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<div id="recursos">
+
+<!-- Feature 1: Insight -->
+<div class="feature-section">
+  <!-- Image side with floating cards -->
+  <div class="feature-img-side">
+    <div class="feature-img-bg" style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1010 50%,#0a0a0a 100%);opacity:1;"></div>
+    <div class="feature-img-gradient"></div>
+    <div class="feature-floating-cards">
+      <div style="color:#6C6C70;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 13 13"><rect width="13" height="13" rx="3" fill="#222"/><path d="M3 4h7M3 6.5h7M3 9h4" stroke="#6C6C70" stroke-width="1" stroke-linecap="round"/></svg>Ultimas transacoes</div>
+      <div style="background:rgba(16,16,16,.95);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:13px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.6);">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#x1F6F5;</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:500;">Delivery de comida</div><div style="color:#6C6C70;font-size:12px;">Alimentacao &bull; 28 de abr</div></div>
+        <div style="color:#FF453A;font-weight:700;font-size:14px;">R$ 42,00</div>
+      </div>
+      <div style="background:rgba(16,16,16,.95);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:13px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.6);">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#x1F3E8;</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:500;">Hospedagem</div><div style="color:#6C6C70;font-size:12px;">Viagens &bull; 24 de abr</div></div>
+        <div style="color:#FF453A;font-weight:700;font-size:14px;">R$ 120,00</div>
+      </div>
+      <div style="background:rgba(16,16,16,.95);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:13px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.6);">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(100,100,100,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#x1F697;</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:500;">Corrida Uber</div><div style="color:#6C6C70;font-size:12px;">parcela 1/4 &bull; 28 abr</div></div>
+        <div style="color:#FF453A;font-weight:700;font-size:14px;">R$ 120,00</div>
+      </div>
+    </div>
+  </div>
+  <!-- Text side -->
+  <div class="feature-text-side">
+    <div class="feature-eyebrow">Analise inteligente</div>
+    <h2 class="feature-title">Surpresas na<br>fatura?<br>Comigo, nao.</h2>
+    <p class="feature-body">Eu sei como e abrir a fatura e nao entender nada. Por isso eu organizo tudo pra voce nao ter surpresa.</p>
+    <button class="btn-feature" style="background:transparent;color:#F5F5F7;border:1.5px solid #333;border-radius:50px;font-weight:500;">Descobrir surpresas</button>
+  </div>
+  <!-- HIDDEN old ui-card (replaced) -->
+  <div style="display:none">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div style="font-weight:700;font-size:15px;">Alertas ativos</div>
+        <div style="background:rgba(240,120,84,.15);color:var(--accent);font-size:11px;font-weight:600;padding:3px 10px;border-radius:50px;">3 novos</div>
+      </div>
+      <div style="background:var(--bg);border:1px solid rgba(255,69,58,.2);border-left:3px solid #FF453A;border-radius:14px;padding:14px 16px;">
+        <div style="font-size:12px;font-weight:600;margin-bottom:3px;color:#FF453A;">⚠ Cobrança duplicada</div>
+        <div style="color:var(--txt2);font-size:13px;font-weight:300;">Netflix cobrou duas vezes esse mês — R$ 39,90 a mais.</div>
+        <div style="margin-top:8px;display:flex;gap:8px;">
+          <button style="background:var(--accent);color:var(--bg);border:none;border-radius:50px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans;">Resolver</button>
+          <button style="background:transparent;color:var(--txt3);border:1px solid var(--border);border-radius:50px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:DM Sans;">Ignorar</button>
+        </div>
+      </div>
+      <div style="background:var(--bg);border:1px solid rgba(240,120,84,.2);border-left:3px solid var(--accent);border-radius:14px;padding:14px 16px;">
+        <div style="font-size:12px;font-weight:600;margin-bottom:3px;color:var(--accent);">💳 Limite de orçamento</div>
+        <div style="color:var(--txt2);font-size:13px;font-weight:300;">Você usou 89% do orçamento de Alimentação. Faltam R$ 55,60.</div>
+      </div>
+      <div style="background:var(--bg);border:1px solid rgba(48,209,88,.2);border-left:3px solid #30D158;border-radius:14px;padding:14px 16px;">
+        <div style="font-size:12px;font-weight:600;margin-bottom:3px;color:#30D158;">🎯 Meta atingida</div>
+        <div style="color:var(--txt2);font-size:13px;font-weight:300;">Reserva de emergência chegou a R$ 10.000. Parabéns! 🎉</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feature 2: categorias -->
+<div class="feature-section reverse">
+  <!-- Image side -->
+  <div class="feature-img-side">
+    <div class="feature-img-bg" style="background:linear-gradient(135deg,#0f0a08 0%,#1a1208 60%,#080808 100%);opacity:1;"></div>
+    <div class="feature-img-gradient-rev"></div>
+    <div class="feature-floating-cards" style="align-items:flex-end;">
+      <div style="width:100%;max-width:280px;">
+        <div style="color:#6C6C70;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;">Orcamento do mes</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:rgba(16,16,16,.95);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 15px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:13px;font-weight:500;">Alimentacao</span><span style="font-size:13px;color:#6C6C70;">R$544 / R$600</span></div>
+            <div style="height:5px;background:#1a1a1a;border-radius:5px;"><div style="width:90%;height:100%;background:#F07854;border-radius:5px;"></div></div>
+          </div>
+          <div style="background:rgba(16,16,16,.95);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 15px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:13px;font-weight:500;">Transporte</span><span style="font-size:13px;color:#6C6C70;">R$114 / R$300</span></div>
+            <div style="height:5px;background:#1a1a1a;border-radius:5px;"><div style="width:38%;height:100%;background:#30D158;border-radius:5px;"></div></div>
+          </div>
+          <div style="background:rgba(16,16,16,.95);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 15px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:13px;font-weight:500;">Assinaturas</span><span style="font-size:13px;color:#6C6C70;">R$162 / R$200</span></div>
+            <div style="height:5px;background:#1a1a1a;border-radius:5px;"><div style="width:81%;height:100%;background:#54C5F0;border-radius:5px;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Text side -->
+  <div class="feature-text-side">
+    <div class="feature-eyebrow">Visao completa</div>
+    <h2 class="feature-title">Eu te mostro<br>pra onde sua<br>grana ta indo.</h2>
+    <p class="feature-body">Categorizacao automatica de todos os seus gastos. Alimentacao, transporte, lazer, assinaturas — tudo organizado sem voce precisar fazer nada.</p>
+    <button class="btn-feature" style="background:transparent;color:#F5F5F7;border:1.5px solid #333;border-radius:50px;font-weight:500;">Ver meu resumo</button>
+  </div>
+  <div style="display:none" class="ui-card">
+    <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-weight:700;font-size:15px;">Orçamento — Abril</div>
+      <div style="color:var(--txt3);font-size:12px;">R$ 4.200 disponível</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:13px;font-weight:500;">🛒 Alimentação</div>
+          <div style="font-size:13px;color:var(--txt2);">R$ 544 <span style="color:var(--txt3);">/ R$ 600</span></div>
+        </div>
+        <div style="background:var(--bg);border-radius:50px;height:6px;overflow:hidden;border:1px solid var(--border2);">
+          <div style="width:90%;height:100%;background:var(--accent);border-radius:50px;"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:13px;font-weight:500;">🚗 Transporte</div>
+          <div style="font-size:13px;color:var(--txt2);">R$ 114 <span style="color:var(--txt3);">/ R$ 300</span></div>
+        </div>
+        <div style="background:var(--bg);border-radius:50px;height:6px;overflow:hidden;border:1px solid var(--border2);">
+          <div style="width:38%;height:100%;background:#30D158;border-radius:50px;"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:13px;font-weight:500;">🎬 Assinaturas</div>
+          <div style="font-size:13px;color:var(--txt2);">R$ 162 <span style="color:var(--txt3);">/ R$ 200</span></div>
+        </div>
+        <div style="background:var(--bg);border-radius:50px;height:6px;overflow:hidden;border:1px solid var(--border2);">
+          <div style="width:81%;height:100%;background:#54C5F0;border-radius:50px;"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:13px;font-weight:500;">🏠 Moradia</div>
+          <div style="font-size:13px;color:#FF453A;font-weight:600;">R$ 1.800 <span style="color:#FF453A44;">/ R$ 1.800</span></div>
+        </div>
+        <div style="background:var(--bg);border-radius:50px;height:6px;overflow:hidden;border:1px solid var(--border2);">
+          <div style="width:100%;height:100%;background:#FF453A;border-radius:50px;"></div>
+        </div>
+        <div style="color:#FF453A;font-size:11px;font-weight:500;margin-top:4px;">Limite atingido</div>
+      </div>
+    </div>
+    <!-- Pie visual placeholder -->
+    <div style="margin-top:20px;padding:16px;background:var(--bg);border-radius:16px;border:1px solid var(--border2);display:flex;align-items:center;gap:16px;">
+      <svg width="64" height="64" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="26" fill="none" stroke="var(--border)" stroke-width="12"/>
+        <circle cx="32" cy="32" r="26" fill="none" stroke="var(--accent)" stroke-width="12" stroke-dasharray="49 114" stroke-dashoffset="28"/>
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#30D158" stroke-width="12" stroke-dasharray="22 141" stroke-dashoffset="-21"/>
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#54C5F0" stroke-width="12" stroke-dasharray="19 144" stroke-dashoffset="-43"/>
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#FF453A" stroke-width="12" stroke-dasharray="24 139" stroke-dashoffset="-62"/>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;border-radius:2px;background:var(--accent);"></div><span style="font-size:12px;color:var(--txt2);">Alimentação 33%</span></div>
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;border-radius:2px;background:#FF453A;"></div><span style="font-size:12px;color:var(--txt2);">Moradia 28%</span></div>
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;border-radius:2px;background:#30D158;"></div><span style="font-size:12px;color:var(--txt2);">Transporte 13%</span></div>
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;border-radius:2px;background:#54C5F0;"></div><span style="font-size:12px;color:var(--txt2);">Assinaturas 11%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feature 3: Metas -->
+<div class="feature-section">
+  <!-- Image side -->
+  <div class="feature-img-side">
+    <div class="feature-img-bg" style="background:linear-gradient(135deg,#080c10 0%,#0a1020 60%,#080808 100%);opacity:1;"></div>
+    <div class="feature-img-gradient"></div>
+    <div class="feature-floating-cards">
+      <div style="color:#6C6C70;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px;">Entenda o que pesa no proximo mes</div>
+      <div style="display:flex;gap:10px;">
+        <div style="background:rgba(16,16,16,.97);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;text-align:center;flex:1;box-shadow:0 8px 32px rgba(0,0,0,.6);">
+          <div style="width:36px;height:36px;border-radius:50%;background:#1DB954;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px;">&#x1F3B5;</div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px;">Spotify</div>
+          <div style="font-weight:700;font-size:15px;margin-bottom:4px;">R$ 22,00</div>
+          <div style="color:#6C6C70;font-size:10px;font-weight:500;">EM 12 DIAS</div>
+        </div>
+        <div style="background:rgba(16,16,16,.97);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;text-align:center;flex:1;box-shadow:0 8px 32px rgba(0,0,0,.6);">
+          <div style="width:36px;height:36px;border-radius:50%;background:#E50914;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px;">&#x1F3AC;</div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px;">Netflix</div>
+          <div style="font-weight:700;font-size:15px;margin-bottom:4px;">R$ 32,00</div>
+          <div style="color:#6C6C70;font-size:10px;font-weight:500;">EM 22 DIAS</div>
+        </div>
+        <div style="background:rgba(16,16,16,.97);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;text-align:center;flex:1;box-shadow:0 8px 32px rgba(0,0,0,.6);">
+          <div style="width:36px;height:36px;border-radius:50%;background:#F07854;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px;">&#x1F6CD;</div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px;">Amazon</div>
+          <div style="font-weight:700;font-size:15px;margin-bottom:4px;">R$ 17,00</div>
+          <div style="color:#6C6C70;font-size:10px;font-weight:500;">EM 20 DIAS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Text side -->
+  <div class="feature-text-side">
+    <div class="feature-eyebrow">Planejamento</div>
+    <h2 class="feature-title">Entenda o que<br>pesa no<br>proximo mes.</h2>
+    <p class="feature-body">Saiba exatamente o que vai sair da sua conta nos proximos meses: assinaturas, boletos e parcelas — tudo num so lugar.</p>
+    <button class="btn-feature" style="background:transparent;color:#F5F5F7;border:1.5px solid #333;border-radius:50px;font-weight:500;">Planejar financas</button>
+  </div>
+  <div style="display:none" class="ui-card">
+    <div style="font-weight:700;font-size:15px;margin-bottom:16px;">Minhas metas</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:var(--bg);border-radius:18px;padding:18px;border:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(240,120,84,.15);display:flex;align-items:center;justify-content:center;font-size:20px;">🏖</div>
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:14px;">Viagem Floripa</div>
+            <div style="color:var(--txt3);font-size:12px;">R$ 2.840 de R$ 5.000</div>
+          </div>
+          <div style="color:var(--accent);font-weight:800;font-size:18px;">57%</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:50px;height:5px;overflow:hidden;">
+          <div style="width:57%;height:100%;background:var(--accent);border-radius:50px;"></div>
+        </div>
+        <div style="color:var(--txt3);font-size:11px;margin-top:8px;">Faltam R$ 2.160 · ~4 meses no seu ritmo atual</div>
+      </div>
+      <div style="background:var(--bg);border-radius:18px;padding:18px;border:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(48,209,88,.15);display:flex;align-items:center;justify-content:center;font-size:20px;">🛡</div>
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:14px;">Reserva de emergência</div>
+            <div style="color:var(--txt3);font-size:12px;">R$ 8.600 de R$ 15.000</div>
+          </div>
+          <div style="color:#30D158;font-weight:800;font-size:18px;">57%</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:50px;height:5px;overflow:hidden;">
+          <div style="width:57%;height:100%;background:#30D158;border-radius:50px;"></div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;background:transparent;color:var(--txt);border:1.5px dashed var(--border);border-radius:14px;font-family:DM Sans;font-size:14px;cursor:pointer;font-weight:500;">+ Nova meta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Feature 4: IA conversa -->
+<div class="feature-section reverse">
+  <div>
+    <div class="feature-eyebrow">IA conversacional</div>
+    <h2 class="feature-title">Pergunta do<br>seu jeito.<br>Eu entendo.</h2>
+    <p class="feature-body">Quer saber quanto gastou com delivery em março? Me pergunte assim mesmo. Sem filtros complicados, sem relatórios confusos — só uma conversa.</p>
+    <button class="btn-feature" style="background:transparent;color:#F5F5F7;border:1.5px solid #333;border-radius:50px;font-weight:500;">Falar com o Nox</button>
+  </div>
+  <!-- UI: Chat -->
+  <div class="ui-card">
+    <div style="font-weight:700;font-size:15px;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+      <svg width="18" height="18" viewBox="0 0 40 40" fill="none"><path d="M20 7L31 11.5V21C31 27 27 32.5 20 34C13 32.5 9 27 9 21V11.5L20 7Z" stroke="var(--accent)" stroke-width="1.8" fill="none" stroke-linejoin="round"/><path d="M24 14A4 4 0 1 0 24 22A3.2 3.2 0 0 1 24 14Z" fill="var(--accent)"/></svg>
+      Chat com o Nox
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <!-- User -->
+      <div style="display:flex;justify-content:flex-end;">
+        <div style="background:var(--bg3);border-radius:16px 16px 4px 16px;padding:12px 15px;max-width:75%;font-size:14px;font-weight:300;">
+          Quanto eu gastei com delivery em março?
+        </div>
+      </div>
+      <!-- Nox -->
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(240,120,84,.15);border:1px solid rgba(240,120,84,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;">🛡</div>
+        <div style="background:var(--bg2);border-radius:4px 16px 16px 16px;padding:12px 15px;max-width:80%;border:1px solid var(--border2);">
+          <div style="font-size:14px;font-weight:300;line-height:1.6;margin-bottom:10px;">Em março você gastou <strong style="font-weight:600;color:var(--accent);">R$ 432,80</strong> com delivery — 18% a mais que em fevereiro. Foram 12 pedidos, sendo iFood a maioria.</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;">Ver pedidos</div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;">Comparar meses</div>
+          </div>
+        </div>
+      </div>
+      <!-- User 2 -->
+      <div style="display:flex;justify-content:flex-end;">
+        <div style="background:var(--bg3);border-radius:16px 16px 4px 16px;padding:12px 15px;max-width:75%;font-size:14px;font-weight:300;">
+          Tô gastando muito né 😅
+        </div>
+      </div>
+      <!-- Nox 2 -->
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(240,120,84,.15);border:1px solid rgba(240,120,84,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;">🛡</div>
+        <div style="background:var(--bg2);border-radius:4px 16px 16px 16px;padding:12px 15px;max-width:80%;border:1px solid var(--border2);">
+          <div style="font-size:14px;font-weight:300;line-height:1.6;">Olha, um limite de R$ 300 já te salvaria uns R$ 130 por mês. Quer que eu crie esse orçamento pra você?</div>
+        </div>
+      </div>
+    </div>
+    <!-- Input -->
+    <div style="margin-top:14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px;">
+      <div style="flex:1;color:var(--txt3);font-size:14px;">Pergunte qualquer coisa…</div>
+      <div style="width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;">↑</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /recursos -->
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-cell">
+      <div class="stat-val">2.4k<span style="color:var(--accent);">+</span></div>
+      <div class="stat-lbl">usuários ativos no Brasil</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--accent);">R$ 48M</div>
+      <div class="stat-lbl">monitorados todo mês</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val">94<span style="color:var(--accent);">%</span></div>
+      <div class="stat-lbl">economizam mais no 1° mês</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--green);">4.9★</div>
+      <div class="stat-lbl">avaliação média nas lojas</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECURITY ═══════════════ -->
+<div class="security-section" id="seguranca">
+  <div class="security-inner">
+    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(240,120,84,.08);border:1px solid rgba(240,120,84,.2);color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.06em;padding:5px 14px;border-radius:50px;margin-bottom:20px;">Segurança</div>
+    <h2 style="font-weight:800;font-size:clamp(32px,4vw,52px);letter-spacing:-.04em;line-height:1;margin-bottom:14px;">Como eu funciono,<br>por dentro.</h2>
+    <p style="color:var(--txt2);font-size:17px;font-weight:300;max-width:500px;line-height:1.6;">Você me conecta às suas contas. Eu <em>leio</em> — nunca movimento, nunca guardo senha.</p>
+    <div class="security-grid">
+      <div class="security-card">
+        <div class="security-icon">🏛</div>
+        <div class="security-title">Open Finance BC</div>
+        <p class="security-desc">Protocolo regulamentado pelo Banco Central. Você autoriza, eu acesso. Sem senha compartilhada, nunca.</p>
+      </div>
+      <div class="security-card">
+        <div class="security-icon">🔐</div>
+        <div class="security-title">Apenas leitura</div>
+        <p class="security-desc">Sem acesso de movimentação. O Nox vê e analisa — não saca, não transfere, não paga nada por você.</p>
+      </div>
+      <div class="security-card">
+        <div class="security-icon">🛡</div>
+        <div class="security-title">Dados criptografados</div>
+        <p class="security-desc">Criptografia AES-256 em repouso, TLS 1.3 em trânsito. Seus dados ficam protegidos como em um banco.</p>
+      </div>
+      <div class="security-card">
+        <div class="security-icon">👁</div>
+        <div class="security-title">Você no controle</div>
+        <p class="security-desc">Desconecte qualquer conta a qualquer momento. Solicite exclusão total dos seus dados em um clique.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MEDIA ═══════════════ -->
+<div class="media-section">
+  <div class="media-inner">
+    <div class="media-label">Nox na mídia</div>
+    <div class="media-logos">
+      <div class="media-logo">Exame</div>
+      <div class="media-logo">Valor Econômico</div>
+      <div class="media-logo">Infomoney</div>
+      <div class="media-logo">Folha</div>
+      <div class="media-logo">Estadão</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PRICING ═══════════════ -->
+<div class="pricing-section" id="precos">
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(240,120,84,.08);border:1px solid rgba(240,120,84,.2);color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.06em;padding:5px 14px;border-radius:50px;margin-bottom:20px;">Preços</div>
+  <h2 style="font-weight:800;font-size:clamp(32px,4vw,52px);letter-spacing:-.04em;line-height:1;margin-bottom:14px;">Transparente<br>como deve ser.</h2>
+  <p style="color:var(--txt2);font-size:17px;font-weight:300;max-width:460px;line-height:1.6;margin-bottom:40px;">Sem taxa de setup. Sem cartão pra começar. Cancela quando quiser, sem burocracia.</p>
+
+  <!-- Toggle -->
+  <div class="pricing-toggle" id="billing-toggle">
+    <span class="toggle-opt active" id="monthly-label">Mensal</span>
+    <div class="toggle-btn" id="toggle-btn" onclick="toggleBilling()">
+      <div class="toggle-knob" id="toggle-knob"></div>
+    </div>
+    <span class="toggle-opt" id="annual-label">Anual</span>
+    <span class="discount-tag" id="discount-tag">−19%</span>
+  </div>
+
+  <div class="pricing-grid">
+    <!-- Básico -->
+    <div class="pricing-card">
+      <div class="pricing-plan-name">Básico</div>
+      <div class="pricing-price"><sup>R$</sup><span id="price-basic">0</span></div>
+      <div class="pricing-period">Para sempre grátis</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features" style="color:var(--txt2);">
+        <li>1 conta bancária conectada</li>
+        <li>Histórico de 3 meses</li>
+        <li>Categorização automática</li>
+        <li>Relatório mensal básico</li>
+        <li class="off">IA com insights diários</li>
+        <li class="off">Metas e orçamentos</li>
+        <li class="off">Alertas em tempo real</li>
+      </ul>
+      <button class="btn-plan btn-plan-ghost">Criar conta grátis</button>
+    </div>
+    <!-- Pro (popular) -->
+    <div class="pricing-card popular">
+      <div class="popular-badge">★ Mais popular</div>
+      <div class="pricing-plan-name">Pro</div>
+      <div class="pricing-price"><sup>R$</sup><span id="price-pro">19</span></div>
+      <div class="pricing-period" id="period-pro">/mês · cobrado mensalmente</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>Contas ilimitadas</li>
+        <li>Histórico completo</li>
+        <li>IA com insights diários</li>
+        <li>Metas e orçamentos</li>
+        <li>Alertas em tempo real</li>
+        <li>Relatório mensal avançado</li>
+        <li class="off">Consultoria financeira IA</li>
+      </ul>
+      <button class="btn-plan btn-plan-filled">Assinar Pro</button>
+    </div>
+    <!-- Premium -->
+    <div class="pricing-card">
+      <div class="pricing-plan-name">Premium</div>
+      <div class="pricing-price"><sup>R$</sup><span id="price-premium">49</span></div>
+      <div class="pricing-period" id="period-premium">/mês · cobrado mensalmente</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features" style="color:var(--txt2);">
+        <li>Tudo do Pro</li>
+        <li>Consultoria financeira IA</li>
+        <li>Simulações de investimento</li>
+        <li>Relatórios PDF personalizados</li>
+        <li>Suporte prioritário 24/7</li>
+        <li>Multi-usuário (família)</li>
+        <li>API de integração</li>
+      </ul>
+      <button class="btn-plan btn-plan-ghost">Assinar Premium</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<div class="faq-section" id="faq">
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(240,120,84,.08);border:1px solid rgba(240,120,84,.2);color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.06em;padding:5px 14px;border-radius:50px;margin-bottom:20px;">FAQ</div>
+  <h2 style="font-weight:800;font-size:clamp(32px,4vw,52px);letter-spacing:-.04em;line-height:1;margin-bottom:48px;">Perguntas<br>frequentes.</h2>
+
+  <div id="faq-list">
+    <div class="faq-item open">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>O Nox é seguro? Preciso compartilhar minha senha do banco?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">Não, nunca. O Nox usa o Open Finance — protocolo regulamentado pelo Banco Central — que permite leitura das suas transações sem que você precise compartilhar nenhuma senha. É o mesmo nível de segurança que os apps dos próprios bancos usam.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>O Nox consegue fazer transferências ou pagamentos?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">Não. O Nox tem acesso apenas de leitura às suas contas. Ele vê, analisa e te informa — mas não movimenta nenhum centavo. Isso é por design: separamos completamente a inteligência financeira da movimentação de dinheiro.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Quais bancos são compatíveis?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">Todos que aderiram ao Open Finance Brasil — incluindo Nubank, Itaú, Bradesco, Santander, Banco do Brasil, Caixa, C6 Bank, Inter, BTG, XP, e mais de 200 outras instituições. A lista cresce conforme o Banco Central expande o programa.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Posso cancelar quando quiser?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">Sim, sem burocracia. Planos mensais cancelam no fim do mês vigente. Planos anuais têm garantia de 30 dias — se não gostar, devolvemos o valor integral. Você também pode pedir exclusão completa dos seus dados a qualquer momento.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Como funciona a IA do Nox?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">A IA analisa seus padrões de gastos ao longo do tempo e gera insights personalizados — não genéricos. Ela identifica anomalias (cobranças duplicadas, gastos acima da média), projeta tendências e responde perguntas em linguagem natural. Quanto mais você usa, mais ela aprende sobre você.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Tem versão para desktop também?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">Sim! O Nox tem app mobile (iOS e Android) e versão web completa. Tudo sincronizado em tempo real. Você pode usar onde preferir — mas a maioria dos usuários acaba preferindo o mobile pela praticidade.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>O plano grátis tem limite de uso?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">O plano Básico conecta 1 conta bancária e mantém histórico de 3 meses — para sempre, sem custo. Não tem limite de transações dentro dessa conta. Para múltiplas contas, histórico completo e IA avançada, você precisa do Pro ou Premium.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CTA FINAL ═══════════════ -->
+<div class="final-cta">
+  <div class="final-cta-glow"></div>
+  <div class="final-cta-inner">
+    <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(240,120,84,.1);border:1px solid rgba(240,120,84,.22);color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.06em;padding:5px 14px;border-radius:50px;margin-bottom:24px;">
+      <div class="dot-pulse"></div>
+      Comece agora, é grátis
+    </div>
+    <h2 class="final-title">
+      Você fecha<br>os olhos.<br>
+      <span style="color:var(--accent);">Eu não.</span>
+    </h2>
+    <p class="final-sub">Sem cartão de crédito. Sem contrato. Cancela em 1 clique.</p>
+    <button class="btn-cta" style="font-size:18px;padding:20px 52px;">Começar grátis agora</button>
+    <div class="app-btns">
+      <div class="app-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div>
+          <div class="app-btn-label">Baixar na</div>
+          <div class="app-btn-store">App Store</div>
+        </div>
+      </div>
+      <div class="app-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.64.18.96.06l12.45-7.2-2.67-2.67-10.74 9.81zm-1.85-20.9A1.5 1.5 0 0 0 1 4v16a1.5 1.5 0 0 0 .33.9l.09.09 8.97-8.96v-.22L1.42 2.77l-.09.09zm19.4 8.8-2.53-1.46-2.99 2.99 3 3 2.54-1.47a1.5 1.5 0 0 0 0-3.06zM4.14.24C3.82.12 3.48.13 3.18.3l10.74 9.79 2.67-2.67L4.14.24z"/></svg>
+        <div>
+          <div class="app-btn-label">Disponível no</div>
+          <div class="app-btn-store">Google Play</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div>
+    <div class="footer-logo">
+      <svg width="18" height="18" viewBox="0 0 40 40" fill="none"><path d="M20 7L31 11.5V21C31 27 27 32.5 20 34C13 32.5 9 27 9 21V11.5L20 7Z" stroke="var(--accent)" stroke-width="1.8" fill="none" stroke-linejoin="round"/><path d="M24 14A4 4 0 1 0 24 22A3.2 3.2 0 0 1 24 14Z" fill="var(--accent)"/></svg>
+      <span class="footer-logo-text">nox</span>
+    </div>
+    <p class="footer-tagline">Guardião das suas finanças. Enquanto você vive, eu vigio.</p>
+    <p style="color:var(--txt3);font-size:12px;margin-top:20px;">Feito no Brasil 🇧🇷</p>
+  </div>
+  <div class="footer-links">
+    <div>
+      <div class="footer-col-title">Produto</div>
+      <div class="footer-col">
+        <a href="#">Recursos</a>
+        <a href="#">Segurança</a>
+        <a href="#">Preços</a>
+        <a href="#">Changelog</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Empresa</div>
+      <div class="footer-col">
+        <a href="#">Sobre</a>
+        <a href="#">Blog</a>
+        <a href="#">Carreiras</a>
+        <a href="#">Imprensa</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Legal</div>
+      <div class="footer-col">
+        <a href="#">Privacidade</a>
+        <a href="#">Termos</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2026 Nox Finanças Inteligentes LTDA. Todos os direitos reservados.</p>
+  <p>CNPJ 00.000.000/0001-00</p>
+</div>
+
+<!-- ═══════════════ TWEAKS ═══════════════ -->
+<div id="tweaks-panel">
+  <div class="t-title">Tweaks</div>
+  <div class="t-row">
+    <div class="t-label">Accent color</div>
+    <div class="t-swatches">
+      <div class="t-swatch active" style="background:#F07854" data-color="#F07854"></div>
+      <div class="t-swatch" style="background:#F0A854" data-color="#F0A854"></div>
+      <div class="t-swatch" style="background:#E8C97A" data-color="#E8C97A"></div>
+      <div class="t-swatch" style="background:#30D158" data-color="#30D158"></div>
+      <div class="t-swatch" style="background:#54C5F0" data-color="#54C5F0"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── TWEAKS ── */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#F07854"
+}/*EDITMODE-END*/;
+const stored = (() => { try { return JSON.parse(localStorage.getItem('nox-lp2-tweaks') || '{}'); } catch { return {}; } })();
+const cfg = { ...TWEAK_DEFAULTS, ...stored };
+
+function applyAccent(c) {
+  document.documentElement.style.setProperty('--accent', c);
+  document.querySelectorAll('.t-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === c));
+  cfg.accentColor = c; save();
+}
+function save() {
+  localStorage.setItem('nox-lp2-tweaks', JSON.stringify(cfg));
+  window.parent.postMessage({ type: '__edit_mode_set_keys', edits: cfg }, '*');
+}
+applyAccent(cfg.accentColor);
+document.querySelectorAll('.t-swatch').forEach(s => s.addEventListener('click', () => applyAccent(s.dataset.color)));
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode') document.getElementById('tweaks-panel').classList.add('visible');
+  else if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').classList.remove('visible');
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+/* ── PRICING TOGGLE ── */
+let isAnnual = false;
+function toggleBilling() {
+  isAnnual = !isAnnual;
+  document.getElementById('toggle-btn').classList.toggle('annual', isAnnual);
+  document.getElementById('monthly-label').classList.toggle('active', !isAnnual);
+  document.getElementById('annual-label').classList.toggle('active', isAnnual);
+  if (isAnnual) {
+    document.getElementById('price-pro').textContent = '15';
+    document.getElementById('price-premium').textContent = '40';
+    document.getElementById('period-pro').textContent = '/mês · cobrado anualmente';
+    document.getElementById('period-premium').textContent = '/mês · cobrado anualmente';
+  } else {
+    document.getElementById('price-pro').textContent = '19';
+    document.getElementById('price-premium').textContent = '49';
+    document.getElementById('period-pro').textContent = '/mês · cobrado mensalmente';
+    document.getElementById('period-premium').textContent = '/mês · cobrado mensalmente';
+  }
+}
+
+/* ── FAQ ── */
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#080808"/>
+    <path d="M50 18L62 23V34C62 42 57 48 50 50C43 48 38 42 38 34V23L50 18Z" stroke="#F07854" stroke-width="2" fill="none"/>
+    <path d="M54 26A4 4 0 1 0 54 34 3 3 0 0 1 54 26Z" fill="#F07854"/>
+    <rect x="20" y="58" width="60" height="4" rx="2" fill="#1A1A1A"/>
+    <rect x="20" y="66" width="45" height="4" rx="2" fill="#1A1A1A"/>
+    <rect x="20" y="78" width="28" height="10" rx="5" fill="#F5F5F7"/>
+    <rect x="52" y="78" width="28" height="10" rx="5" fill="none" stroke="#222" stroke-width="1.5"/>
+  </svg>
+</template>
+
+</body>
+</html>

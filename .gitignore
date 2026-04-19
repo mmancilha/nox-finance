@@ -1,0 +1,90 @@
+# ────────── Node / pnpm ──────────
+node_modules/
+.pnpm-store/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ────────── Next.js ──────────
+.next/
+out/
+build/
+dist/
+.vercel/
+next-env.d.ts
+.turbo/
+
+# ────────── Python ──────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ────────── Poetry / uv ──────────
+poetry.lock.backup
+.uv/
+
+# ────────── Pytest / coverage ──────────
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+
+# ────────── Ruff / mypy ──────────
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+
+# ────────── Alembic (manter versions/, ignorar temporários) ──────────
+# apps/api/alembic/versions/*.py  ← não ignorar
+
+# ────────── Docker ──────────
+.docker-data/
+
+# ────────── Envs ──────────
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+# Manter exemplos
+!.env.example
+
+# ────────── IDEs / OS ──────────
+.vscode/*
+!.vscode/settings.json.example
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ────────── Secrets / chaves ──────────
+*.pem
+*.key
+secrets/
+
+# ────────── Storybook / test reports ──────────
+storybook-static/
+playwright-report/
+test-results/
+
+# ────────── Logs ──────────
+logs/
+*.log
+
+# ────────── Outputs locais ──────────
+tmp/
+.tmp/

@@ -1,0 +1,129 @@
+[tool.poetry]
+name = "nox-api"
+version = "0.1.0"
+description = "Backend do Nox — FastAPI + Celery + SQLAlchemy async."
+authors = ["Maycon <mancilhamaycon@gmail.com>"]
+license = "UNLICENSED"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# Core web
+fastapi = { extras = ["standard"], version = "^0.115.6" }
+uvicorn = { extras = ["standard"], version = "^0.34.0" }
+pydantic = "^2.10.4"
+pydantic-settings = "^2.7.0"
+
+# DB
+sqlalchemy = { extras = ["asyncio"], version = "^2.0.36" }
+asyncpg = "^0.30.0"
+alembic = "^1.14.0"
+psycopg2-binary = "^2.9.10"  # usado pelo alembic em migrations síncronas
+
+# Queue / workers
+celery = { extras = ["redis"], version = "^5.4.0" }
+redis = "^5.2.1"
+
+# Auth / Segurança
+python-jose = { extras = ["cryptography"], version = "^3.3.0" }
+passlib = { extras = ["bcrypt"], version = "^1.7.4" }
+cryptography = "^44.0.0"
+
+# Integrações externas
+httpx = "^0.28.1"
+openai = "^1.58.1"
+
+# Observabilidade / utilitários
+structlog = "^24.4.0"
+sentry-sdk = { extras = ["fastapi"], version = "^2.19.2" }
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-asyncio = "^0.25.0"
+pytest-cov = "^6.0.0"
+pytest-mock = "^3.14.0"
+httpx = "^0.28.1"
+ruff = "^0.8.4"
+black = "^24.10.0"
+mypy = "^1.14.0"
+
+[tool.poetry.scripts]
+dev = "scripts.dev:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# ──────────────────────────────────────────────────────────
+# Linters / formatters
+# ──────────────────────────────────────────────────────────
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["alembic/versions", "__pycache__", ".venv"]
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "I",   # isort
+  "B",   # bugbear
+  "UP",  # pyupgrade
+  "S",   # bandit security
+  "RUF", # ruff-specific
+  "C4",  # comprehensions
+  "SIM", # simplify
+  "TID", # tidy imports
+]
+ignore = [
+  "S101",  # assert em testes é OK
+  "B008",  # Depends(...) em defaults do FastAPI é idiomático
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S106"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+extend-exclude = '''
+/(
+  alembic/versions
+  | __pycache__
+  | \.venv
+)/
+'''
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+exclude = ["alembic/versions", ".venv"]
+
+[[tool.mypy.overrides]]
+module = ["celery.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "app.tasks.heartbeat"
+disable_error_code = ["untyped-decorator"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+  "integration: integration tests (requires docker compose up)",
+  "slow: slow tests",
+]

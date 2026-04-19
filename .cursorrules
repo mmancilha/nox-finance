@@ -1,0 +1,336 @@
+# Nox — Cursor AI Rules
+
+## 🌙 Contexto do Projeto
+
+Você está desenvolvendo o **Nox**, um assistente financeiro inteligente brasileiro com:
+- 4 agentes autônomos (Sentinela, Oráculo, Norte, Companheiro)
+- Integração bancária via Open Finance Brasil (Pluggy)
+- Categorização e insights com IA (OpenAI)
+- Design premium dark mode, aesthetic Pierre Finance + Apple
+- Stack: Next.js 14 + TypeScript + Tailwind / FastAPI + Python + Celery
+
+**Tagline**: "Enquanto você dorme, eu cuido do seu dinheiro."
+
+---
+
+## 🎨 Design System — TOKENS OBRIGATÓRIOS
+
+### Cores (use sempre via CSS vars, nunca hardcoded)
+
+```css
+--bg: #080808;           /* Fundo principal - NÃO use #0A0A0A nem #000 */
+--bg2: #101010;          /* Cards e painéis */
+--bg3: #181818;          /* Elementos elevados (modais, dropdowns) */
+--txt: #F5F5F7;          /* Texto principal */
+--txt2: #A1A1A6;         /* Texto secundário */
+--txt3: #6C6C70;         /* Texto muted, placeholders */
+--accent: #F07854;       /* ÂMBAR-CORAL - CTA, destaques, brand */
+--green: #30D158;        /* Receitas, positivo */
+--red: #FF453A;          /* Gastos, negativo, alerta */
+--border: #222222;       /* Borda padrão */
+--border2: #161616;      /* Borda sutil */
+```
+
+**Regras**:
+- Todo fundo principal = `#080808` (nunca branco, nunca outro preto)
+- Acento da marca = `#F07854` — sempre em CTAs primários e brand elements
+- Verde/vermelho SÓ para receita/gasto (semântica), nunca decorativo
+
+### Tipografia — DM Sans (via Google Fonts)
+
+```typescript
+// app/layout.tsx
+import { DM_Sans } from 'next/font/google'
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '700', '800'],
+  variable: '--font-dm-sans'
+})
+```
+
+**Escala (use essas e apenas essas)**:
+```
+h1 hero:     72px / weight 800 / tracking -0.04em / line-height 0.95
+h1:          48px / weight 800 / tracking -0.03em
+h2:          36px / weight 800 / tracking -0.03em
+h3:          22px / weight 700 / tracking -0.02em
+body:        16px / weight 300 / line-height 1.65  ← PESO LEVE É O PADRÃO
+body strong: weight 600
+caption:     13px / weight 400
+label:       11px / weight 500 / uppercase / tracking 0.12em / color --accent
+```
+
+**Princípio visual**: contraste entre **800 em headings** e **300 no body** é o que dá a estética Pierre/premium.
+
+### Componentes — Padrões
+
+- **Botões**: `border-radius: 50px` (pill), nunca retangular
+- **Cards**: `background: var(--bg2); border: 1px solid var(--border); border-radius: 16px`
+- **Nav**: glassmorphism `rgba(14,14,14,0.92) + backdrop-filter: blur(28px)`
+- **Hero glow**: `radial-gradient(ellipse, rgba(240,120,84,0.08), transparent)` absoluto
+- **Inputs**: fundo `var(--bg2)`, borda `var(--border)`, focus com ring `var(--accent)`
+- **Sombras**: EVITE. Use borda + background differentiation. Exceção: nav `box-shadow: 0 8px 40px rgba(0,0,0,.5)`
+
+### Tailwind config (adicione ao `tailwind.config.ts`)
+
+```typescript
+theme: {
+  extend: {
+    colors: {
+      nox: {
+        bg: '#080808',
+        bg2: '#101010',
+        bg3: '#181818',
+        txt: '#F5F5F7',
+        txt2: '#A1A1A6',
+        txt3: '#6C6C70',
+        accent: '#F07854',
+        green: '#30D158',
+        red: '#FF453A',
+        border: '#222222',
+        border2: '#161616'
+      }
+    },
+    fontFamily: {
+      sans: ['var(--font-dm-sans)', 'system-ui', 'sans-serif']
+    },
+    borderRadius: {
+      pill: '50px'
+    }
+  }
+}
+```
+
+---
+
+## 🏗️ Arquitetura e Estrutura
+
+### Frontend (`apps/web/`)
+- **Next.js 14** App Router (Server Components por padrão)
+- **TypeScript strict** - nunca `any`, prefira `unknown`
+- **Tailwind CSS** + shadcn/ui customizado com tokens Nox
+- **Framer Motion** para animações
+- **Recharts** para gráficos
+- **TanStack Query** para server state (NÃO use `useEffect` para fetch)
+- **Zustand** para estado global do cliente
+- **React Hook Form + Zod** para formulários
+
+### Backend (`apps/api/`)
+- **FastAPI** (Python 3.11+) com type hints em tudo
+- **SQLAlchemy 2.0** async + **Pydantic v2**
+- **Celery + Redis** para tarefas em background (agentes + sync)
+- **Alembic** para migrations
+- **JWT + refresh tokens** para auth
+
+---
+
+## 📏 Regras de Código
+
+### TypeScript / React
+
+```typescript
+// ✅ Correto
+interface TransactionCardProps {
+  transaction: Transaction;
+  onCategoryChange?: (id: string, category: string) => void;
+}
+
+export function TransactionCard({ transaction, onCategoryChange }: TransactionCardProps) {
+  return <article className="bg-nox-bg2 border border-nox-border rounded-2xl p-4" />
+}
+
+// ❌ Evitar
+const Card = (props: any) => { ... }
+```
+
+- Componentes em **PascalCase**, hooks em **camelCase**, pastas em **kebab-case**
+- Server Components por padrão, `'use client'` só quando necessário (forms, hooks, state)
+- Sempre tipar retorno de async functions: `Promise<T>`
+- NUNCA use `useEffect` para fetch — use TanStack Query
+
+### Python / FastAPI
+
+```python
+# ✅ Correto - lógica no service, router apenas orquestra
+async def get_transactions(
+    user_id: UUID,
+    month: int,
+    year: int,
+    db: AsyncSession = Depends(get_db)
+) -> list[TransactionSchema]:
+    return await transaction_service.get_by_user_month(db, user_id, month, year)
+
+# ❌ Evitar - lógica direto no router
+@router.get("/transactions")
+async def get_transactions():
+    result = await db.execute(select(Transaction).where(...))
+    return [TransactionSchema.from_orm(r) for r in result]
+```
+
+- async/await em TUDO que for I/O
+- Pydantic v2 em schemas, SQLAlchemy em models — nunca misture
+- Routers finos, services grossos
+- Dependency injection do FastAPI para `db`, `current_user`
+
+---
+
+## 🤖 Regras dos Agentes (o diferencial do Nox)
+
+Os 4 agentes têm **personalidades distintas** no prompt system. NUNCA misture:
+
+1. **Sentinela** (reativo/tempo real) — direto, atento. "Notei que..."
+2. **Oráculo** (semanal) — analítico, previsões. "A tendência esse mês é..."
+3. **Norte** (diário) — coach de metas. "Faltam X para sua meta."
+4. **Companheiro** (chat) — amigo esperto. Sempre construtivo, nunca julga.
+
+### Regras obrigatórias para todos os agentes
+
+- Respostas sempre em **pt-BR**, nunca em inglês
+- Valores em **R$** com formatação pt-BR: `Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`
+- Use `gpt-4o-mini` para categorização e tarefas simples, `gpt-4o` só para chat e análises complexas
+- **Sempre** `response_format: { type: 'json_object' }` quando esperar JSON
+- **Sempre** tem fallback: se a IA falhar, não quebra o sistema (categoria "Outros", insight vazio)
+- Todo agente respeita o `monthly_token_budget` do usuário
+
+```python
+# ✅ Correto - com fallback e tracking
+try:
+    category = await categorizer.categorize(tx.description)
+    await agent.track_tokens(user_id, category.tokens_used)
+except OpenAIError:
+    category = CategoryResult(name="Outros", confidence=0.0)
+```
+
+---
+
+## 🏦 Integração Pluggy / Open Finance
+
+- **Sempre** verificar se consentimento está ativo antes de buscar dados
+- Refresh tokens **proativamente** (24h antes de expirar)
+- Webhook `/webhook/pluggy` é **idempotente** — mesmo evento pode chegar múltiplas vezes
+- Sincronização SEMPRE em **Celery task**, nunca no request do usuário
+- Armazenar `pluggy_item_id` e `pluggy_account_id` para referência
+
+---
+
+## 🔐 Segurança (OBRIGATÓRIO)
+
+- **Nunca** logar tokens, senhas, dados bancários ou PII
+- **Sempre** validar auth com `get_current_user` dependency do FastAPI
+- Tokens bancários **sempre** encriptados (AES-256) antes de salvar
+- Usar parametrized queries (SQLAlchemy resolve, mas atenção em raw SQL)
+- Sanitizar inputs do usuário antes de mandar para IA
+- **Nunca** expor IDs sequenciais no frontend — sempre UUIDs
+
+```python
+# ✅ Correto
+account.access_token = encrypt(token, settings.ENCRYPTION_KEY)
+
+# ❌ NUNCA
+account.access_token = token  # texto puro no banco
+```
+
+---
+
+## 📁 Convenções de Arquivos
+
+### Frontend
+
+```
+app/(dashboard)/[feature]/
+├── page.tsx          # Server Component
+├── loading.tsx       # Skeleton UI
+├── error.tsx         # Error boundary
+└── _components/      # Componentes privados da rota
+
+components/
+├── ui/               # shadcn/ui customizado
+├── finance/          # Transações, cartões, valores
+├── agents/           # Cards dos 4 agentes
+├── charts/           # Recharts wrappers
+└── layout/           # Header, Sidebar, Footer
+```
+
+### Backend
+
+```
+routers/    → apenas endpoints HTTP, sem lógica
+services/   → lógica de negócio
+models/     → SQLAlchemy models
+schemas/    → Pydantic schemas (request/response)
+tasks/      → Celery tasks (background jobs)
+core/       → config, db, security, encryption
+```
+
+---
+
+## 🧪 Testes
+
+- Frontend: **Vitest + Testing Library** para componentes críticos
+- Backend: **Pytest + pytest-asyncio**
+- Mínimo de testes para: auth, sync bancário, categorização, cada um dos 4 agentes
+- Mock do Pluggy e OpenAI com `httpx_mock` / `pytest-mock`
+
+---
+
+## 🚀 Performance
+
+- Imagens: `next/image` sempre com width/height explícitos
+- Virtualização em listas > 50 items (`@tanstack/react-virtual`)
+- TanStack Query: `staleTime: 5 * 60 * 1000` para dados financeiros
+- Cache Redis no backend: dashboards com TTL 2 minutos
+- Paginação em TUDO — nunca retornar 1000+ transações de uma vez
+
+---
+
+## 💬 Formatação e Idioma
+
+- **Código**: inglês (vars, funções, comentários técnicos)
+- **UI / textos ao usuário**: português brasileiro
+- **Valores monetários**:
+  ```typescript
+  export const formatBRL = (value: number) =>
+    new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  ```
+- **Datas**: formato brasileiro DD/MM/YYYY na UI, ISO 8601 na API
+- **Saudação dinâmica**: "Bom dia" / "Boa tarde" / "Boa noite" baseada na hora
+
+---
+
+## ⚠️ O Que NUNCA Fazer
+
+- ❌ `useEffect` para fetch — use TanStack Query
+- ❌ Tokens bancários sem encriptação
+- ❌ Chamadas Pluggy/OpenAI no request do usuário — use Celery
+- ❌ `any` no TypeScript
+- ❌ Cores hardcoded — sempre via tokens `--bg`, `--accent`, etc.
+- ❌ Fontes diferentes de DM Sans
+- ❌ Bordas retangulares em botões — sempre pill `border-radius: 50px`
+- ❌ Fundo `#000` ou `#0A0A0A` — o Nox é `#080808`
+- ❌ Peso 400 no body — é sempre 300 (estética premium)
+- ❌ Sombras pesadas ou gradientes roxos — a marca é preto + coral âmbar
+- ❌ SELECT * nas queries — sempre campos explícitos
+- ❌ Lógica de negócio nos componentes — vai em hooks/services
+- ❌ Expor erros internos ao usuário — mensagem genérica em pt-BR
+- ❌ Commitar `.env` com secrets
+
+---
+
+## ✨ Checklist de PR
+
+Antes de fazer merge, verificar:
+
+- [ ] TypeScript strict sem erros
+- [ ] Ruff/Black no Python passa
+- [ ] Todas as queries têm paginação se retornam listas
+- [ ] Tokens sensíveis encriptados
+- [ ] Valores em R$ formatados com `Intl`
+- [ ] Textos em pt-BR, sem erros de português
+- [ ] Cores via tokens da marca (nenhum `#XXXXXX` hardcoded fora de `tokens.css`)
+- [ ] DM Sans aplicado (sem fontes default do sistema)
+- [ ] Agentes têm fallback em caso de erro da IA
+- [ ] LGPD: sem log de dados sensíveis

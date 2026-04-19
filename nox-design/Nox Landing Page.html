@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nox — Seu dinheiro nunca dorme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --bg2: #111111;
+    --bg3: #1A1A1A;
+    --txt: #F5F5F7;
+    --txt2: #A1A1A6;
+    --txt3: #6C6C70;
+    --accent: #F07854;
+    --green: #30D158;
+    --red: #FF453A;
+    --border: #2C2C2E;
+    --border2: #1C1C1E;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 clamp(24px, 5vw, 80px);
+    background: rgba(10,10,10,0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(44,44,46,0.5);
+  }
+
+  .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+  .nav-logo span { font-weight: 800; font-size: 20px; letter-spacing: -0.04em; color: var(--txt); }
+
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { color: var(--txt3); font-size: 14px; text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--txt); }
+
+  .nav-cta { display: flex; align-items: center; gap: 12px; }
+  .btn-ghost { color: var(--txt2); font-size: 14px; background: none; border: none; cursor: pointer; font-family: 'DM Sans'; padding: 8px 16px; border-radius: 50px; transition: color 0.15s; }
+  .btn-ghost:hover { color: var(--txt); background: var(--bg3); }
+  .btn-primary { background: var(--txt); color: var(--bg); font-family: 'DM Sans'; font-weight: 700; font-size: 14px; border: none; border-radius: 50px; padding: 10px 24px; cursor: pointer; transition: opacity 0.15s; letter-spacing: -0.01em; }
+  .btn-primary:hover { opacity: 0.88; }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px clamp(24px, 5vw, 80px); max-width: 1200px; margin: 0 auto; }
+
+  .section-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(240,120,84,0.1); border: 1px solid rgba(240,120,84,0.25);
+    color: var(--accent); font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+    padding: 5px 14px; border-radius: 50px; margin-bottom: 24px;
+  }
+
+  h2.section-title {
+    font-weight: 800; font-size: clamp(36px, 5vw, 56px);
+    letter-spacing: -0.04em; line-height: 1.0;
+    margin-bottom: 20px;
+  }
+
+  p.section-sub {
+    color: var(--txt2); font-size: 18px; font-weight: 300;
+    max-width: 520px; line-height: 1.6; margin-bottom: 60px;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    padding-top: 160px; padding-bottom: 80px;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute; top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(240,120,84,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(240,120,84,0.08); border: 1px solid rgba(240,120,84,0.2);
+    color: var(--accent); font-size: 13px; font-weight: 500;
+    padding: 6px 16px; border-radius: 50px; margin-bottom: 28px;
+  }
+  .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+  h1.hero-title {
+    font-weight: 800; font-size: clamp(36px, 4.5vw, 58px);
+    letter-spacing: -0.04em; line-height: 1.0;
+    margin-bottom: 24px;
+  }
+  h1.hero-title .accent { color: var(--accent); }
+
+  .hero-sub { color: var(--txt2); font-size: 18px; font-weight: 300; line-height: 1.6; margin-bottom: 40px; max-width: 440px; }
+
+  .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 52px; }
+  .btn-hero { padding: 18px 36px; background: var(--txt); color: var(--bg); border: none; border-radius: 50px; font-family: 'DM Sans'; font-weight: 700; font-size: 17px; cursor: pointer; letter-spacing: -0.01em; transition: opacity 0.15s; }
+  .btn-hero:hover { opacity: 0.88; }
+  .btn-hero-ghost { padding: 17px 28px; background: transparent; color: var(--txt); border: 1px solid var(--border); border-radius: 50px; font-family: 'DM Sans'; font-weight: 300; font-size: 16px; cursor: pointer; transition: border-color 0.15s; display: flex; align-items: center; gap: 8px; }
+  .btn-hero-ghost:hover { border-color: var(--txt3); }
+
+  .hero-proof { display: flex; align-items: center; gap: 16px; }
+  .hero-avatars { display: flex; }
+  .hero-avatar { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--bg); margin-left: -8px; }
+  .hero-avatar:first-child { margin-left: 0; }
+  .hero-stars { color: var(--accent); font-size: 13px; letter-spacing: 1px; }
+
+  /* ── PHONE MOCK ── */
+  .phone-mock {
+    width: 300px; height: 580px;
+    background: var(--bg);
+    border-radius: 44px;
+    border: 2px solid var(--border);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+    flex-shrink: 0;
+  }
+  .phone-notch-sm {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 28px;
+    background: var(--bg); border-radius: 0 0 18px 18px; z-index: 10;
+  }
+  .phone-screen { padding: 40px 18px 16px; height: 100%; overflow: hidden; }
+
+  /* ── FEATURES GRID ── */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .feature-card {
+    background: var(--bg2); border: 1px solid var(--border2);
+    border-radius: 24px; padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .feature-card:hover { border-color: var(--border); }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 18px;
+  }
+  .feature-title { font-weight: 700; font-size: 18px; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .feature-desc { color: var(--txt2); font-size: 14px; font-weight: 300; line-height: 1.6; }
+
+  /* ── HOW IT WORKS ── */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .step-num {
+    font-weight: 800; font-size: 56px; letter-spacing: -0.04em;
+    color: var(--border); margin-bottom: 16px; line-height: 1;
+  }
+  .step-title { font-weight: 700; font-size: 20px; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .step-desc { color: var(--txt2); font-size: 14px; font-weight: 300; line-height: 1.6; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .testimonial {
+    background: var(--bg2); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 24px;
+  }
+  .testimonial-text { font-size: 15px; font-weight: 300; line-height: 1.7; margin-bottom: 20px; color: var(--txt); }
+  .testimonial-author { display: flex; align-items: center; gap: 10px; }
+  .testimonial-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+  .testimonial-name { font-weight: 600; font-size: 14px; }
+  .testimonial-role { color: var(--txt3); font-size: 12px; }
+
+  /* ── PRICING ── */
+  .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 740px; }
+  .pricing-card {
+    background: var(--bg2); border: 1px solid var(--border2);
+    border-radius: 24px; padding: 32px;
+  }
+  .pricing-card.featured {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .pricing-card.featured * { color: var(--bg) !important; }
+  .pricing-label { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--txt3); margin-bottom: 8px; }
+  .pricing-price { font-weight: 800; font-size: 48px; letter-spacing: -0.04em; line-height: 1; margin-bottom: 4px; }
+  .pricing-sub { color: var(--txt3); font-size: 14px; margin-bottom: 28px; }
+  .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .pricing-features li { font-size: 14px; font-weight: 300; display: flex; align-items: center; gap: 8px; }
+  .pricing-features li::before { content: '✓'; font-weight: 700; }
+  .btn-pricing-primary { width: 100%; padding: 15px; background: var(--bg); color: var(--txt); border: none; border-radius: 50px; font-family: 'DM Sans'; font-weight: 700; font-size: 15px; cursor: pointer; transition: opacity 0.15s; }
+  .btn-pricing-primary:hover { opacity: 0.88; }
+  .btn-pricing-ghost { width: 100%; padding: 15px; background: transparent; color: var(--txt); border: 1px solid var(--border); border-radius: 50px; font-family: 'DM Sans'; font-weight: 500; font-size: 15px; cursor: pointer; transition: border-color 0.15s; }
+  .btn-pricing-ghost:hover { border-color: var(--txt3); }
+
+  /* ── CTA BAND ── */
+  #cta-band {
+    background: var(--bg2);
+    border-top: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border2);
+    padding: 100px clamp(24px, 5vw, 80px);
+    text-align: center;
+  }
+  #cta-band .inner { max-width: 640px; margin: 0 auto; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 60px clamp(24px, 5vw, 80px) 40px;
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--border2);
+  }
+  .footer-logo { display: flex; align-items: center; gap: 8px; }
+  .footer-logo span { font-weight: 800; font-size: 18px; letter-spacing: -0.04em; }
+  footer p { color: var(--txt3); font-size: 13px; }
+
+  /* ── STAT STRIP ── */
+  .stats-strip {
+    display: flex; gap: 0;
+    border: 1px solid var(--border2); border-radius: 24px;
+    overflow: hidden; margin-bottom: 80px;
+  }
+  .stat-item {
+    flex: 1; padding: 28px 32px;
+    border-right: 1px solid var(--border2);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-value { font-weight: 800; font-size: 40px; letter-spacing: -0.04em; margin-bottom: 4px; }
+  .stat-label { color: var(--txt3); font-size: 13px; font-weight: 400; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .phone-mock { display: none; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr; gap: 28px; }
+    .testimonials { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .features-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── TWEAKS PANEL ── */
+  #tweaks-panel {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px; width: 220px;
+    z-index: 999; display: none;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    font-family: 'DM Sans';
+  }
+  #tweaks-panel.visible { display: block; }
+  .tweaks-title { font-weight: 700; font-size: 13px; margin-bottom: 14px; }
+  .tweaks-row { margin-bottom: 12px; }
+  .tweaks-label { font-size: 11px; color: var(--txt3); margin-bottom: 6px; }
+  .tweaks-swatch-row { display: flex; gap: 6px; }
+  .tweaks-swatch { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; }
+  .tweaks-swatch:hover { transform: scale(1.1); }
+  .tweaks-swatch.active { border-color: white; }
+  .tweaks-row select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--txt); padding: 6px 8px; border-radius: 8px; font-family: 'DM Sans'; font-size: 12px; }
+  .tweaks-row input[type=text] { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--txt); padding: 6px 8px; border-radius: 8px; font-family: 'DM Sans'; font-size: 12px; outline: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+      <path d="M20 8L30 12V20C30 25.5 25.5 30.5 20 32C14.5 30.5 10 25.5 10 20V12L20 8Z" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+      <path d="M23.5 14A3.5 3.5 0 1 0 23.5 21.5 2.8 2.8 0 0 1 23.5 14Z" fill="var(--accent)"/>
+    </svg>
+    <span>nox</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Recursos</a>
+    <a href="#how">Como funciona</a>
+    <a href="#pricing">Preços</a>
+    <a href="#">Blog</a>
+  </div>
+  <div class="nav-cta">
+    <button class="btn-ghost">Entrar</button>
+    <button class="btn-primary">Começar grátis</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="max-width:100%; padding-left: clamp(24px, 5vw, 80px); padding-right: clamp(24px, 5vw, 80px);">
+  <div class="hero-glow"></div>
+  <div class="hero-inner" style="max-width:1200px; margin:0 auto;">
+    <!-- Text -->
+    <div>
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Inteligência artificial para suas finanças
+      </div>
+      <h1 class="hero-title">
+        Seu dinheiro<br>
+        nunca dorme.<br>
+        <span class="accent">Agora você<br>também não<br>precisa se<br>preocupar.</span>
+      </h1>
+      <p class="hero-sub">O Nox monitora, analisa e organiza tudo — enquanto você vive.</p>
+      <div class="hero-actions">
+        <button class="btn-hero">Começar grátis</button>
+        <button class="btn-hero-ghost">Ver como funciona <span style="opacity:0.4">→</span></button>
+      </div>
+      <div class="hero-proof">
+        <div class="hero-avatars">
+          <div class="hero-avatar" style="background: var(--accent);"></div>
+          <div class="hero-avatar" style="background: #F5F5F7;"></div>
+          <div class="hero-avatar" style="background: #A1A1A6;"></div>
+          <div class="hero-avatar" style="background: #6C6C70;"></div>
+          <div class="hero-avatar" style="background: #3A3A3C;"></div>
+        </div>
+        <div>
+          <div class="hero-stars">★★★★★</div>
+          <div style="color:var(--txt3); font-size:13px; margin-top:2px;">+2.400 brasileiros já usam</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone mock -->
+    <div style="display:flex; justify-content:center;">
+      <div class="phone-mock">
+        <div class="phone-notch-sm"></div>
+        <div class="phone-screen">
+          <!-- Mini status -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; opacity:0.6;">
+            <span style="font-size:13px; font-weight:600;">9:41</span>
+            <div style="width:16px; height:8px; border:1px solid #F5F5F7; border-radius:2px; display:flex; align-items:center; padding:0 1px;">
+              <div style="width:75%; height:4px; background:#F5F5F7; border-radius:1px;"></div>
+            </div>
+          </div>
+          <!-- Greeting -->
+          <div style="color:var(--txt3); font-size:12px; margin-bottom:2px;">Bom dia,</div>
+          <div style="font-weight:700; font-size:18px; letter-spacing:-0.02em; margin-bottom:16px;">Lucas 👋</div>
+          <!-- Balance card -->
+          <div style="background:#111; border-radius:18px; padding:18px; margin-bottom:10px; border:1px solid #1C1C1E; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:-30px; right:-30px; width:120px; height:120px; border-radius:50%; background:rgba(240,120,84,0.08);"></div>
+            <div style="color:var(--txt3); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:500; margin-bottom:6px;">Patrimônio</div>
+            <div style="font-weight:800; font-size:26px; letter-spacing:-0.03em; margin-bottom:6px;">R$ 12.430,60</div>
+            <div style="background:rgba(48,209,88,0.15); display:inline-flex; border-radius:50px; padding:2px 8px; color:#30D158; font-size:11px; font-weight:600;">↑ 3,2%</div>
+          </div>
+          <!-- Mini stats -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+            <div style="background:#111; border-radius:12px; padding:12px; border:1px solid #1C1C1E;">
+              <div style="color:var(--txt3); font-size:9px; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Receitas</div>
+              <div style="color:#30D158; font-weight:700; font-size:14px;">+R$ 7.250</div>
+            </div>
+            <div style="background:#111; border-radius:12px; padding:12px; border:1px solid #1C1C1E;">
+              <div style="color:var(--txt3); font-size:9px; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Despesas</div>
+              <div style="color:#FF453A; font-weight:700; font-size:14px;">−R$ 2.468</div>
+            </div>
+          </div>
+          <!-- AI insight -->
+          <div style="background:rgba(240,120,84,0.1); border:1px solid rgba(240,120,84,0.25); border-radius:14px; padding:12px;">
+            <div style="color:var(--accent); font-size:11px; font-weight:600; margin-bottom:4px;">💡 Insight do Nox</div>
+            <div style="color:var(--txt); font-size:12px; font-weight:300; line-height:1.5;">Você gastou 24% a mais no mercado essa semana.</div>
+          </div>
+          <!-- Transactions preview -->
+          <div style="margin-top:12px;">
+            <div style="color:var(--txt3); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:500; margin-bottom:8px;">Recentes</div>
+            <div style="background:#111; border-radius:12px; overflow:hidden; border:1px solid #1C1C1E;">
+              <div style="padding:10px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid #1C1C1E;">
+                <div style="width:28px; height:28px; border-radius:8px; background:rgba(48,209,88,0.15); display:flex; align-items:center; justify-content:center; font-size:13px;">💼</div>
+                <div style="flex:1;"><div style="font-size:12px; font-weight:500;">Salário</div></div>
+                <div style="color:#30D158; font-size:12px; font-weight:700;">+6.200</div>
+              </div>
+              <div style="padding:10px 12px; display:flex; align-items:center; gap:8px;">
+                <div style="width:28px; height:28px; border-radius:8px; background:rgba(255,69,58,0.15); display:flex; align-items:center; justify-content:center; font-size:13px;">🛵</div>
+                <div style="flex:1;"><div style="font-size:12px; font-weight:500;">iFood</div></div>
+                <div style="color:#FF453A; font-size:12px; font-weight:700;">−87,50</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div style="padding: 0 clamp(24px, 5vw, 80px); max-width:1200px; margin:0 auto 0;">
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-value">2.4k+</div>
+      <div class="stat-label">usuários ativos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" style="color:var(--accent);">R$ 48M</div>
+      <div class="stat-label">monitorados todo mês</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">94%</div>
+      <div class="stat-label">economizam mais no 1° mês</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" style="color:var(--green);">4.9★</div>
+      <div class="stat-label">avaliação média</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">Recursos</div>
+  <h2 class="section-title">Tudo que seu dinheiro<br>precisa, num só lugar.</h2>
+  <p class="section-sub">O Nox conecta suas contas, entende seus padrões e age antes que você precise perguntar.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(240,120,84,0.12);">🤖</div>
+      <div class="feature-title">IA Financeira</div>
+      <p class="feature-desc">Insights proativos baseados no seu comportamento real. Não alertas genéricos — conselhos que fazem sentido para você.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(48,209,88,0.12);">🏦</div>
+      <div class="feature-title">Open Finance</div>
+      <p class="feature-desc">Conecte Nubank, Itaú, Bradesco e mais de 200 instituições via Open Finance. Tudo atualizado em tempo real.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(84,197,240,0.12);">📊</div>
+      <div class="feature-title">Orçamento inteligente</div>
+      <p class="feature-desc">Categorias automáticas, limites personalizados e alertas antes de estourar. Sem planilha, sem trabalho manual.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(240,120,84,0.12);">🎯</div>
+      <div class="feature-title">Metas de poupança</div>
+      <p class="feature-desc">Defina objetivos — viagem, reserva de emergência, aposentadoria. O Nox traça o caminho e monitora o progresso.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(255,69,58,0.12);">🔔</div>
+      <div class="feature-title">Alertas em tempo real</div>
+      <p class="feature-desc">Cobranças duplicadas, assinaturas esquecidas, gastos acima do padrão. Você sabe antes de sentir no bolso.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(232,201,122,0.12);">📈</div>
+      <div class="feature-title">Relatório mensal</div>
+      <p class="feature-desc">Um resumo claro, visual e em português do Brasil. No dia 1° de cada mês, tudo que aconteceu no anterior.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="background:var(--bg2); max-width:100%; padding-left: clamp(24px, 5vw, 80px); padding-right: clamp(24px, 5vw, 80px); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="section-label">Como funciona</div>
+    <h2 class="section-title">Três passos.<br>Resultado imediato.</h2>
+    <p class="section-sub" style="margin-bottom:60px;">Sem burocracia. Sem planilha. Do cadastro ao primeiro insight em menos de 2 minutos.</p>
+    <div class="steps">
+      <div>
+        <div class="step-num">01</div>
+        <div class="step-title">Crie sua conta</div>
+        <p class="step-desc">E-mail ou Google. Nenhuma informação bancária pedida nessa etapa. Em 30 segundos você já está dentro.</p>
+      </div>
+      <div>
+        <div class="step-num">02</div>
+        <div class="step-title">Conecte suas contas</div>
+        <p class="step-desc">Via Open Finance — o padrão do Banco Central. Seguro, regulamentado e sem compartilhar senha. O Nox só lê, nunca movimenta.</p>
+      </div>
+      <div>
+        <div class="step-num">03</div>
+        <div class="step-title">O Nox trabalha</div>
+        <p class="step-desc">A IA categoriza, analisa padrões e entrega insights em português mesmo. Você recebe um relatório completo sem fazer nada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label">Depoimentos</div>
+  <h2 class="section-title">Quem usa,<br>não volta pra planilha.</h2>
+  <p class="section-sub" style="margin-bottom:48px;">Histórias reais de quem finalmente entendeu onde o dinheiro estava indo.</p>
+  <div class="testimonials">
+    <div class="testimonial">
+      <p class="testimonial-text">"Em dois meses usando o Nox eu percebi que estava gastando quase R$ 800 por mês em assinaturas que nem usava. Cancelei 6 delas."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:rgba(240,120,84,0.2); color:var(--accent);">A</div>
+        <div>
+          <div class="testimonial-name">Ana Paula, 29</div>
+          <div class="testimonial-role">Desenvolvedora · SP</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <p class="testimonial-text">"Nunca consegui manter uma planilha por mais de uma semana. Com o Nox é automático. Hoje tenho minha reserva de emergência pela primeira vez."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:rgba(48,209,88,0.2); color:#30D158;">R</div>
+        <div>
+          <div class="testimonial-name">Rafael, 34</div>
+          <div class="testimonial-role">Designer · BH</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <p class="testimonial-text">"O insight de IA é o que diferencia. Ele me alertou que meu gasto com delivery tinha aumentado 40% em três meses. Não tinha percebido."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:rgba(84,197,240,0.2); color:#54C5F0;">C</div>
+        <div>
+          <div class="testimonial-name">Camila, 26</div>
+          <div class="testimonial-role">Médica · RJ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-label">Preços</div>
+  <h2 class="section-title">Simples como<br>deveria ser.</h2>
+  <p class="section-sub" style="margin-bottom:48px;">Sem taxa de setup. Sem cartão para o plano grátis. Cancela quando quiser.</p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-label">Free</div>
+      <div class="pricing-price">R$ 0</div>
+      <div class="pricing-sub">Para sempre grátis</div>
+      <ul class="pricing-features" style="color:var(--txt2);">
+        <li>1 conta conectada</li>
+        <li>Histórico de 3 meses</li>
+        <li>Categorização automática</li>
+        <li>Relatório mensal básico</li>
+      </ul>
+      <button class="btn-pricing-ghost">Criar conta grátis</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-label" style="color:rgba(10,10,10,0.6);">Pro</div>
+      <div class="pricing-price">R$ 19</div>
+      <div class="pricing-sub" style="color:rgba(10,10,10,0.55);">/mês · cobrado mensalmente</div>
+      <ul class="pricing-features">
+        <li>Contas ilimitadas</li>
+        <li>Histórico completo</li>
+        <li>IA com insights diários</li>
+        <li>Metas e orçamento</li>
+        <li>Alertas em tempo real</li>
+        <li>Suporte prioritário</li>
+      </ul>
+      <button class="btn-pricing-primary">Assinar Pro</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div id="cta-band">
+  <div class="inner">
+    <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(240,120,84,0.1); border:1px solid rgba(240,120,84,0.2); color:var(--accent); font-size:13px; font-weight:500; padding:6px 16px; border-radius:50px; margin-bottom:28px;">
+      <div style="width:6px; height:6px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite;"></div>
+      Junte-se a +2.400 usuários
+    </div>
+    <h2 style="font-weight:800; font-size:clamp(36px,5vw,60px); letter-spacing:-0.04em; line-height:1.0; margin-bottom:20px;">
+      Comece hoje.<br><span style="color:var(--accent);">É grátis.</span>
+    </h2>
+    <p style="color:var(--txt2); font-size:18px; font-weight:300; margin-bottom:36px; line-height:1.6;">
+      Sem cartão de crédito. Sem contrato. Cancela em 1 clique.
+    </p>
+    <button class="btn-hero" style="font-size:18px; padding:20px 48px;">Começar grátis agora</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg width="18" height="18" viewBox="0 0 40 40" fill="none">
+      <path d="M20 8L30 12V20C30 25.5 25.5 30.5 20 32C14.5 30.5 10 25.5 10 20V12L20 8Z" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+      <path d="M23.5 14A3.5 3.5 0 1 0 23.5 21.5 2.8 2.8 0 0 1 23.5 14Z" fill="var(--accent)"/>
+    </svg>
+    <span>nox</span>
+  </div>
+  <p>© 2026 Nox Finanças. Feito no Brasil 🇧🇷</p>
+  <div style="display:flex; gap:24px;">
+    <a href="#" style="color:var(--txt3); font-size:13px; text-decoration:none;">Privacidade</a>
+    <a href="#" style="color:var(--txt3); font-size:13px; text-decoration:none;">Termos</a>
+    <a href="#" style="color:var(--txt3); font-size:13px; text-decoration:none;">Contato</a>
+  </div>
+</footer>
+
+<!-- TWEAKS PANEL -->
+<div id="tweaks-panel">
+  <div class="tweaks-title">Tweaks</div>
+  <div class="tweaks-row">
+    <div class="tweaks-label">Accent color</div>
+    <div class="tweaks-swatch-row">
+      <div class="tweaks-swatch active" style="background:#F07854" data-color="#F07854"></div>
+      <div class="tweaks-swatch" style="background:#F0A854" data-color="#F0A854"></div>
+      <div class="tweaks-swatch" style="background:#E8C97A" data-color="#E8C97A"></div>
+      <div class="tweaks-swatch" style="background:#30D158" data-color="#30D158"></div>
+      <div class="tweaks-swatch" style="background:#54C5F0" data-color="#54C5F0"></div>
+    </div>
+  </div>
+  <div class="tweaks-row">
+    <div class="tweaks-label">Headline</div>
+    <select id="tweak-headline">
+      <option value="a">Seu dinheiro nunca dorme.</option>
+      <option value="b">Inteligência que cuida de você.</option>
+      <option value="c">Finanças simples. De verdade.</option>
+    </select>
+  </div>
+</div>
+
+<script>
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#F07854",
+  "headline": "a"
+}/*EDITMODE-END*/;
+
+const stored = (() => { try { return JSON.parse(localStorage.getItem('nox-lp-tweaks') || '{}'); } catch { return {}; } })();
+const cfg = { ...TWEAK_DEFAULTS, ...stored };
+
+const HEADLINES = {
+  a: ['Seu dinheiro', 'nunca dorme.', 'Agora você', 'também não', 'precisa se', 'preocupar.'],
+  b: ['Inteligência', 'que cuida', 'de você.', '', '', ''],
+  c: ['Finanças', 'simples.', 'De verdade.', '', '', ''],
+};
+
+function applyAccent(color) {
+  document.documentElement.style.setProperty('--accent', color);
+  document.querySelectorAll('.tweaks-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === color));
+  cfg.accentColor = color;
+  save();
+}
+
+function applyHeadline(v) {
+  const lines = HEADLINES[v];
+  const h1 = document.querySelector('.hero-title');
+  if (!h1) return;
+  const [l1, l2, l3, l4, l5, l6] = lines;
+  h1.innerHTML = `${l1}<br>${l2}<br><span class="accent">${[l3,l4,l5,l6].filter(Boolean).join('<br>')}</span>`;
+  cfg.headline = v;
+  save();
+}
+
+function save() {
+  localStorage.setItem('nox-lp-tweaks', JSON.stringify(cfg));
+  window.parent.postMessage({ type: '__edit_mode_set_keys', edits: cfg }, '*');
+}
+
+// Init
+applyAccent(cfg.accentColor);
+document.getElementById('tweak-headline').value = cfg.headline;
+applyHeadline(cfg.headline);
+
+// Tweaks
+document.querySelectorAll('.tweaks-swatch').forEach(s => {
+  s.addEventListener('click', () => applyAccent(s.dataset.color));
+});
+document.getElementById('tweak-headline').addEventListener('change', e => applyHeadline(e.target.value));
+
+// Panel toggle
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode') document.getElementById('tweaks-panel').classList.add('visible');
+  else if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').classList.remove('visible');
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+</script>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#0A0A0A"/>
+    <rect x="15" y="20" width="70" height="6" rx="3" fill="#F07854" opacity="0.8"/>
+    <rect x="15" y="32" width="55" height="4" rx="2" fill="#F5F5F7" opacity="0.3"/>
+    <rect x="15" y="40" width="45" height="4" rx="2" fill="#F5F5F7" opacity="0.2"/>
+    <rect x="15" y="54" width="30" height="10" rx="5" fill="#F5F5F7"/>
+    <rect x="50" y="54" width="28" height="10" rx="5" fill="none" stroke="#2C2C2E" stroke-width="1"/>
+    <path d="M55 25L60 27V31C60 33.5 58.5 35.5 55 36C51.5 35.5 50 33.5 50 31V27L55 25Z" stroke="#F07854" stroke-width="1" fill="none" transform="translate(0 35)"/>
+  </svg>
+</template>
+
+</body>
+</html>

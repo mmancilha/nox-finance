@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nox — App Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+    padding: 24px;
+  }
+
+  .phone-stage {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  .phone-wrap {
+    width: 390px;
+    height: 780px;
+    background: #0A0A0A;
+    border-radius: 52px;
+    border: 2px solid #2C2C2E;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .phone-inner {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Notch */
+  .notch {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 126px; height: 37px;
+    background: #0A0A0A;
+    border-radius: 0 0 22px 22px;
+    z-index: 50;
+  }
+
+  /* Scrollable screen content */
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    padding-top: 52px;
+    padding-bottom: 88px;
+    position: absolute;
+    inset: 0;
+    background: #0A0A0A;
+    transition: opacity 0.2s, transform 0.25s;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .screen.hidden { opacity: 0; pointer-events: none; transform: translateY(8px); }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 88px;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid #1C1C1E;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 12px;
+    z-index: 40;
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    border: none;
+    background: transparent;
+    padding: 0;
+  }
+  .nav-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+  .nav-label { font-size: 10px; font-weight: 500; font-family: 'DM Sans'; }
+
+  /* Status bar */
+  .status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px 0;
+    z-index: 45;
+    pointer-events: none;
+  }
+
+  /* Cards */
+  .card {
+    background: #111;
+    border: 1px solid #1C1C1E;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  /* Tweaks */
+  #tweaks-panel {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #1A1A1A; border: 1px solid #2C2C2E;
+    border-radius: 16px; padding: 20px; width: 220px;
+    z-index: 999; display: none;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    font-family: 'DM Sans', sans-serif;
+  }
+  #tweaks-panel.visible { display: block; }
+  .tweaks-title { font-weight: 700; font-size: 13px; margin-bottom: 14px; color: #F5F5F7; }
+  .tweaks-row { margin-bottom: 12px; }
+  .tweaks-label { font-size: 11px; color: #6C6C70; margin-bottom: 6px; }
+  .tweaks-swatch-row { display: flex; gap: 6px; }
+  .tweaks-swatch { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; }
+  .tweaks-swatch:hover { transform: scale(1.1); }
+  .tweaks-swatch.active { border-color: white; }
+  .tweaks-row select { width: 100%; background: #0A0A0A; border: 1px solid #2C2C2E; color: #F5F5F7; padding: 6px 8px; border-radius: 8px; font-family: 'DM Sans'; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<div id="tweaks-panel">
+  <div class="tweaks-title">Tweaks</div>
+  <div class="tweaks-row">
+    <div class="tweaks-label">Accent color</div>
+    <div class="tweaks-swatch-row">
+      <div class="tweaks-swatch" style="background:#F07854" data-color="#F07854"></div>
+      <div class="tweaks-swatch" style="background:#F0A854" data-color="#F0A854"></div>
+      <div class="tweaks-swatch" style="background:#E8C97A" data-color="#E8C97A"></div>
+      <div class="tweaks-swatch" style="background:#30D158" data-color="#30D158"></div>
+      <div class="tweaks-swatch" style="background:#54C5F0" data-color="#54C5F0"></div>
+    </div>
+  </div>
+  <div class="tweaks-row">
+    <div class="tweaks-label">Nome do usuário</div>
+    <select id="tweak-user">
+      <option value="Lucas">Lucas</option>
+      <option value="Ana">Ana</option>
+      <option value="Pedro">Pedro</option>
+      <option value="Mariana">Mariana</option>
+    </select>
+  </div>
+  <div class="tweaks-row">
+    <div class="tweaks-label">Mostrar saldo</div>
+    <select id="tweak-balance">
+      <option value="show">Visível</option>
+      <option value="hide">Oculto</option>
+    </select>
+  </div>
+</div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#F07854",
+  "userName": "Pedro",
+  "showBalance": "show"
+}/*EDITMODE-END*/;
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const TRANSACTIONS = [
+  { id:1,  label:'iFood',           cat:'Alimentação',   amount:-87.50,  date:'Hoje',      icon:'🛵', color:'#FF453A' },
+  { id:2,  label:'Salário',         cat:'Receita',       amount:6200.00, date:'Hoje',      icon:'💼', color:'#30D158' },
+  { id:3,  label:'Spotify',         cat:'Assinaturas',   amount:-21.90,  date:'Ontem',     icon:'🎵', color:'#FF453A' },
+  { id:4,  label:'Uber',            cat:'Transporte',    amount:-34.20,  date:'Ontem',     icon:'🚗', color:'#FF453A' },
+  { id:5,  label:'Freelance',       cat:'Receita',       amount:800.00,  date:'15 abr',    icon:'💻', color:'#30D158' },
+  { id:6,  label:'Mercado Extra',   cat:'Alimentação',   amount:-187.40, date:'14 abr',    icon:'🛒', color:'#FF453A' },
+  { id:7,  label:'Netflix',         cat:'Assinaturas',   amount:-39.90,  date:'14 abr',    icon:'🎬', color:'#FF453A' },
+  { id:8,  label:'Nubank',          cat:'Cartão crédito',amount:-1420.00,date:'13 abr',    icon:'💳', color:'#FF453A' },
+  { id:9,  label:'Farmácia',        cat:'Saúde',         amount:-62.00,  date:'12 abr',    icon:'💊', color:'#FF453A' },
+  { id:10, label:'Aluguel',         cat:'Moradia',       amount:-1800.00,date:'10 abr',    icon:'🏠', color:'#FF453A' },
+  { id:11, label:'Academia',        cat:'Saúde',         amount:-99.90,  date:'05 abr',    icon:'🏋', color:'#FF453A' },
+  { id:12, label:'PIX recebido',    cat:'Receita',       amount:250.00,  date:'03 abr',    icon:'↗', color:'#30D158' },
+];
+
+const GOALS = [
+  { id:1, label:'Viagem Floripa',   target:5000,  saved:2840,  color:'#F07854',  emoji:'🏖' },
+  { id:2, label:'Reserva emergência',target:15000, saved:8600, color:'#30D158',  emoji:'🛡' },
+  { id:3, label:'Notebook novo',    target:4200,  saved:1200,  color:'#54C5F0',  emoji:'💻' },
+];
+
+const BUDGETS = [
+  { cat:'Alimentação', spent:274.90, limit:600,  color:'#F07854' },
+  { cat:'Transporte',  spent:114.20, limit:300,  color:'#E8C97A' },
+  { cat:'Assinaturas', spent:161.70, limit:200,  color:'#54C5F0' },
+  { cat:'Saúde',       spent:161.90, limit:250,  color:'#30D158' },
+  { cat:'Moradia',     spent:1800,   limit:1800, color:'#FF453A' },
+];
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+const fmt = (n) => {
+  const abs = Math.abs(n);
+  const str = abs.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  return (n >= 0 ? '+' : '−') + ' R$ ' + str;
+};
+const fmtAbs = (n) => 'R$ ' + Math.abs(n).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+
+// ─── COMPONENTS ──────────────────────────────────────────────────────────────
+function StatusBar() {
+  return (
+    <div className="status-bar">
+      <span style={{ fontSize:15, fontWeight:600, color:'#F5F5F7' }}>9:41</span>
+      <div style={{ display:'flex', gap:5, alignItems:'center' }}>
+        <svg width="16" height="11" viewBox="0 0 17 12" fill="#F5F5F7">
+          <rect x="0" y="3" width="3" height="9" rx="1"/>
+          <rect x="4.5" y="2" width="3" height="10" rx="1"/>
+          <rect x="9" y="0" width="3" height="12" rx="1"/>
+          <rect x="13.5" y="0" width="3" height="12" rx="1" opacity="0.3"/>
+        </svg>
+        <div style={{ width:20, height:10, border:'1.5px solid #F5F5F7', borderRadius:3, display:'flex', alignItems:'center', padding:'0 2px' }}>
+          <div style={{ width:'75%', height:5, background:'#F5F5F7', borderRadius:1 }}/>
+          <div style={{ position:'absolute', marginLeft:21, width:2, height:5, background:'#F5F5F7', borderRadius:1 }}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LogoMark({ size=20, color='#F07854' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
+      <path d="M20 8L30 12V20C30 25.5 25.5 30.5 20 32C14.5 30.5 10 25.5 10 20V12L20 8Z" stroke={color} strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
+      <path d="M23.5 14A3.5 3.5 0 1 0 23.5 21.5 2.8 2.8 0 0 1 23.5 14Z" fill={color}/>
+    </svg>
+  );
+}
+
+function TxIcon({ icon, color }) {
+  return (
+    <div style={{ width:44, height:44, borderRadius:14, background:color+'18', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>
+      {icon}
+    </div>
+  );
+}
+
+// ─── SCREEN: HOME ─────────────────────────────────────────────────────────────
+function HomeScreen({ accent, userName, showBalance, onTxTap }) {
+  const balance = 12430.60;
+  const income = 7250;
+  const expenses = 2468.50;
+  const hidden = showBalance === 'hide';
+
+  return (
+    <div style={{ padding:'0 20px' }}>
+      {/* Header */}
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:24, paddingTop:4 }}>
+        <div>
+          <div style={{ color:'#6C6C70', fontSize:13 }}>Bom dia,</div>
+          <div style={{ fontWeight:700, fontSize:22, letterSpacing:'-0.02em' }}>{userName} 👋</div>
+        </div>
+        <div style={{ width:40, height:40, borderRadius:'50%', background:accent+'22', border:`1.5px solid ${accent}44`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <span style={{ color:accent, fontWeight:700, fontSize:16 }}>{userName[0]}</span>
+        </div>
+      </div>
+
+      {/* Balance card */}
+      <div style={{ background:'#111', borderRadius:24, padding:'24px', marginBottom:14, border:'1px solid #1C1C1E', position:'relative', overflow:'hidden' }}>
+        <div style={{ position:'absolute', top:-40, right:-40, width:160, height:160, borderRadius:'50%', background:accent+'0A', pointerEvents:'none' }}/>
+        <div style={{ color:'#6C6C70', fontSize:12, fontWeight:500, letterSpacing:'0.06em', textTransform:'uppercase', marginBottom:8 }}>Patrimônio total</div>
+        <div style={{ fontWeight:800, fontSize:36, letterSpacing:'-0.03em', marginBottom:4, transition:'filter 0.2s', filter: hidden ? 'blur(12px)' : 'none', userSelect: hidden ? 'none' : 'auto' }}>
+          R$ {balance.toLocaleString('pt-BR', { minimumFractionDigits:2 })}
+        </div>
+        <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+          <div style={{ background:'#30D15820', borderRadius:50, padding:'3px 10px', color:'#30D158', fontSize:12, fontWeight:600 }}>↑ 3,2%</div>
+          <span style={{ color:'#6C6C70', fontSize:12 }}>vs mês anterior</span>
+        </div>
+      </div>
+
+      {/* Month summary */}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:20 }}>
+        {[
+          { label:'Receitas', value:income,    color:'#30D158', arrow:'↑' },
+          { label:'Despesas', value:expenses,  color:'#FF453A', arrow:'↓' },
+        ].map(s => (
+          <div key={s.label} className="card" style={{ padding:'16px' }}>
+            <div style={{ color:'#6C6C70', fontSize:11, fontWeight:500, letterSpacing:'0.06em', textTransform:'uppercase', marginBottom:8 }}>{s.label}</div>
+            <div style={{ color:s.color, fontWeight:700, fontSize:18, letterSpacing:'-0.02em', filter: hidden ? 'blur(8px)' : 'none' }}>
+              {s.arrow} R$ {s.value.toLocaleString('pt-BR', { minimumFractionDigits:2 })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* AI Insight */}
+      <div style={{ background:accent+'12', border:`1px solid ${accent}30`, borderRadius:20, padding:'16px 18px', marginBottom:20 }}>
+        <div style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
+          <LogoMark size={18} color={accent} />
+          <div>
+            <div style={{ color:accent, fontSize:12, fontWeight:600, marginBottom:4 }}>Insight do Nox</div>
+            <div style={{ color:'#F5F5F7', fontSize:14, fontWeight:300, lineHeight:1.5 }}>
+              Você gastou <strong style={{ fontWeight:600 }}>R$ 187,40</strong> no mercado essa semana — 24% acima da sua média. Quer ajustar o orçamento de alimentação?
+            </div>
+            <button style={{ marginTop:10, background:accent, color:'#0A0A0A', border:'none', borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:700, cursor:'pointer' }}>
+              Ver orçamento
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent transactions */}
+      <div style={{ marginBottom:8 }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+          <div style={{ fontWeight:700, fontSize:16 }}>Últimas transações</div>
+          <button onClick={onTxTap} style={{ color:accent, fontSize:13, background:'none', border:'none', cursor:'pointer', fontFamily:'DM Sans' }}>Ver todas</button>
+        </div>
+        <div className="card">
+          {TRANSACTIONS.slice(0,5).map((tx, i) => (
+            <div key={tx.id} style={{ padding:'14px 16px', borderBottom: i < 4 ? '1px solid #1C1C1E' : 'none', display:'flex', alignItems:'center', gap:12 }}>
+              <TxIcon icon={tx.icon} color={tx.color} />
+              <div style={{ flex:1 }}>
+                <div style={{ fontWeight:500, fontSize:14 }}>{tx.label}</div>
+                <div style={{ color:'#6C6C70', fontSize:12 }}>{tx.cat} · {tx.date}</div>
+              </div>
+              <div style={{ color:tx.color, fontWeight:700, fontSize:14, filter: hidden ? 'blur(6px)' : 'none' }}>
+                {tx.amount > 0 ? '+' : '−'} R$ {Math.abs(tx.amount).toLocaleString('pt-BR', { minimumFractionDigits:2 })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── SCREEN: TRANSACTIONS ────────────────────────────────────────────────────
+function TransactionsScreen({ accent, showBalance }) {
+  const [filter, setFilter] = useState('Todos');
+  const [search, setSearch] = useState('');
+  const filters = ['Todos','Receitas','Despesas'];
+  const hidden = showBalance === 'hide';
+
+  const filtered = TRANSACTIONS.filter(tx => {
+    if (filter === 'Receitas' && tx.amount < 0) return false;
+    if (filter === 'Despesas' && tx.amount > 0) return false;
+    if (search && !tx.label.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  const grouped = filtered.reduce((acc, tx) => {
+    if (!acc[tx.date]) acc[tx.date] = [];
+    acc[tx.date].push(tx);
+    return acc;
+  }, {});
+
+  return (
+    <div style={{ padding:'0 20px' }}>
+      <div style={{ paddingTop:4, marginBottom:20 }}>
+        <div style={{ fontWeight:800, fontSize:26, letterSpacing:'-0.03em', marginBottom:4 }}>Transações</div>
+        <div style={{ color:'#6C6C70', fontSize:14 }}>Abril 2026</div>
+      </div>
+
+      {/* Search */}
+      <div style={{ background:'#111', border:'1px solid #2C2C2E', borderRadius:14, padding:'12px 16px', display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="7" cy="7" r="5" stroke="#6C6C70" strokeWidth="1.5"/>
+          <path d="M11 11L14 14" stroke="#6C6C70" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar transação…" style={{ background:'transparent', border:'none', outline:'none', color:'#F5F5F7', fontSize:15, fontFamily:'DM Sans', fontWeight:300, flex:1 }}/>
+      </div>
+
+      {/* Filter pills */}
+      <div style={{ display:'flex', gap:8, marginBottom:20 }}>
+        {filters.map(f => (
+          <button key={f} onClick={() => setFilter(f)} style={{
+            padding:'7px 16px', borderRadius:50, fontSize:13, fontWeight:500,
+            background: filter === f ? accent : '#111',
+            color: filter === f ? '#0A0A0A' : '#A1A1A6',
+            border: `1px solid ${filter === f ? accent : '#2C2C2E'}`,
+            cursor:'pointer', fontFamily:'DM Sans', transition:'all 0.15s',
+          }}>{f}</button>
+        ))}
+      </div>
+
+      {/* Grouped list */}
+      {Object.entries(grouped).map(([date, txs]) => (
+        <div key={date} style={{ marginBottom:20 }}>
+          <div style={{ color:'#6C6C70', fontSize:12, fontWeight:500, letterSpacing:'0.06em', textTransform:'uppercase', marginBottom:10 }}>{date}</div>
+          <div className="card">
+            {txs.map((tx, i) => (
+              <div key={tx.id} style={{ padding:'14px 16px', borderBottom: i < txs.length-1 ? '1px solid #1C1C1E' : 'none', display:'flex', alignItems:'center', gap:12 }}>
+                <TxIcon icon={tx.icon} color={tx.color} />
+                <div style={{ flex:1 }}>
+                  <div style={{ fontWeight:500, fontSize:14 }}>{tx.label}</div>
+                  <div style={{ color:'#6C6C70', fontSize:12 }}>{tx.cat}</div>
+                </div>
+                <div style={{ textAlign:'right' }}>
+                  <div style={{ color:tx.color, fontWeight:700, fontSize:14, filter: hidden ? 'blur(5px)' : 'none' }}>
+                    {tx.amount > 0 ? '+' : '−'} R$ {Math.abs(tx.amount).toLocaleString('pt-BR', { minimumFractionDigits:2 })}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── SCREEN: METAS ────────────────────────────────────────────────────────────
+function GoalsScreen({ accent }) {
+  const [tab, setTab] = useState('metas');
+
+  return (
+    <div style={{ padding:'0 20px' }}>
+      <div style={{ paddingTop:4, marginBottom:20 }}>
+        <div style={{ fontWeight:800, fontSize:26, letterSpacing:'-0.03em', marginBottom:16 }}>Planejamento</div>
+        <div style={{ display:'flex', background:'#111', borderRadius:14, padding:4, border:'1px solid #1C1C1E' }}>
+          {[{ id:'metas', label:'Metas' }, { id:'orcamento', label:'Orçamento' }].map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} style={{
+              flex:1, padding:'9px', borderRadius:10, fontSize:14, fontWeight:600,
+              background: tab === t.id ? accent : 'transparent',
+              color: tab === t.id ? '#0A0A0A' : '#6C6C70',
+              border:'none', cursor:'pointer', fontFamily:'DM Sans', transition:'all 0.15s',
+            }}>{t.label}</button>
+          ))}
+        </div>
+      </div>
+
+      {tab === 'metas' ? (
+        <div>
+          {GOALS.map(g => {
+            const pct = Math.round(g.saved / g.target * 100);
+            return (
+              <div key={g.id} className="card" style={{ padding:'20px', marginBottom:12 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:14 }}>
+                  <div style={{ width:44, height:44, borderRadius:14, background:g.color+'18', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22 }}>{g.emoji}</div>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontWeight:600, fontSize:15 }}>{g.label}</div>
+                    <div style={{ color:'#6C6C70', fontSize:12 }}>
+                      R$ {g.saved.toLocaleString('pt-BR')} de R$ {g.target.toLocaleString('pt-BR')}
+                    </div>
+                  </div>
+                  <div style={{ color:g.color, fontWeight:800, fontSize:18 }}>{pct}%</div>
+                </div>
+                <div style={{ background:'#1C1C1E', borderRadius:50, height:6, overflow:'hidden' }}>
+                  <div style={{ width:`${pct}%`, height:'100%', background:g.color, borderRadius:50, transition:'width 0.5s ease' }}/>
+                </div>
+              </div>
+            );
+          })}
+          <button style={{ width:'100%', padding:'16px', background:'transparent', color:'#F5F5F7', border:'1.5px dashed #2C2C2E', borderRadius:20, fontFamily:'DM Sans', fontWeight:500, fontSize:15, cursor:'pointer', marginTop:4 }}>
+            + Nova meta
+          </button>
+        </div>
+      ) : (
+        <div>
+          {/* Monthly summary */}
+          <div className="card" style={{ padding:'20px', marginBottom:16 }}>
+            <div style={{ color:'#6C6C70', fontSize:12, fontWeight:500, letterSpacing:'0.06em', textTransform:'uppercase', marginBottom:12 }}>Gasto total — Abril</div>
+            <div style={{ fontWeight:800, fontSize:32, letterSpacing:'-0.03em', marginBottom:4 }}>R$ 2.468,50</div>
+            <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+              <div style={{ background:'#30D15820', borderRadius:50, padding:'3px 10px', color:'#30D158', fontSize:12, fontWeight:600 }}>↓ 8% vs março</div>
+            </div>
+          </div>
+
+          {BUDGETS.map((b, i) => {
+            const pct = Math.min(Math.round(b.spent / b.limit * 100), 100);
+            const over = b.spent >= b.limit;
+            return (
+              <div key={b.cat} className="card" style={{ padding:'16px', marginBottom:10 }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
+                  <div style={{ fontWeight:600, fontSize:14 }}>{b.cat}</div>
+                  <div style={{ display:'flex', gap:6, alignItems:'center' }}>
+                    <span style={{ color:'#6C6C70', fontSize:12 }}>R$ {b.spent.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+                    <span style={{ color:'#3A3A3C', fontSize:12 }}>/</span>
+                    <span style={{ color:'#A1A1A6', fontSize:12 }}>R$ {b.limit.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+                  </div>
+                </div>
+                <div style={{ background:'#1C1C1E', borderRadius:50, height:5, overflow:'hidden' }}>
+                  <div style={{ width:`${pct}%`, height:'100%', background: over ? '#FF453A' : b.color, borderRadius:50, transition:'width 0.5s ease' }}/>
+                </div>
+                {over && <div style={{ color:'#FF453A', fontSize:11, marginTop:6, fontWeight:500 }}>⚠ Limite atingido</div>}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── SCREEN: PERFIL ───────────────────────────────────────────────────────────
+function ProfileScreen({ accent, userName }) {
+  const sections = [
+    { title:'Conta', items:[
+      { icon:'🏦', label:'Contas conectadas', sub:'Nubank, Itaú' },
+      { icon:'💳', label:'Cartões', sub:'2 cartões ativos' },
+      { icon:'🔔', label:'Notificações', sub:'Ativadas' },
+    ]},
+    { title:'Nox IA', items:[
+      { icon:'🤖', label:'Insights automáticos', sub:'Ligado' },
+      { icon:'🎯', label:'Metas inteligentes', sub:'Ativo' },
+      { icon:'📊', label:'Relatório mensal', sub:'Todo dia 1°' },
+    ]},
+    { title:'Segurança', items:[
+      { icon:'🔐', label:'Biometria', sub:'Face ID ativado' },
+      { icon:'🛡', label:'Autenticação 2 fatores', sub:'Ativado' },
+    ]},
+    { title:'Suporte', items:[
+      { icon:'💬', label:'Chat com suporte', sub:'' },
+      { icon:'📄', label:'Termos de uso', sub:'' },
+    ]},
+  ];
+
+  return (
+    <div style={{ padding:'0 20px' }}>
+      {/* Profile header */}
+      <div style={{ paddingTop:4, marginBottom:24 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:20 }}>
+          <div style={{ width:64, height:64, borderRadius:'50%', background:accent+'22', border:`2px solid ${accent}`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:accent, fontWeight:800, fontSize:26 }}>{userName[0]}</span>
+          </div>
+          <div>
+            <div style={{ fontWeight:700, fontSize:20 }}>{userName} Silva</div>
+            <div style={{ color:'#6C6C70', fontSize:13 }}>{userName.toLowerCase()}@gmail.com</div>
+          </div>
+        </div>
+        {/* Plan badge */}
+        <div style={{ background:accent+'12', border:`1px solid ${accent}30`, borderRadius:16, padding:'14px 18px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <div>
+            <div style={{ color:accent, fontWeight:700, fontSize:14 }}>Nox Free</div>
+            <div style={{ color:'#6C6C70', fontSize:12 }}>Conta gratuita ativa</div>
+          </div>
+          <button style={{ background:accent, color:'#0A0A0A', border:'none', borderRadius:50, padding:'8px 18px', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:'DM Sans' }}>
+            Upgrade
+          </button>
+        </div>
+      </div>
+
+      {/* Settings sections */}
+      {sections.map(sec => (
+        <div key={sec.title} style={{ marginBottom:20 }}>
+          <div style={{ color:'#6C6C70', fontSize:11, fontWeight:500, letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:10 }}>{sec.title}</div>
+          <div className="card">
+            {sec.items.map((item, i) => (
+              <div key={item.label} style={{ padding:'14px 16px', borderBottom: i < sec.items.length-1 ? '1px solid #1C1C1E' : 'none', display:'flex', alignItems:'center', gap:12 }}>
+                <div style={{ width:36, height:36, borderRadius:10, background:'#1A1A1A', display:'flex', alignItems:'center', justifyContent:'center', fontSize:17, flexShrink:0 }}>{item.icon}</div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontWeight:500, fontSize:14 }}>{item.label}</div>
+                  {item.sub && <div style={{ color:'#6C6C70', fontSize:12 }}>{item.sub}</div>}
+                </div>
+                <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
+                  <path d="M1 1L6 6L1 11" stroke="#3A3A3C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <button style={{ width:'100%', padding:'16px', background:'transparent', color:'#FF453A', border:'1px solid #FF453A30', borderRadius:16, fontFamily:'DM Sans', fontWeight:500, fontSize:15, cursor:'pointer', marginBottom:12 }}>
+        Sair da conta
+      </button>
+    </div>
+  );
+}
+
+// ─── BOTTOM NAV ───────────────────────────────────────────────────────────────
+function BottomNav({ active, onChange, accent }) {
+  const tabs = [
+    { id:'home', label:'Início', icon: (on) => (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M3 9.5L12 3L21 9.5V20C21 20.6 20.6 21 20 21H15V15H9V21H4C3.4 21 3 20.6 3 20V9.5Z"
+          stroke={on ? accent : '#6C6C70'} fill={on ? accent+'22' : 'none'} strokeWidth="1.5" strokeLinejoin="round"/>
+      </svg>
+    )},
+    { id:'transactions', label:'Transações', icon: (on) => (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M3 6H21M3 12H21M3 18H15" stroke={on ? accent : '#6C6C70'} strokeWidth="1.5" strokeLinecap="round"/>
+        <circle cx="19" cy="18" r="3" stroke={on ? accent : '#6C6C70'} strokeWidth="1.5" fill={on ? accent+'22' : 'none'}/>
+      </svg>
+    )},
+    { id:'goals', label:'Metas', icon: (on) => (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke={on ? accent : '#6C6C70'} strokeWidth="1.5" fill={on ? accent+'18' : 'none'}/>
+        <circle cx="12" cy="12" r="5" stroke={on ? accent : '#6C6C70'} strokeWidth="1.5"/>
+        <circle cx="12" cy="12" r="1.5" fill={on ? accent : '#6C6C70'}/>
+      </svg>
+    )},
+    { id:'profile', label:'Perfil', icon: (on) => (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" stroke={on ? accent : '#6C6C70'} strokeWidth="1.5" fill={on ? accent+'22' : 'none'}/>
+        <path d="M4 20C4 16.7 7.6 14 12 14C16.4 14 20 16.7 20 20" stroke={on ? accent : '#6C6C70'} strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    )},
+  ];
+
+  return (
+    <nav className="bottom-nav">
+      {tabs.map(t => (
+        <button key={t.id} className="nav-item" onClick={() => onChange(t.id)}>
+          <div className="nav-icon">{t.icon(active === t.id)}</div>
+          <span className="nav-label" style={{ color: active === t.id ? accent : '#6C6C70' }}>{t.label}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+// ─── APP ─────────────────────────────────────────────────────────────────────
+function App() {
+  const stored = (() => { try { return JSON.parse(localStorage.getItem('nox-app-tweaks') || '{}'); } catch { return {}; } })();
+  const defaults = { ...TWEAK_DEFAULTS, ...stored };
+
+  const [accent, setAccent] = useState(defaults.accentColor);
+  const [userName, setUserName] = useState(defaults.userName);
+  const [showBalance, setShowBalance] = useState(defaults.showBalance);
+  const [tab, setTab] = useState('home');
+
+  useEffect(() => {
+    const save = { accentColor: accent, userName, showBalance };
+    localStorage.setItem('nox-app-tweaks', JSON.stringify(save));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: save }, '*');
+  }, [accent, userName, showBalance]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.data?.type === '__activate_edit_mode') document.getElementById('tweaks-panel').classList.add('visible');
+      else if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').classList.remove('visible');
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+    document.querySelectorAll('.tweaks-swatch').forEach(s => {
+      if (s.dataset.color === accent) s.classList.add('active');
+      s.addEventListener('click', () => {
+        document.querySelectorAll('.tweaks-swatch').forEach(x => x.classList.remove('active'));
+        s.classList.add('active');
+        setAccent(s.dataset.color);
+      });
+    });
+    document.getElementById('tweak-user').value = userName;
+    document.getElementById('tweak-user').addEventListener('change', e => setUserName(e.target.value));
+    document.getElementById('tweak-balance').value = showBalance;
+    document.getElementById('tweak-balance').addEventListener('change', e => setShowBalance(e.target.value));
+
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  const screens = ['home','transactions','goals','profile'];
+
+  return (
+    <div className="phone-stage">
+      <div className="phone-wrap">
+        <div className="phone-inner">
+          <div className="notch"/>
+          <StatusBar />
+
+          {screens.map(s => (
+            <div key={s} className={`screen ${tab !== s ? 'hidden' : ''}`}>
+              {s === 'home'         && <HomeScreen accent={accent} userName={userName} showBalance={showBalance} onTxTap={() => setTab('transactions')} />}
+              {s === 'transactions' && <TransactionsScreen accent={accent} showBalance={showBalance} />}
+              {s === 'goals'        && <GoalsScreen accent={accent} />}
+              {s === 'profile'      && <ProfileScreen accent={accent} userName={userName} />}
+            </div>
+          ))}
+
+          <BottomNav active={tab} onChange={setTab} accent={accent} />
+        </div>
+      </div>
+
+      {/* Side info panel */}
+      <div style={{ color:'#F5F5F7', maxWidth:220, paddingTop:20 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:24 }}>
+          <LogoMark size={18} color={accent} />
+          <span style={{ fontWeight:800, fontSize:18, letterSpacing:'-0.03em' }}>nox</span>
+          <span style={{ color:'#6C6C70', fontSize:12 }}>app prototype</span>
+        </div>
+        <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+          {[
+            { id:'home',         label:'Home',           sub:'Dashboard & AI insight' },
+            { id:'transactions', label:'Transações',     sub:'Busca, filtros, histórico' },
+            { id:'goals',        label:'Metas',          sub:'Poupança + orçamento' },
+            { id:'profile',      label:'Perfil',         sub:'Conta, IA, segurança' },
+          ].map(s => (
+            <button key={s.id} onClick={() => setTab(s.id)} style={{
+              background: tab === s.id ? accent+'18' : 'transparent',
+              border: `1px solid ${tab === s.id ? accent+'44' : '#1C1C1E'}`,
+              borderRadius:12, padding:'10px 14px', cursor:'pointer', textAlign:'left',
+              transition:'all 0.15s', fontFamily:'DM Sans',
+            }}>
+              <div style={{ color: tab === s.id ? accent : '#F5F5F7', fontWeight:600, fontSize:13 }}>{s.label}</div>
+              <div style={{ color:'#6C6C70', fontSize:11, marginTop:2 }}>{s.sub}</div>
+            </button>
+          ))}
+        </div>
+        <div style={{ marginTop:24, padding:'14px', background:'#111', border:'1px solid #1C1C1E', borderRadius:12 }}>
+          <div style={{ color:'#6C6C70', fontSize:11, marginBottom:8, fontWeight:500 }}>TECLADO</div>
+          <div style={{ color:'#A1A1A6', fontSize:12, lineHeight:1.7 }}>
+            Use o menu lateral<br/>ou a nav inferior<br/>para navegar.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#111"/>
+    <rect x="30" y="10" width="40" height="80" rx="8" fill="#0A0A0A" stroke="#2C2C2E" stroke-width="1"/>
+    <path d="M45 25L55 29V36C55 40 52 43 50 44C48 43 45 40 45 36V29L50 25Z" stroke="#F07854" stroke-width="1" fill="none"/>
+    <rect x="35" y="50" width="30" height="3" rx="1.5" fill="#1A1A1A"/>
+    <rect x="35" y="57" width="22" height="3" rx="1.5" fill="#1A1A1A"/>
+    <rect x="35" y="64" width="26" height="3" rx="1.5" fill="#1A1A1A"/>
+  </svg>
+</template>
+</body>
+</html>

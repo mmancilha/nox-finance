@@ -47,9 +47,13 @@ class Settings(BaseSettings):
 
     # ── Auth ────────────────────────────────────────
     nextauth_secret: str = Field(default="dev-secret-change-me", alias="NEXTAUTH_SECRET")
+    jwt_secret: str = Field(
+        default="local-dev-jwt-secret-min-32-characters-long!!",
+        alias="JWT_SECRET",
+    )
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
-    jwt_access_ttl_minutes: int = Field(default=30, alias="JWT_ACCESS_TTL_MINUTES")
-    jwt_refresh_ttl_days: int = Field(default=14, alias="JWT_REFRESH_TTL_DAYS")
+    access_token_expire_minutes: int = Field(default=15, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    refresh_token_expire_days: int = Field(default=30, alias="REFRESH_TOKEN_EXPIRE_DAYS")
 
     # ── Encryption (tokens bancários) ───────────────
     encryption_key: str = Field(

@@ -1,6 +1,6 @@
 """Endpoints de autenticação (cadastro, login, refresh, perfil).
 
-Nota: NÃO usar `from __future__ import annotations` aqui — o slowapi
+Nota: NÃO usar `from __future__ import annotations` aqui, o slowapi
 envolve cada endpoint em um wrapper cujo módulo não conhece nossos
 símbolos, então as anotações em string ficam como ForwardRef não
 resolvido e o FastAPI deixa de reconhecer o body Pydantic.

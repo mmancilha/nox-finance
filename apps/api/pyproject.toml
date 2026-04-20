@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "nox-api"
 version = "0.1.0"
-description = "Backend do Nox — FastAPI + Celery + SQLAlchemy async."
+description = "Backend do Nox, FastAPI + Celery + SQLAlchemy async."
 authors = ["Maycon <mancilhamaycon@gmail.com>"]
 license = "UNLICENSED"
 readme = "README.md"

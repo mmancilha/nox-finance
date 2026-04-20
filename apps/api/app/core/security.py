@@ -3,7 +3,7 @@
 Tokens bancários (Pluggy) SEMPRE passam por `encrypt_token` antes de ir ao banco.
 Regra inegociável do .cursorrules.
 
-JWT (HS256) para sessões de API — ver `create_access_token` / `decode_access_token`.
+JWT (HS256) para sessões de API, ver `create_access_token` / `decode_access_token`.
 """
 
 from __future__ import annotations

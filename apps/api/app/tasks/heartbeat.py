@@ -1,4 +1,4 @@
-"""Heartbeats Celery — placeholders do Sprint 1.
+"""Heartbeats Celery, placeholders do Sprint 1.
 
 No Sprint 4 estas tasks vão invocar os agentes reais (Oráculo, Norte).
 Por enquanto só servem para confirmar que Beat + worker estão conversando.

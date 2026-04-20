@@ -1,7 +1,7 @@
 """Configuração central do Nox API.
 
 Tudo vem de variáveis de ambiente. Em dev lê do .env na raiz do monorepo.
-Nunca commitar secrets — use sempre `.env.example` como fonte da verdade.
+Nunca commitar secrets, use sempre `.env.example` como fonte da verdade.
 """
 
 from functools import lru_cache

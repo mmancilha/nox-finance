@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nox — Design System</title>
+<title>Nox, Design System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,300&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
@@ -227,9 +227,9 @@
   <div class="tweaks-row">
     <div class="tweaks-label">Login layout</div>
     <select id="tweak-login">
-      <option value="a">Opção A — Centrado</option>
-      <option value="b">Opção B — Bottom sheet</option>
-      <option value="c">Opção C — Minimalista</option>
+      <option value="a">Opção A, Centrado</option>
+      <option value="b">Opção B, Bottom sheet</option>
+      <option value="c">Opção C, Minimalista</option>
     </select>
   </div>
 </div>
@@ -299,14 +299,14 @@ function AppIcon({ variant = 'crescent', size = 60, accent = '#F0A854', elevated
 // ─── LOGO SECTION ────────────────────────────────────────────────────────────
 function LogoSection({ accent, logoVariant }) {
   const marks = [
-    { id: 'crescent', label: 'Crescent', desc: 'Fase lunar — simples, reconhecível, funciona em 16px' },
-    { id: 'eye',      label: 'Eye',      desc: 'Olho guardião com lua interna — mais narrativo' },
-    { id: 'shield',   label: 'Shield',   desc: 'Escudo-guardião com crescent — confiança + proteção' },
+    { id: 'crescent', label: 'Crescent', desc: 'Fase lunar, simples, reconhecível, funciona em 16px' },
+    { id: 'eye',      label: 'Eye',      desc: 'Olho guardião com lua interna, mais narrativo' },
+    { id: 'shield',   label: 'Shield',   desc: 'Escudo-guardião com crescent, confiança + proteção' },
   ];
 
   return (
     <section className="ds-section" id="logos">
-      <div className="ds-section-label">01 — Logo System</div>
+      <div className="ds-section-label">01, Logo System</div>
       <h2 className="ds-section-title">Identidade visual</h2>
       <p className="ds-section-sub">Três direções para o símbolo. Todas funcionam em 16px e como ícone de app. O wordmark usa DM Sans 800, lowercase, tracking −0.04em.</p>
 
@@ -385,7 +385,7 @@ function ColorTokens({ accent }) {
     { name: 'text-primary',   value: '#F5F5F7', label: 'Texto principal' },
     { name: 'text-secondary', value: '#A1A1A6', label: 'Texto de apoio' },
     { name: 'text-muted',     value: '#6C6C70', label: 'Placeholder / hint' },
-    { name: 'accent',         value: accent,    label: 'Âmbar — CTA, links' },
+    { name: 'accent',         value: accent,    label: 'Âmbar, CTA, links' },
     { name: 'accent-success', value: '#30D158', label: 'Receita / positivo' },
     { name: 'accent-danger',  value: '#FF453A', label: 'Despesa / negativo' },
     { name: 'border',         value: '#2C2C2E', label: 'Borda padrão' },
@@ -394,9 +394,9 @@ function ColorTokens({ accent }) {
 
   return (
     <section className="ds-section" id="tokens">
-      <div className="ds-section-label">02 — Color Tokens</div>
+      <div className="ds-section-label">02, Color Tokens</div>
       <h2 className="ds-section-title">Paleta & tokens</h2>
-      <p className="ds-section-sub">Todos os tokens usados no sistema. O âmbar é o único acento — quente contra o preto absoluto, nunca frio.</p>
+      <p className="ds-section-sub">Todos os tokens usados no sistema. O âmbar é o único acento, quente contra o preto absoluto, nunca frio.</p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
         {tokens.map(t => {
@@ -428,9 +428,9 @@ function ColorTokens({ accent }) {
 function Typography({ accent }) {
   return (
     <section className="ds-section" id="type">
-      <div className="ds-section-label">03 — Tipografia</div>
+      <div className="ds-section-label">03, Tipografia</div>
       <h2 className="ds-section-title">Escala tipográfica</h2>
-      <p className="ds-section-sub">DM Sans em toda a hierarquia — 800 para títulos, 300 para corpo. Contraste máximo de peso, família única.</p>
+      <p className="ds-section-sub">DM Sans em toda a hierarquia, 800 para títulos, 300 para corpo. Contraste máximo de peso, família única.</p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
         {[
@@ -598,12 +598,12 @@ function LoginA({ accent }) {
 }
 
 function LoginB({ accent }) {
-  // Bottom sheet variant — background shows a glimpse of the app
+  // Bottom sheet variant, background shows a glimpse of the app
   const [email, setEmail] = useState('');
 
   return (
     <div style={{ background: '#0A0A0A', height: '100%', position: 'relative', overflow: 'hidden' }}>
-      {/* Background — mock app glimpse */}
+      {/* Background, mock app glimpse */}
       <div style={{ padding: '60px 28px 0' }}>
         <div style={{ color: '#6C6C70', fontSize: 12, marginBottom: 4 }}>Patrimônio total</div>
         <div style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 38, letterSpacing: '-0.03em', color: '#1A1A1A', filter: 'blur(12px)', userSelect: 'none' }}>R$ 24.580,00</div>
@@ -722,9 +722,9 @@ function LoginC({ accent }) {
 
 function LoginSection({ accent, loginLayout }) {
   const variants = [
-    { id: 'a', label: 'A — Centrado', desc: 'Padrão Apple — ícone + título + inputs empilhados' },
-    { id: 'b', label: 'B — Bottom Sheet', desc: 'Vislumbre do app desfocado + sheet sobreposta' },
-    { id: 'c', label: 'C — Minimalista', desc: 'Ultra-limpo, âmbar no underline + CTA' },
+    { id: 'a', label: 'A, Centrado', desc: 'Padrão Apple, ícone + título + inputs empilhados' },
+    { id: 'b', label: 'B, Bottom Sheet', desc: 'Vislumbre do app desfocado + sheet sobreposta' },
+    { id: 'c', label: 'C, Minimalista', desc: 'Ultra-limpo, âmbar no underline + CTA' },
   ];
 
   const PhoneFrame = ({ children, label, active }) => (
@@ -755,17 +755,17 @@ function LoginSection({ accent, loginLayout }) {
 
   return (
     <section className="ds-section" id="login">
-      <div className="ds-section-label">04 — Login & Onboarding</div>
+      <div className="ds-section-label">04, Login & Onboarding</div>
       <h2 className="ds-section-title">Telas de acesso</h2>
       <p className="ds-section-sub">Três variações de layout para a tela de login. Todas funcionais e interativas. Use o Tweaks para alternar.</p>
       <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <PhoneFrame label="A — Centrado" active={loginLayout === 'a'}>
+        <PhoneFrame label="A, Centrado" active={loginLayout === 'a'}>
           <LoginA accent={accent} />
         </PhoneFrame>
-        <PhoneFrame label="B — Bottom Sheet" active={loginLayout === 'b'}>
+        <PhoneFrame label="B, Bottom Sheet" active={loginLayout === 'b'}>
           <LoginB accent={accent} />
         </PhoneFrame>
-        <PhoneFrame label="C — Minimalista" active={loginLayout === 'c'}>
+        <PhoneFrame label="C, Minimalista" active={loginLayout === 'c'}>
           <LoginC accent={accent} />
         </PhoneFrame>
       </div>
@@ -777,7 +777,7 @@ function LoginSection({ accent, loginLayout }) {
 function HeroSection({ accent, logoVariant }) {
   return (
     <section className="ds-section" id="hero" style={{ paddingTop: 60, paddingBottom: 60 }}>
-      <div className="ds-section-label">05 — Landing Page Hero</div>
+      <div className="ds-section-label">05, Landing Page Hero</div>
       <h2 className="ds-section-title">Hero section</h2>
       <p className="ds-section-sub">Preview do hero da landing page. Fundo preto absoluto, headline bold, tom quente e confiante.</p>
 
@@ -846,7 +846,7 @@ function HeroSection({ accent, logoVariant }) {
             color: '#A1A1A6', fontSize: 20, fontWeight: 300,
             marginBottom: 48, maxWidth: 480, lineHeight: 1.5,
           }}>
-            O Nox monitora, analisa e organiza tudo — enquanto você vive.
+            O Nox monitora, analisa e organiza tudo, enquanto você vive.
           </p>
 
           <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -896,9 +896,9 @@ function ComponentsSection({ accent }) {
 
   return (
     <section className="ds-section" id="components">
-      <div className="ds-section-label">06 — Componentes</div>
+      <div className="ds-section-label">06, Componentes</div>
       <h2 className="ds-section-title">UI Components</h2>
-      <p className="ds-section-sub">Elementos reutilizáveis do design system — botões, inputs, tags, cards de transação.</p>
+      <p className="ds-section-sub">Elementos reutilizáveis do design system, botões, inputs, tags, cards de transação.</p>
 
       {/* Buttons */}
       <div style={{ marginBottom: 48 }}>

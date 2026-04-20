@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# Nox — setup do husky após clonar o repo.
+# Nox, setup do husky após clonar o repo.
 #
 # O husky é instalado via `pnpm install` (script `prepare` do package.json raiz).
 # Este script cria o hook pre-commit caso você precise reconfigurar manualmente.

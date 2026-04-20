@@ -1,4 +1,4 @@
-# Nox — infra local para desenvolvimento
+# Nox, infra local para desenvolvimento
 # Sobe Postgres 16 + Redis 7. Produção usa Supabase + Upstash Redis.
 #
 # Uso:
@@ -6,7 +6,7 @@
 #   pnpm docker:down
 #   pnpm docker:logs
 #
-# Os valores default aqui só servem em dev local — nunca em produção.
+# Os valores default aqui só servem em dev local, nunca em produção.
 
 name: nox
 

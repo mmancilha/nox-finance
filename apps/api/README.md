@@ -1,6 +1,6 @@
 # @nox/api
 
-Backend do Nox — FastAPI + SQLAlchemy 2.0 async + Celery + Alembic.
+Backend do Nox, FastAPI + SQLAlchemy 2.0 async + Celery + Alembic.
 
 ## Pré-requisitos
 
@@ -28,7 +28,7 @@ poetry run uvicorn app.main:app --reload --port 8000
 # Worker Celery (outro terminal)
 poetry run celery -A app.core.celery_app worker --loglevel=info
 
-# Beat scheduler (outro terminal — só precisa em dev se você quer testar cron)
+# Beat scheduler (outro terminal, só precisa em dev se você quer testar cron)
 poetry run celery -A app.core.celery_app beat --loglevel=info
 ```
 

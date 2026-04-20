@@ -1,4 +1,4 @@
-# 🌙 Nox — Plano de Desenvolvimento
+# 🌙 Nox, Plano de Desenvolvimento
 
 > **Enquanto você dorme, eu cuido do seu dinheiro.**
 >
@@ -8,7 +8,7 @@
 
 ## 📐 Identidade da Marca (finalizada)
 
-**Nome**: Nox (do latim, "noite" — vigilância silenciosa enquanto você descansa)
+**Nome**: Nox (do latim, "noite", vigilância silenciosa enquanto você descansa)
 **Tipografia**: DM Sans (300 / 400 / 500 / 700 / 800)
 **Acento principal**: `#F07854` (âmbar-coral quente, o calor no preto)
 
@@ -27,7 +27,7 @@
   --txt3: #6c6c70; /* Muted, placeholders */
 
   /* Acentos */
-  --accent: #f07854; /* Âmbar-coral — CTA, destaques, brand */
+  --accent: #f07854; /* Âmbar-coral, CTA, destaques, brand */
   --green: #30d158; /* Receita, positivo */
   --red: #ff453a; /* Gasto, negativo, alerta */
 
@@ -55,10 +55,10 @@ label:         11px, weight 500, uppercase, letter-spacing 0.12em, cor --accent
 - **Fundo `#080808`** em TUDO (não use `#0A0A0A`, nem branco)
 - **Peso 300** no body como padrão (é o que dá a estética Pierre/premium)
 - **Peso 800** em headings (contraste forte com o body leve)
-- **Botões pill**: `border-radius: 50px` — nunca retangulares
+- **Botões pill**: `border-radius: 50px`, nunca retangulares
 - **Glassmorphism** na nav: `rgba(14,14,14,0.92)` + `backdrop-filter: blur(28px)`
-- **Radial glow suave** com `rgba(240,120,84,0.08)` em hero sections — cria aura
-- **Cards com border `#222`** de 1px — nunca sombras pesadas
+- **Radial glow suave** com `rgba(240,120,84,0.08)` em hero sections, cria aura
+- **Cards com border `#222`** de 1px, nunca sombras pesadas
 
 ---
 
@@ -66,7 +66,7 @@ label:         11px, weight 500, uppercase, letter-spacing 0.12em, cor --accent
 
 **Diferencial vs Pierre Finance**: enquanto o Pierre é reativo (você pergunta, ele responde), o Nox tem **agentes autônomos** que trabalham em background.
 
-**Pitch em uma frase**: _"Um time de agentes financeiros que monitoram sua vida financeira 24 horas por dia — e te avisam só quando importa."_
+**Pitch em uma frase**: _"Um time de agentes financeiros que monitoram sua vida financeira 24 horas por dia, e te avisam só quando importa."_
 
 ### Os 4 Agentes do Nox
 
@@ -165,7 +165,7 @@ nox/
 │       │       ├── oraculo.py
 │       │       ├── norte.py
 │       │       └── companheiro.py
-│       ├── tasks/                  # Celery — heartbeats
+│       ├── tasks/                  # Celery, heartbeats
 │       │   ├── agents_heartbeat.py
 │       │   └── sync_transactions.py
 │       ├── models/                 # SQLAlchemy
@@ -307,11 +307,11 @@ chat_messages (
 
 ---
 
-## 🔐 Fase 1 — Autenticação e Base
+## 🔐 Fase 1, Autenticação e Base
 
 **Tempo estimado**: 1 semana
 
-- **Login/Registro**: apenas 2 opções (simplificação) — **Email/senha** e **Continuar com Google**
+- **Login/Registro**: apenas 2 opções (simplificação), **Email/senha** e **Continuar com Google**
 - **NextAuth v5** no frontend
 - **JWT + Refresh Tokens** no backend
 - Recuperação de senha via Resend
@@ -333,13 +333,13 @@ chat_messages (
 
 ---
 
-## 🏦 Fase 2 — Integração Bancária
+## 🏦 Fase 2, Integração Bancária
 
 **Tempo estimado**: 2 semanas
 
 ### Pluggy é o caminho
 
-Não tentar integrar direto com o Open Finance do Bacen — usar Pluggy como middleware. Vantagens: sandbox com Santander, Itaú, Nubank simulados; documentação 100% em português; SDKs prontos (Python/Node); webhooks padronizados.
+Não tentar integrar direto com o Open Finance do Bacen, usar Pluggy como middleware. Vantagens: sandbox com Santander, Itaú, Nubank simulados; documentação 100% em português; SDKs prontos (Python/Node); webhooks padronizados.
 
 ### Fluxo de conexão
 
@@ -393,7 +393,7 @@ async def pluggy_webhook(
 
 ---
 
-## 🤖 Fase 3 — Motor de Agentes (o diferencial)
+## 🤖 Fase 3, Motor de Agentes (o diferencial)
 
 **Tempo estimado**: 3 semanas
 
@@ -519,7 +519,7 @@ class Companheiro(NoxAgent):
 
 ---
 
-## 🎨 Fase 4 — Frontend e UX
+## 🎨 Fase 4, Frontend e UX
 
 **Tempo estimado**: 4 semanas (paralelo com Fase 3)
 
@@ -610,7 +610,7 @@ const AnimatedBalance = ({ value }: { value: number }) => (
 
 ---
 
-## 🚀 Fase 5 — Deploy e Infraestrutura
+## 🚀 Fase 5, Deploy e Infraestrutura
 
 **Tempo estimado**: 1 semana
 
@@ -674,7 +674,7 @@ SENTRY_DSN=
 
 ---
 
-## 💎 Fase 6 — SaaS e Monetização
+## 💎 Fase 6, SaaS e Monetização
 
 ### Pricing (inspirado no Pierre, mas reposicionado)
 
@@ -769,12 +769,12 @@ SENTRY_DSN=
 
 ## 📚 Referências
 
-- [Pluggy Docs](https://docs.pluggy.ai) — Open Finance Brasil
-- [Open Finance Brasil](https://openfinancebrasil.org.br) — Doc oficial Bacen
+- [Pluggy Docs](https://docs.pluggy.ai), Open Finance Brasil
+- [Open Finance Brasil](https://openfinancebrasil.org.br), Doc oficial Bacen
 - [Next.js 14 App Router](https://nextjs.org/docs)
 - [FastAPI](https://fastapi.tiangolo.com)
 - [Supabase Docs](https://supabase.com/docs)
-- [Stripe Brasil](https://stripe.com/br) — Pagamentos com Pix
+- [Stripe Brasil](https://stripe.com/br), Pagamentos com Pix
 - [DM Sans on Google Fonts](https://fonts.google.com/specimen/DM+Sans)
-- [Pierre Finance](https://lp.pierre.finance) — inspiração principal de aesthetic
-- [Paperclip](https://github.com/paperclipai/paperclip) — inspiração de arquitetura de agentes
+- [Pierre Finance](https://lp.pierre.finance), inspiração principal de aesthetic
+- [Paperclip](https://github.com/paperclipai/paperclip), inspiração de arquitetura de agentes

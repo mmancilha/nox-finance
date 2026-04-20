@@ -1,4 +1,4 @@
--- Nox — init do Postgres em dev local.
+-- Nox, init do Postgres em dev local.
 -- Em produção o Supabase já traz essas extensões.
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

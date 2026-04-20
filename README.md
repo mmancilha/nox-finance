@@ -17,8 +17,8 @@ Assistente financeiro brasileiro com 4 agentes de IA autônomos que monitoram su
 | Agente          | Quando roda                     | Modelo        | Papel                                         |
 | --------------- | ------------------------------- | ------------- | --------------------------------------------- |
 | **Sentinela**   | Webhook Pluggy (nova transação) | `gpt-4o-mini` | Duplicatas, anomalias, assinaturas esquecidas |
-| **Oráculo**     | Celery Beat — domingo 20h       | `gpt-4o`      | Análise semanal, previsões, relatório mensal  |
-| **Norte**       | Celery Beat — diário 8h         | `gpt-4o-mini` | Monitora metas e orçamentos                   |
+| **Oráculo**     | Celery Beat, domingo 20h        | `gpt-4o`      | Análise semanal, previsões, relatório mensal  |
+| **Norte**       | Celery Beat, diário 8h          | `gpt-4o-mini` | Monitora metas e orçamentos                   |
 | **Companheiro** | On-demand (chat)                | `gpt-4o`      | Chat conversacional em pt-BR                  |
 
 Implementação completa no Sprint 4 (`apps/api/app/services/agents/`).
@@ -29,10 +29,10 @@ Implementação completa no Sprint 4 (`apps/api/app/services/agents/`).
 
 ### Pré-requisitos
 
-- **Node.js** 20+ — `nvm install` (usa `.nvmrc`)
-- **pnpm** 9+ — `npm install -g pnpm@9`
+- **Node.js** 20+, `nvm install` (usa `.nvmrc`)
+- **pnpm** 9+, `npm install -g pnpm@9`
 - **Python** 3.11+
-- **Poetry** 1.8+ — `pipx install poetry`
+- **Poetry** 1.8+, `pipx install poetry`
 - **Docker Desktop** (para Postgres + Redis)
 
 ### 1. Clone + envs
@@ -66,18 +66,18 @@ pnpm docker:up
 Em terminais separados:
 
 ```bash
-# Terminal 1 — Frontend
+# Terminal 1, Frontend
 pnpm dev
 # → http://localhost:3000
 
-# Terminal 2 — API
+# Terminal 2, API
 cd apps/api && poetry run uvicorn app.main:app --reload --port 8000
 # → http://localhost:8000/docs
 
-# Terminal 3 — Celery worker (precisa só quando testar tasks)
+# Terminal 3, Celery worker (precisa só quando testar tasks)
 cd apps/api && poetry run celery -A app.core.celery_app worker --loglevel=info
 
-# Terminal 4 — Celery beat (precisa só quando testar cron)
+# Terminal 4, Celery beat (precisa só quando testar cron)
 cd apps/api && poetry run celery -A app.core.celery_app beat --loglevel=info
 ```
 
@@ -144,11 +144,11 @@ pnpm docker:logs        # tail dos containers
 
 ## Sprint atual
 
-**Sprint 1 — Fundação ✅**
+**Sprint 1, Fundação ✅**
 
 Monorepo pnpm, Docker, Next.js com tokens da marca + DM Sans, FastAPI com SQLAlchemy async + Alembic, Celery + Beat, linters (ESLint/Prettier/Ruff/Black), `.env.example`, README.
 
-**Próximo — Sprint 2 — Auth + Landing**
+**Próximo, Sprint 2, Auth + Landing**
 
 Ver `PLANO_DESENVOLVIMENTO.md` e `COWORK_BRIEFING.md`.
 
@@ -156,7 +156,7 @@ Ver `PLANO_DESENVOLVIMENTO.md` e `COWORK_BRIEFING.md`.
 
 ## Leituras obrigatórias antes de codar
 
-1. **`.cursorrules`** — design tokens, regras TS/Python, segurança, pt-BR
-2. **`PLANO_DESENVOLVIMENTO.md`** — arquitetura, schema do banco, roadmap
-3. **`COWORK_BRIEFING.md`** — persona do dev, tom, definition of done
-4. **`nox-design/`** — HTMLs com design system visual
+1. **`.cursorrules`**, design tokens, regras TS/Python, segurança, pt-BR
+2. **`PLANO_DESENVOLVIMENTO.md`**, arquitetura, schema do banco, roadmap
+3. **`COWORK_BRIEFING.md`**, persona do dev, tom, definition of done
+4. **`nox-design/`**, HTMLs com design system visual

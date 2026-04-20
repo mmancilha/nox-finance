@@ -1,4 +1,4 @@
-"""Lógica de negócio — cadastro, login e refresh token."""
+"""Lógica de negócio, cadastro, login e refresh token."""
 
 from __future__ import annotations
 

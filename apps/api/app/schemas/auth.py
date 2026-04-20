@@ -1,4 +1,4 @@
-"""Schemas Pydantic v2 — autenticação."""
+"""Schemas Pydantic v2, autenticação."""
 
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ class RegisterResponse(BaseModel):
 
 
 class UpdateMeRequest(BaseModel):
-    """Atualização parcial do perfil — usado pelo onboarding."""
+    """Atualização parcial do perfil, usado pelo onboarding."""
 
     preferred_name: str | None = None
     avatar_emoji: str | None = None

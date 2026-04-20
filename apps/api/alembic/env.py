@@ -1,4 +1,4 @@
-"""Alembic env.py — usa SQLAlchemy async + lê config do .env via pydantic-settings."""
+"""Alembic env.py, usa SQLAlchemy async + lê config do .env via pydantic-settings."""
 
 import asyncio
 from logging.config import fileConfig

@@ -35,7 +35,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(
     title="Nox API",
     version=__version__,
-    description="Backend do Nox — 4 agentes financeiros autônomos.",
+    description="Backend do Nox, 4 agentes financeiros autônomos.",
     docs_url="/docs" if settings.is_dev else None,
     redoc_url="/redoc" if settings.is_dev else None,
     lifespan=lifespan,

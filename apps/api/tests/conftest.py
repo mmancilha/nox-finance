@@ -1,4 +1,4 @@
-"""Fixtures compartilhadas — cliente async + SQLite em memória."""
+"""Fixtures compartilhadas, cliente async + SQLite em memória."""
 
 from collections.abc import AsyncGenerator, Iterator
 

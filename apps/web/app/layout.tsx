@@ -37,7 +37,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={dmSans.variable}>
+    <html lang="pt-BR" className={`${dmSans.variable} scroll-smooth`}>
       <body className="bg-nox-bg text-nox-txt antialiased">{children}</body>
     </html>
   );

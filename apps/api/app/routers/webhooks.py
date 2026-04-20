@@ -18,6 +18,7 @@ from app.core.logging import get_logger
 from app.models.bank_account import BankAccount
 from app.schemas.webhook import PluggyWebhookPayload
 from app.services.bank_service import bank_service
+from app.tasks.agents import run_sentinela
 from app.tasks.sync_transactions import sync_account
 
 log = get_logger(__name__)
@@ -73,6 +74,7 @@ async def pluggy_webhook(
 
         for account in accounts:
             sync_account.delay(str(account.id))
+            run_sentinela.delay(str(account.user_id))
             log.info("webhook.sync_enqueued", account_id=str(account.id))
 
     elif payload.event == "item/error":

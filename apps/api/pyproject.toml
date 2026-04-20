@@ -127,6 +127,10 @@ disable_error_code = ["untyped-decorator"]
 module = "app.tasks.sync_transactions"
 disable_error_code = ["untyped-decorator"]
 
+[[tool.mypy.overrides]]
+module = "app.tasks.agents"
+disable_error_code = ["untyped-decorator"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]

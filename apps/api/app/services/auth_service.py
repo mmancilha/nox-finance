@@ -16,7 +16,7 @@ from app.core.security import create_access_token, create_refresh_token
 from app.models.onboarding import OnboardingProgress
 from app.models.session import Session as AuthSessionRow
 from app.models.user import User
-from app.schemas.auth import LoginRequest, RefreshRequest, RegisterRequest
+from app.schemas.auth import LoginRequest, RefreshRequest, RegisterRequest, UpdateMeRequest
 
 ph = PasswordHasher()
 
@@ -147,3 +147,31 @@ class AuthService:
         await db.commit()
 
         return new_access, raw_refresh
+
+    async def update_me(
+        self,
+        db: AsyncSession,
+        user: User,
+        req: UpdateMeRequest,
+    ) -> User:
+        """Atualiza nome do usuário e mescla campos no OnboardingProgress."""
+        if req.preferred_name is not None:
+            user.name = req.preferred_name
+
+        result = await db.execute(
+            select(OnboardingProgress).where(OnboardingProgress.user_id == user.id)
+        )
+        progress = result.scalar_one_or_none()
+        if progress is not None:
+            patch: dict[str, str] = {}
+            if req.avatar_emoji is not None:
+                patch["avatarEmoji"] = req.avatar_emoji
+            if req.risk_profile is not None:
+                patch["riskProfile"] = req.risk_profile
+            progress.data = {**progress.data, **patch}
+            progress.is_completed = True
+            progress.current_step = 5
+
+        await db.commit()
+        await db.refresh(user)
+        return user

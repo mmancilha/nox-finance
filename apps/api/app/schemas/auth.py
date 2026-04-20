@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -49,3 +50,11 @@ class RegisterResponse(BaseModel):
     token_type: str = "bearer"
     expires_in: int
     user: UserResponse
+
+
+class UpdateMeRequest(BaseModel):
+    """Atualização parcial do perfil — usado pelo onboarding."""
+
+    preferred_name: str | None = None
+    avatar_emoji: str | None = None
+    risk_profile: Literal["conservador", "moderado", "arrojado"] | None = None

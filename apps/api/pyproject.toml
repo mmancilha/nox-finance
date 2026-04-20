@@ -38,6 +38,8 @@ openai = "^1.58.1"
 # Observabilidade / utilitários
 structlog = "^24.4.0"
 sentry-sdk = { extras = ["fastapi"], version = "^2.19.2" }
+slowapi = "^0.1.9"
+argon2-cffi = "^25.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
@@ -48,6 +50,7 @@ httpx = "^0.28.1"
 ruff = "^0.8.4"
 black = "^24.10.0"
 mypy = "^1.14.0"
+aiosqlite = "^0.22.1"
 
 [tool.poetry.scripts]
 dev = "scripts.dev:main"

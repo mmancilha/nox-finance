@@ -1,6 +1,6 @@
 """Fixtures compartilhadas — cliente async + SQLite em memória."""
 
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Iterator
 
 import pytest
 from httpx import ASGITransport, AsyncClient
@@ -9,8 +9,16 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.pool import StaticPool
 
 from app.core.database import get_db
+from app.core.limiter import limiter as _limiter
 from app.main import app
 from app.models.base import Base
+
+
+@pytest.fixture(autouse=True)
+def reset_limiter() -> Iterator[None]:
+    """Zera contadores do slowapi entre testes (storage em memória)."""
+    _limiter.reset()
+    yield
 
 
 @pytest.fixture

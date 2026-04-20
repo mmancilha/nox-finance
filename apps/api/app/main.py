@@ -4,14 +4,19 @@ Roda com:
     poetry run uvicorn app.main:app --reload
 """
 
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
+from typing import cast
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
 from app import __version__
 from app.core.config import get_settings
+from app.core.limiter import limiter
 from app.core.logging import configure_logging, get_logger
 from app.routers import auth, health
 
@@ -35,6 +40,16 @@ app = FastAPI(
     redoc_url="/redoc" if settings.is_dev else None,
     lifespan=lifespan,
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(
+    RateLimitExceeded,
+    cast(
+        Callable[[Request, Exception], Response | Awaitable[Response]],
+        _rate_limit_exceeded_handler,
+    ),
+)
+app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(
     CORSMiddleware,

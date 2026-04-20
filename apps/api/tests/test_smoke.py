@@ -1,4 +1,4 @@
-"""Smoke tests do Sprint 1 — garantem que a app sobe e os módulos são importáveis."""
+"""Smoke tests do Sprint 1, garantem que a app sobe e os módulos são importáveis."""
 
 from fastapi.testclient import TestClient
 
@@ -19,7 +19,7 @@ def test_root_endpoint() -> None:
 
 
 def test_encrypt_decrypt_roundtrip() -> None:
-    """AES-256-GCM — tokens bancários voltam iguais após round-trip."""
+    """AES-256-GCM, tokens bancários voltam iguais após round-trip."""
     original = "pluggy-access-token-xyz-12345"
     encrypted = encrypt_token(original)
     assert encrypted != original

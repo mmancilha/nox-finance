@@ -24,7 +24,7 @@ celery_app = Celery(
 )
 
 celery_app.conf.update(
-    # Timezone Brasil — agendamentos batem com o briefing
+    # Timezone Brasil, agendamentos batem com o briefing
     timezone="America/Sao_Paulo",
     enable_utc=False,
     # Segurança / resiliência

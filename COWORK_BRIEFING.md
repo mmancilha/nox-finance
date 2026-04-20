@@ -1,4 +1,4 @@
-# 🌙 Nox — Briefing para Claude Cowork
+# 🌙 Nox, Briefing para Claude Cowork
 
 > Documento a ser colado/carregado no início do projeto no Claude Cowork para que ele entenda o contexto completo e possa automatizar o desenvolvimento.
 
@@ -23,11 +23,11 @@ Eu sou **Maycon**, desenvolvedor solo tocando o projeto. Uso Cursor + Claude Cow
 - **Desktop/dev tools**: VS Code + Cursor
 - **OS**: Windows 11 (path: `C:\Users\MMANCILHA\...`)
 
-Já desenvolvi anteriormente um assistente J.A.R.V.I.S. (Python/FastAPI + React) — tenho familiaridade com stacks modernas mas valorizo código limpo e bem organizado.
+Já desenvolvi anteriormente um assistente J.A.R.V.I.S. (Python/FastAPI + React), tenho familiaridade com stacks modernas mas valorizo código limpo e bem organizado.
 
 ---
 
-## 🎨 Marca — Informações Fundamentais
+## 🎨 Marca, Informações Fundamentais
 
 **Nome**: Nox
 **Fonte**: DM Sans (Google Fonts, pesos 300/400/500/700/800)
@@ -75,8 +75,8 @@ Cada agente é uma classe Python que roda em Celery tasks e tem prompt system pr
 | Agente          | Quando roda                     | Modelo IA   | O que faz                                             |
 | --------------- | ------------------------------- | ----------- | ----------------------------------------------------- |
 | **Sentinela**   | Webhook Pluggy (nova transação) | gpt-4o-mini | Detecta duplicatas, anomalias, assinaturas esquecidas |
-| **Oráculo**     | Celery Beat — Domingo 20h       | gpt-4o      | Análise semanal, previsões, relatório mensal          |
-| **Norte**       | Celery Beat — Diário 8h         | gpt-4o-mini | Monitora metas e orçamentos                           |
+| **Oráculo**     | Celery Beat, Domingo 20h        | gpt-4o      | Análise semanal, previsões, relatório mensal          |
+| **Norte**       | Celery Beat, Diário 8h          | gpt-4o-mini | Monitora metas e orçamentos                           |
 | **Companheiro** | On-demand (chat)                | gpt-4o      | Chat conversacional em pt-BR                          |
 
 Cada agente tem:
@@ -94,7 +94,7 @@ Cada agente tem:
 
 Quando eu iniciar o projeto no Claude Cowork, quero que ele me ajude nessa ordem:
 
-### 🥇 Sprint 1 — Setup (prioridade máxima)
+### 🥇 Sprint 1, Setup (prioridade máxima)
 
 1. Criar monorepo com pnpm workspaces (`apps/web`, `apps/api`, `packages/shared-types`)
 2. Configurar Docker Compose com Postgres + Redis locais
@@ -105,7 +105,7 @@ Quando eu iniciar o projeto no Claude Cowork, quero que ele me ajude nessa ordem
 7. Criar `.env.example` completo
 8. README principal com instruções de setup
 
-### 🥈 Sprint 2 — Auth + Landing
+### 🥈 Sprint 2, Auth + Landing
 
 1. Implementar landing page baseada nos HTML exportados do Claude Design
 2. NextAuth v5 com Email + Google provider
@@ -113,7 +113,7 @@ Quando eu iniciar o projeto no Claude Cowork, quero que ele me ajude nessa ordem
 4. Middleware de proteção de rotas
 5. Tela de onboarding (5 passos)
 
-### 🥉 Sprint 3 — Pluggy Integration
+### 🥉 Sprint 3, Pluggy Integration
 
 1. Service `PluggyService` com métodos `create_connect_token`, `sync_accounts`, `sync_transactions`
 2. Webhook endpoint `/webhook/pluggy` idempotente
@@ -122,7 +122,7 @@ Quando eu iniciar o projeto no Claude Cowork, quero que ele me ajude nessa ordem
 5. Celery task `sync_account` que roda em background
 6. Encriptação AES-256 dos tokens bancários
 
-### Sprint 4 — Agentes
+### Sprint 4, Agentes
 
 1. Classe base `NoxAgent`
 2. Implementação das 4 classes: `Sentinela`, `Oraculo`, `Norte`, `Companheiro`
@@ -131,7 +131,7 @@ Quando eu iniciar o projeto no Claude Cowork, quero que ele me ajude nessa ordem
 5. Endpoint `/chat` para o Companheiro com streaming
 6. Dashboard com cards dos insights recentes
 
-### Sprint 5 — Polish
+### Sprint 5, Polish
 
 1. Animações Framer Motion
 2. Testes E2E críticos (Playwright)
@@ -145,9 +145,9 @@ Quando eu iniciar o projeto no Claude Cowork, quero que ele me ajude nessa ordem
 
 Ao iniciar o Cowork, já tenho prontos:
 
-1. **`PLANO_DESENVOLVIMENTO.md`** — plano completo com toda arquitetura
-2. **`.cursorrules`** — regras de código (Cursor também deve seguir)
-3. **Pasta `Nox_design/`** — 4 arquivos HTML exportados do Claude Design com design system, landing page, app mockup
+1. **`PLANO_DESENVOLVIMENTO.md`**, plano completo com toda arquitetura
+2. **`.cursorrules`**, regras de código (Cursor também deve seguir)
+3. **Pasta `Nox_design/`**, 4 arquivos HTML exportados do Claude Design com design system, landing page, app mockup
 4. **Este briefing** (`COWORK_BRIEFING.md`)
 
 Instrução para o Cowork: **antes de começar a codar, leia os 3 primeiros arquivos e a pasta de design**. Eles contêm 100% do contexto necessário.
@@ -187,10 +187,10 @@ Uma tarefa só está "pronta" quando:
 
 ## 💡 Inspirações (para referenciar quando necessário)
 
-- **Pierre Finance** (`lp.pierre.finance`) — aesthetic, tom brasileiro, landing page
-- **Linear** (`linear.app`) — polish, motion, dark mode
-- **Apple HIG** — tipografia, espaçamento, hierarquia
-- **Paperclip** (`github.com/paperclipai/paperclip`) — arquitetura de agentes, heartbeats, orçamentos de tokens
+- **Pierre Finance** (`lp.pierre.finance`), aesthetic, tom brasileiro, landing page
+- **Linear** (`linear.app`), polish, motion, dark mode
+- **Apple HIG**, tipografia, espaçamento, hierarquia
+- **Paperclip** (`github.com/paperclipai/paperclip`), arquitetura de agentes, heartbeats, orçamentos de tokens
 
 ---
 
@@ -218,7 +218,7 @@ Todas vão em `.env` local e nunca commitadas. Serviços que precisam de conta:
 4. **pt-BR**: toda interface ao usuário é em português, com formatação brasileira
 5. **Tokens da marca**: nenhum hex color fora do arquivo `tokens.css`
 6. **Agentes com fallback**: se a IA falhar, o sistema continua funcionando
-7. **Celery para tudo lento**: sync bancário, IA, emails — nunca no request direto
+7. **Celery para tudo lento**: sync bancário, IA, emails, nunca no request direto
 
 ---
 

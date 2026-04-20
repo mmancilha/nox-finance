@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 /**
- * Tailwind do Nox — tokens da marca obrigatórios (.cursorrules).
+ * Tailwind do Nox, tokens da marca obrigatórios (.cursorrules).
  * NÃO adicione cores hex aqui fora do namespace `nox`.
  * NÃO use fontes diferentes de DM Sans.
  */

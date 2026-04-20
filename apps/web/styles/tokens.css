@@ -1,5 +1,5 @@
 /**
- * Nox — Design Tokens (CSS variables).
+ * Nox, Design Tokens (CSS variables).
  *
  * Fonte da verdade: .cursorrules + PLANO_DESENVOLVIMENTO.md.
  * Toda cor/size aqui. Nunca hardcode hex fora deste arquivo.
@@ -28,6 +28,11 @@
 
   /* Nav glass */
   --nav-bg: rgba(14, 14, 14, 0.92);
+  --nav-border: rgba(255, 255, 255, 0.08);
+
+  /* FAQ / accent surfaces (sem hex fora daqui) */
+  --accent-soft-bg: rgba(240, 120, 84, 0.08);
+  --accent-soft-border: rgba(240, 120, 84, 0.2);
 
   /* Radius */
   --radius-pill: 50px;

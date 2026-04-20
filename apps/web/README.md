@@ -1,6 +1,6 @@
 # @nox/web
 
-Frontend do Nox — Next.js 14 App Router + TypeScript strict + Tailwind com tokens da marca + DM Sans.
+Frontend do Nox, Next.js 14 App Router + TypeScript strict + Tailwind com tokens da marca + DM Sans.
 
 ## Dev
 
@@ -25,11 +25,11 @@ styles/
 
 ## Regras fixas
 
-- `bg-nox-bg` (#080808) em TUDO — nunca `bg-black` ou `bg-white`
+- `bg-nox-bg` (#080808) em TUDO, nunca `bg-black` ou `bg-white`
 - Botões sempre com `rounded-pill` (50px)
-- DM Sans via `next/font` — nunca outra fonte
+- DM Sans via `next/font`, nunca outra fonte
 - Valores em BRL via `formatBRL()` de `lib/format.ts`
 - Textos ao usuário em pt-BR
-- Sem `useEffect` para fetch — usar TanStack Query (chega no Sprint 3)
+- Sem `useEffect` para fetch, usar TanStack Query (chega no Sprint 3)
 
 Veja `.cursorrules` na raiz para a lista completa.

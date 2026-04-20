@@ -2,7 +2,7 @@
   "name": "nox",
   "version": "0.1.0",
   "private": true,
-  "description": "Nox — Enquanto você dorme, eu cuido do seu dinheiro. Assistente financeiro brasileiro com agentes autônomos.",
+  "description": "Nox: Enquanto você dorme, eu cuido do seu dinheiro. Assistente financeiro brasileiro com agentes autônomos.",
   "author": "Maycon <mancilhamaycon@gmail.com>",
   "license": "UNLICENSED",
   "packageManager": "pnpm@9.15.0",

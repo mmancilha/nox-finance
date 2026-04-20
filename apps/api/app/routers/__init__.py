@@ -1,1 +1,1 @@
-"""HTTP routers — apenas endpoints, sem lógica (.cursorrules)."""
+"""HTTP routers, apenas endpoints, sem lógica (.cursorrules)."""

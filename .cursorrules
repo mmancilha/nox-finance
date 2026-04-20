@@ -1,4 +1,4 @@
-# Nox — Cursor AI Rules
+# Nox, Cursor AI Rules
 
 ## 🌙 Contexto do Projeto
 
@@ -13,7 +13,7 @@ Você está desenvolvendo o **Nox**, um assistente financeiro inteligente brasil
 
 ---
 
-## 🎨 Design System — TOKENS OBRIGATÓRIOS
+## 🎨 Design System, TOKENS OBRIGATÓRIOS
 
 ### Cores (use sempre via CSS vars, nunca hardcoded)
 
@@ -33,10 +33,10 @@ Você está desenvolvendo o **Nox**, um assistente financeiro inteligente brasil
 
 **Regras**:
 - Todo fundo principal = `#080808` (nunca branco, nunca outro preto)
-- Acento da marca = `#F07854` — sempre em CTAs primários e brand elements
+- Acento da marca = `#F07854`, sempre em CTAs primários e brand elements
 - Verde/vermelho SÓ para receita/gasto (semântica), nunca decorativo
 
-### Tipografia — DM Sans (via Google Fonts)
+### Tipografia, DM Sans (via Google Fonts)
 
 ```typescript
 // app/layout.tsx
@@ -63,7 +63,7 @@ label:       11px / weight 500 / uppercase / tracking 0.12em / color --accent
 
 **Princípio visual**: contraste entre **800 em headings** e **300 no body** é o que dá a estética Pierre/premium.
 
-### Componentes — Padrões
+### Componentes, Padrões
 
 - **Botões**: `border-radius: 50px` (pill), nunca retangular
 - **Cards**: `background: var(--bg2); border: 1px solid var(--border); border-radius: 16px`
@@ -147,7 +147,7 @@ const Card = (props: any) => { ... }
 - Componentes em **PascalCase**, hooks em **camelCase**, pastas em **kebab-case**
 - Server Components por padrão, `'use client'` só quando necessário (forms, hooks, state)
 - Sempre tipar retorno de async functions: `Promise<T>`
-- NUNCA use `useEffect` para fetch — use TanStack Query
+- NUNCA use `useEffect` para fetch, use TanStack Query
 
 ### Python / FastAPI
 
@@ -169,7 +169,7 @@ async def get_transactions():
 ```
 
 - async/await em TUDO que for I/O
-- Pydantic v2 em schemas, SQLAlchemy em models — nunca misture
+- Pydantic v2 em schemas, SQLAlchemy em models, nunca misture
 - Routers finos, services grossos
 - Dependency injection do FastAPI para `db`, `current_user`
 
@@ -179,10 +179,10 @@ async def get_transactions():
 
 Os 4 agentes têm **personalidades distintas** no prompt system. NUNCA misture:
 
-1. **Sentinela** (reativo/tempo real) — direto, atento. "Notei que..."
-2. **Oráculo** (semanal) — analítico, previsões. "A tendência esse mês é..."
-3. **Norte** (diário) — coach de metas. "Faltam X para sua meta."
-4. **Companheiro** (chat) — amigo esperto. Sempre construtivo, nunca julga.
+1. **Sentinela** (reativo/tempo real), direto, atento. "Notei que..."
+2. **Oráculo** (semanal), analítico, previsões. "A tendência esse mês é..."
+3. **Norte** (diário), coach de metas. "Faltam X para sua meta."
+4. **Companheiro** (chat), amigo esperto. Sempre construtivo, nunca julga.
 
 ### Regras obrigatórias para todos os agentes
 
@@ -208,7 +208,7 @@ except OpenAIError:
 
 - **Sempre** verificar se consentimento está ativo antes de buscar dados
 - Refresh tokens **proativamente** (24h antes de expirar)
-- Webhook `/webhook/pluggy` é **idempotente** — mesmo evento pode chegar múltiplas vezes
+- Webhook `/webhook/pluggy` é **idempotente**, mesmo evento pode chegar múltiplas vezes
 - Sincronização SEMPRE em **Celery task**, nunca no request do usuário
 - Armazenar `pluggy_item_id` e `pluggy_account_id` para referência
 
@@ -221,7 +221,7 @@ except OpenAIError:
 - Tokens bancários **sempre** encriptados (AES-256) antes de salvar
 - Usar parametrized queries (SQLAlchemy resolve, mas atenção em raw SQL)
 - Sanitizar inputs do usuário antes de mandar para IA
-- **Nunca** expor IDs sequenciais no frontend — sempre UUIDs
+- **Nunca** expor IDs sequenciais no frontend, sempre UUIDs
 
 ```python
 # ✅ Correto
@@ -280,7 +280,7 @@ core/       → config, db, security, encryption
 - Virtualização em listas > 50 items (`@tanstack/react-virtual`)
 - TanStack Query: `staleTime: 5 * 60 * 1000` para dados financeiros
 - Cache Redis no backend: dashboards com TTL 2 minutos
-- Paginação em TUDO — nunca retornar 1000+ transações de uma vez
+- Paginação em TUDO, nunca retornar 1000+ transações de uma vez
 
 ---
 
@@ -303,19 +303,19 @@ core/       → config, db, security, encryption
 
 ## ⚠️ O Que NUNCA Fazer
 
-- ❌ `useEffect` para fetch — use TanStack Query
+- ❌ `useEffect` para fetch, use TanStack Query
 - ❌ Tokens bancários sem encriptação
-- ❌ Chamadas Pluggy/OpenAI no request do usuário — use Celery
+- ❌ Chamadas Pluggy/OpenAI no request do usuário, use Celery
 - ❌ `any` no TypeScript
-- ❌ Cores hardcoded — sempre via tokens `--bg`, `--accent`, etc.
+- ❌ Cores hardcoded, sempre via tokens `--bg`, `--accent`, etc.
 - ❌ Fontes diferentes de DM Sans
-- ❌ Bordas retangulares em botões — sempre pill `border-radius: 50px`
-- ❌ Fundo `#000` ou `#0A0A0A` — o Nox é `#080808`
-- ❌ Peso 400 no body — é sempre 300 (estética premium)
-- ❌ Sombras pesadas ou gradientes roxos — a marca é preto + coral âmbar
-- ❌ SELECT * nas queries — sempre campos explícitos
-- ❌ Lógica de negócio nos componentes — vai em hooks/services
-- ❌ Expor erros internos ao usuário — mensagem genérica em pt-BR
+- ❌ Bordas retangulares em botões, sempre pill `border-radius: 50px`
+- ❌ Fundo `#000` ou `#0A0A0A`, o Nox é `#080808`
+- ❌ Peso 400 no body, é sempre 300 (estética premium)
+- ❌ Sombras pesadas ou gradientes roxos, a marca é preto + coral âmbar
+- ❌ SELECT * nas queries, sempre campos explícitos
+- ❌ Lógica de negócio nos componentes, vai em hooks/services
+- ❌ Expor erros internos ao usuário, mensagem genérica em pt-BR
 - ❌ Commitar `.env` com secrets
 
 ---

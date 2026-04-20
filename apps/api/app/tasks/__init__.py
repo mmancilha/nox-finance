@@ -1,1 +1,1 @@
-"""Celery tasks — heartbeats, sync bancário, categorização."""
+"""Celery tasks, heartbeats, sync bancário, categorização."""

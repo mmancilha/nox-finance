@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { DM_Sans } from 'next/font/google';
+
+import { Providers } from '@/components/providers';
+
 import './globals.css';
 
 const dmSans = DM_Sans({
@@ -38,7 +41,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR" className={`${dmSans.variable} scroll-smooth`}>
-      <body className="bg-nox-bg text-nox-txt antialiased">{children}</body>
+      <body className="bg-nox-bg text-nox-txt antialiased">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

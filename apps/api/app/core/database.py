@@ -27,6 +27,9 @@ SessionLocal = async_sessionmaker(
     autoflush=False,
 )
 
+# Alias semântico para Celery tasks (contexto fora do FastAPI)
+AsyncSessionLocal = SessionLocal
+
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """FastAPI dependency que injeta uma `AsyncSession` nos routers."""

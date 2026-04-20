@@ -11,9 +11,9 @@ from typing import Literal
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Raiz do monorepo (4 níveis acima deste arquivo):
-#   apps/api/app/core/config.py  →  raiz
-ROOT_DIR = Path(__file__).resolve().parents[3]
+# Raiz do monorepo (5 níveis acima deste arquivo):
+#   apps/api/app/core/config.py → core → app → api → apps → raiz
+ROOT_DIR = Path(__file__).resolve().parents[4]
 
 
 class Settings(BaseSettings):
@@ -63,9 +63,10 @@ class Settings(BaseSettings):
     )
 
     # ── Integrações externas ────────────────────────
-    pluggy_client_id: str | None = Field(default=None, alias="PLUGGY_CLIENT_ID")
-    pluggy_client_secret: str | None = Field(default=None, alias="PLUGGY_CLIENT_SECRET")
-    pluggy_webhook_secret: str | None = Field(default=None, alias="PLUGGY_WEBHOOK_SECRET")
+    pluggy_client_id: str = Field(..., alias="PLUGGY_CLIENT_ID")
+    pluggy_client_secret: str = Field(..., alias="PLUGGY_CLIENT_SECRET")
+    pluggy_webhook_secret: str = Field("", alias="PLUGGY_WEBHOOK_SECRET")
+    pluggy_base_url: str = "https://api.pluggy.ai"
 
     openai_api_key: str | None = Field(default=None, alias="OPENAI_API_KEY")
     openai_model_mini: str = Field(default="gpt-4o-mini", alias="OPENAI_MODEL_MINI")
@@ -100,4 +101,4 @@ class Settings(BaseSettings):
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
     """Instância única das settings. Cacheada porque lê do disco."""
-    return Settings()
+    return Settings()  # type: ignore[call-arg]  # pydantic-settings lê args do .env

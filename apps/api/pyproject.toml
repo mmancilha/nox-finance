@@ -51,6 +51,7 @@ ruff = "^0.8.4"
 black = "^24.10.0"
 mypy = "^1.14.0"
 aiosqlite = "^0.22.1"
+respx = "^0.23.1"
 
 [tool.poetry.scripts]
 dev = "scripts.dev:main"
@@ -88,7 +89,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["S101", "S106"]
+"tests/**/*.py" = ["S101", "S105", "S106"]
 "app/schemas/auth.py" = ["S105"]
 
 [tool.ruff.format]
@@ -120,6 +121,10 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "app.tasks.heartbeat"
+disable_error_code = ["untyped-decorator"]
+
+[[tool.mypy.overrides]]
+module = "app.tasks.sync_transactions"
 disable_error_code = ["untyped-decorator"]
 
 [tool.pytest.ini_options]

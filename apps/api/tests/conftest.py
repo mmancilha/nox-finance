@@ -13,6 +13,16 @@ from app.core.limiter import limiter as _limiter
 from app.main import app
 from app.models.base import Base
 
+# Transaction usa ARRAY(String) que é exclusivo do PostgreSQL.
+# BankAccount e Category são compatíveis com SQLite.
+_SQLITE_COMPATIBLE_TABLES = {
+    "users",
+    "sessions",
+    "onboarding_progress",
+    "bank_accounts",
+    "categories",
+}
+
 
 @pytest.fixture(autouse=True)
 def reset_limiter() -> Iterator[None]:
@@ -35,7 +45,14 @@ async def async_client() -> AsyncGenerator[AsyncClient, None]:
         await conn.commit()
 
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(
+            lambda c: Base.metadata.create_all(
+                c,
+                tables=[
+                    t for t in Base.metadata.sorted_tables if t.name in _SQLITE_COMPATIBLE_TABLES
+                ],
+            )
+        )
 
     test_session_factory = async_sessionmaker(
         engine,

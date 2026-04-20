@@ -82,7 +82,11 @@ export function OnboardingWizard() {
           {step === 4 ? <StepRisco data={data} onNext={(patch) => advance(5, patch)} /> : null}
 
           {step === 5 ? (
-            <StepConectarBanco onFinish={() => finish(false)} onSkip={() => finish(true)} />
+            <StepConectarBanco
+              accessToken={session?.accessToken ?? ''}
+              onFinish={() => finish(false)}
+              onSkip={() => finish(true)}
+            />
           ) : null}
         </div>
       </div>

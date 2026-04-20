@@ -18,8 +18,8 @@ celery_app = Celery(
     broker=settings.broker_url,
     backend=settings.result_backend,
     include=[
-        # Registre aqui os módulos de task criados no Sprint 3+
         "app.tasks.heartbeat",
+        "app.tasks.sync_transactions",
     ],
 )
 
@@ -56,3 +56,4 @@ celery_app.conf.beat_schedule = {
 
 # Carrega módulos de tasks na importação (pytest e smoke sem worker precisam dos nomes registrados).
 import_module("app.tasks.heartbeat")
+import_module("app.tasks.sync_transactions")

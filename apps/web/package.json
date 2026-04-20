@@ -2,7 +2,7 @@
   "name": "@nox/web",
   "version": "0.1.0",
   "private": true,
-  "description": "Frontend do Nox — Next.js 14 App Router.",
+  "description": "Frontend do Nox, Next.js 14 App Router.",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",

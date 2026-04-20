@@ -5,37 +5,37 @@ const faqItems: FaqItemData[] = [
   {
     question: 'O Nox é seguro? Preciso compartilhar minha senha do banco?',
     answer:
-      'Não, nunca. O Nox usa o Open Finance — protocolo regulamentado pelo Banco Central — que permite leitura das suas transações sem que você precise compartilhar nenhuma senha. É o mesmo nível de segurança que os apps dos próprios bancos usam.',
+      'Não, nunca. O Nox usa o Open Finance, protocolo regulamentado pelo Banco Central, que permite leitura das suas transações sem que você precise compartilhar nenhuma senha. É o mesmo nível de segurança que os apps dos próprios bancos usam.',
   },
   {
     question: 'O Nox consegue fazer transferências ou pagamentos?',
     answer:
-      'Não. O Nox tem acesso apenas de leitura às suas contas. Ele vê, analisa e te informa — mas não movimenta nenhum centavo. Isso é por design: separamos completamente a inteligência financeira da movimentação de dinheiro.',
+      'Não. O Nox tem acesso apenas de leitura às suas contas. Ele vê, analisa e te informa, mas não movimenta nenhum centavo. Isso é por design: separamos completamente a inteligência financeira da movimentação de dinheiro.',
   },
   {
     question: 'Quais bancos são compatíveis?',
     answer:
-      'Todos que aderiram ao Open Finance Brasil — incluindo Nubank, Itaú, Bradesco, Santander, Banco do Brasil, Caixa, C6 Bank, Inter, BTG, XP, e mais de 200 outras instituições. A lista cresce conforme o Banco Central expande o programa.',
+      'Todos que aderiram ao Open Finance Brasil, incluindo Nubank, Itaú, Bradesco, Santander, Banco do Brasil, Caixa, C6 Bank, Inter, BTG, XP, e mais de 200 outras instituições. A lista cresce conforme o Banco Central expande o programa.',
   },
   {
     question: 'Posso cancelar quando quiser?',
     answer:
-      'Sim, sem burocracia. Planos mensais cancelam no fim do mês vigente. Planos anuais têm garantia de 30 dias — se não gostar, devolvemos o valor integral. Você também pode pedir exclusão completa dos seus dados a qualquer momento.',
+      'Sim, sem burocracia. Planos mensais cancelam no fim do mês vigente. Planos anuais têm garantia de 30 dias, se não gostar, devolvemos o valor integral. Você também pode pedir exclusão completa dos seus dados a qualquer momento.',
   },
   {
     question: 'Como funciona a IA do Nox?',
     answer:
-      'A IA analisa seus padrões de gastos ao longo do tempo e gera insights personalizados — não genéricos. Ela identifica anomalias (cobranças duplicadas, gastos acima da média), projeta tendências e responde perguntas em linguagem natural. Quanto mais você usa, mais ela aprende sobre você.',
+      'A IA analisa seus padrões de gastos ao longo do tempo e gera insights personalizados, não genéricos. Ela identifica anomalias (cobranças duplicadas, gastos acima da média), projeta tendências e responde perguntas em linguagem natural. Quanto mais você usa, mais ela aprende sobre você.',
   },
   {
     question: 'Tem versão para desktop também?',
     answer:
-      'Sim! O Nox tem app mobile (iOS e Android) e versão web completa. Tudo sincronizado em tempo real. Você pode usar onde preferir — mas a maioria dos usuários acaba preferindo o mobile pela praticidade.',
+      'Sim! O Nox tem app mobile (iOS e Android) e versão web completa. Tudo sincronizado em tempo real. Você pode usar onde preferir, mas a maioria dos usuários acaba preferindo o mobile pela praticidade.',
   },
   {
     question: 'O plano grátis tem limite de uso?',
     answer:
-      'O plano Básico conecta 1 conta bancária e mantém histórico de 3 meses — para sempre, sem custo. Não tem limite de transações dentro dessa conta. Para múltiplas contas, histórico completo e IA avançada, você precisa do Pro ou Premium.',
+      'O plano Básico conecta 1 conta bancária e mantém histórico de 3 meses, para sempre, sem custo. Não tem limite de transações dentro dessa conta. Para múltiplas contas, histórico completo e IA avançada, você precisa do Pro ou Premium.',
   },
 ];
 
@@ -43,7 +43,7 @@ const steps = [
   {
     title: 'Conecte pelo Open Finance',
     description:
-      'Autorize suas instituições com o protocolo regulado pelo Banco Central. Sem compartilhar senha — só consentimento seguro.',
+      'Autorize suas instituições com o protocolo regulado pelo Banco Central. Sem compartilhar senha, só consentimento seguro.',
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="text-nox-accent h-10 w-10" aria-hidden>
         <rect x="8" y="14" width="32" height="24" rx="4" stroke="currentColor" strokeWidth="2" />
@@ -54,7 +54,7 @@ const steps = [
   {
     title: 'Eu organizo e monitoro 24h',
     description:
-      'Categorização automática dos gastos e detecção de padrões enquanto você vive — sem planilha e sem esforço manual.',
+      'Categorização automática dos gastos e detecção de padrões enquanto você vive, sem planilha e sem esforço manual.',
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="text-nox-accent h-10 w-10" aria-hidden>
         <circle cx="24" cy="24" r="14" stroke="currentColor" strokeWidth="2" />
@@ -91,7 +91,7 @@ const agents = [
     name: 'Oráculo',
     badge: 'Semanal · domingo 20h',
     description:
-      'Análise mensal, padrões de gastos e previsão do fechamento — o bastidor que antecipa o mês.',
+      'Análise mensal, padrões de gastos e previsão do fechamento, o bastidor que antecipa o mês.',
   },
   {
     name: 'Norte',
@@ -103,7 +103,7 @@ const agents = [
     name: 'Companheiro',
     badge: 'Sob demanda',
     description:
-      'Chat em linguagem natural para perguntas do dia a dia — direto, amigo e sempre em português.',
+      'Chat em linguagem natural para perguntas do dia a dia, direto, amigo e sempre em português.',
   },
 ] as const;
 
@@ -172,7 +172,7 @@ export default function MarketingHomePage() {
             Três passos. Zero fricção.
           </h2>
           <p className="text-body text-nox-txt2 mt-4 max-w-2xl font-light">
-            Do consentimento ao insight — tudo automático, no ritmo da sua vida.
+            Do consentimento ao insight, tudo automático, no ritmo da sua vida.
           </p>
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">

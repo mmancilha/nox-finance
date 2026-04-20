@@ -1,5 +1,5 @@
 /**
- * Formatadores pt-BR — use SEMPRE estes (.cursorrules).
+ * Formatadores pt-BR, use SEMPRE estes (.cursorrules).
  */
 
 export const formatBRL = (value: number): string =>

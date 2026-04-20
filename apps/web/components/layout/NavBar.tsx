@@ -12,9 +12,18 @@ export function NavBar() {
   return (
     <nav
       aria-label="Navegação principal"
-      style={{ background: 'var(--nav-bg)' }}
-      className="rounded-pill border-nox-border shadow-nav backdrop-blur-nav fixed left-1/2 top-5 z-50 flex w-[calc(100%-48px)] max-w-[780px] -translate-x-1/2 items-center justify-between gap-4 border px-6 py-3"
+      style={{
+        background:
+          'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 28%, rgba(12, 12, 12, 0.42) 72%, rgba(12, 12, 12, 0.32) 100%)',
+        boxShadow: '0 14px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.16)',
+      }}
+      className="rounded-pill backdrop-blur-nav backdrop-saturate-180 fixed left-1/2 top-5 isolate z-50 flex w-[calc(100%-48px)] max-w-[780px] -translate-x-1/2 items-center justify-between gap-4 overflow-hidden px-6 py-3"
     >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(130%_90%_at_4%_-30%,rgba(255,255,255,0.32)_0%,transparent_42%),radial-gradient(80%_100%_at_100%_0%,rgba(240,120,84,0.12)_0%,transparent_55%)]"
+      />
+
       <Link href="/" className="flex shrink-0 items-center gap-2">
         <svg
           width={18}

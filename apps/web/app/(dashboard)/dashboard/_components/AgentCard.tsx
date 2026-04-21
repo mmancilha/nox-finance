@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { formatDate } from '@/lib/format';
 
-import type { AgentInsightData } from '../page';
+import type { AgentInsightData } from '../types';
 
 interface AgentMeta {
   label: string;

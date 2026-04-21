@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AgentCard } from '../app/(dashboard)/dashboard/_components/AgentCard';
 import { CompanheiroChat } from '../app/(dashboard)/dashboard/_components/CompanheiroChat';
-import type { AgentInsightData } from '../app/(dashboard)/dashboard/page';
+import type { AgentInsightData } from '../app/(dashboard)/dashboard/types';
 
 // ── AgentCard ─────────────────────────────────────────────────────────────
 

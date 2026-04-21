@@ -1,5 +1,6 @@
 'use client';
 
+import { AnimatePresence, motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -64,6 +65,29 @@ export function OnboardingWizard() {
     router.refresh();
   };
 
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return <StepBemVindo onNext={() => advance(2)} />;
+      case 2:
+        return <StepPerfil data={data} onNext={(patch) => advance(3, patch)} />;
+      case 3:
+        return <StepMeta data={data} onNext={(patch) => advance(4, patch)} />;
+      case 4:
+        return <StepRisco data={data} onNext={(patch) => advance(5, patch)} />;
+      case 5:
+        return (
+          <StepConectarBanco
+            accessToken={session?.accessToken ?? ''}
+            onFinish={() => finish(false)}
+            onSkip={() => finish(true)}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="bg-nox-bg flex min-h-screen flex-col items-center justify-center px-4 py-10">
       <div className="flex w-full max-w-lg flex-col gap-8">
@@ -73,21 +97,17 @@ export function OnboardingWizard() {
           aria-busy={isFinishing}
           className="border-nox-border bg-nox-bg2 rounded-2xl border p-8"
         >
-          {step === 1 ? <StepBemVindo onNext={() => advance(2)} /> : null}
-
-          {step === 2 ? <StepPerfil data={data} onNext={(patch) => advance(3, patch)} /> : null}
-
-          {step === 3 ? <StepMeta data={data} onNext={(patch) => advance(4, patch)} /> : null}
-
-          {step === 4 ? <StepRisco data={data} onNext={(patch) => advance(5, patch)} /> : null}
-
-          {step === 5 ? (
-            <StepConectarBanco
-              accessToken={session?.accessToken ?? ''}
-              onFinish={() => finish(false)}
-              onSkip={() => finish(true)}
-            />
-          ) : null}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.28, 1] }}
+            >
+              {renderStep()}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>

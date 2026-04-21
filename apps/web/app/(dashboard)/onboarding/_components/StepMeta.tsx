@@ -11,6 +11,7 @@ const GOAL_OPTIONS = [
   { id: 'carro', emoji: '🚗', label: 'Comprar carro' },
   { id: 'viagem', emoji: '✈️', label: 'Viagem dos sonhos' },
   { id: 'reserva', emoji: '💰', label: 'Reserva de emergência' },
+  { id: 'outro', emoji: '✏️', label: 'Outro' },
 ] as const;
 
 type GoalId = (typeof GOAL_OPTIONS)[number]['id'];
@@ -26,9 +27,8 @@ const DEADLINE_OPTIONS = [
 type DeadlineValue = (typeof DEADLINE_OPTIONS)[number]['value'];
 
 const metaSchema = z.object({
-  goalId: z.enum(['imovel', 'carro', 'viagem', 'reserva'], {
-    message: 'Escolha um objetivo',
-  }),
+  goalId: z.enum(['imovel', 'carro', 'viagem', 'reserva', 'outro']),
+  goalDisplayText: z.string().trim().min(1, 'Descreva seu objetivo'),
   goalAmount: z.number({ message: 'Informe um valor' }).min(1, 'Informe um valor maior que zero'),
   goalDeadline: z.enum(['6m', '1y', '2y', '5y', 'none']),
 });
@@ -60,14 +60,28 @@ function deadlineToISO(value: DeadlineValue): string | undefined {
   return now.toISOString().split('T')[0];
 }
 
+function getDefaultGoalId(data: OnboardingData): GoalId {
+  if (!data.goalName) return 'imovel';
+  const byLabel = GOAL_OPTIONS.find((g) => g.label === data.goalName);
+  if (byLabel) return byLabel.id;
+  return 'outro';
+}
+
+function getDefaultGoalDisplayText(data: OnboardingData): string {
+  if (!data.goalName) {
+    return GOAL_OPTIONS.find((g) => g.id === 'imovel')!.label;
+  }
+  const byLabel = GOAL_OPTIONS.find((g) => g.label === data.goalName);
+  if (byLabel) return data.goalName;
+  return data.goalName;
+}
+
 interface StepMetaProps {
   data: OnboardingData;
   onNext: (d: Partial<OnboardingData>) => void;
 }
 
 export function StepMeta({ data, onNext }: StepMetaProps) {
-  const initialGoalId = GOAL_OPTIONS.find((g) => g.label === data.goalName)?.id;
-
   const {
     register,
     handleSubmit,
@@ -77,7 +91,8 @@ export function StepMeta({ data, onNext }: StepMetaProps) {
   } = useForm<MetaFormValues>({
     resolver: zodResolver(metaSchema),
     defaultValues: {
-      goalId: initialGoalId,
+      goalId: getDefaultGoalId(data),
+      goalDisplayText: getDefaultGoalDisplayText(data),
       goalAmount: data.goalAmount ?? 0,
       goalDeadline: '1y',
     },
@@ -90,9 +105,8 @@ export function StepMeta({ data, onNext }: StepMetaProps) {
     : brlFormatter.format(0);
 
   const onSubmit = (values: MetaFormValues) => {
-    const goalLabel = GOAL_OPTIONS.find((g) => g.id === values.goalId)?.label;
     onNext({
-      goalName: goalLabel,
+      goalName: values.goalDisplayText.trim(),
       goalAmount: values.goalAmount,
       goalDeadline: deadlineToISO(values.goalDeadline),
     });
@@ -116,7 +130,12 @@ export function StepMeta({ data, onNext }: StepMetaProps) {
               type="button"
               role="radio"
               aria-checked={isSelected}
-              onClick={() => setValue('goalId', goal.id, { shouldValidate: true })}
+              onClick={() => {
+                setValue('goalId', goal.id, { shouldValidate: true });
+                setValue('goalDisplayText', goal.id === 'outro' ? '' : goal.label, {
+                  shouldValidate: true,
+                });
+              }}
               className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${
                 isSelected
                   ? 'border-nox-accent bg-nox-bg3'
@@ -131,9 +150,23 @@ export function StepMeta({ data, onNext }: StepMetaProps) {
           );
         })}
       </div>
-      {errors.goalId ? (
-        <p className="text-caption text-nox-red -mt-2 text-center">{errors.goalId.message}</p>
-      ) : null}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="goalDisplayText" className="text-label text-nox-accent uppercase">
+          Descreva seu objetivo
+        </label>
+        <input
+          id="goalDisplayText"
+          type="text"
+          autoFocus={selectedGoalId === 'outro'}
+          placeholder={selectedGoalId === 'outro' ? 'Descreva seu objetivo...' : ''}
+          aria-invalid={!!errors.goalDisplayText}
+          className="border-nox-border bg-nox-bg text-body text-nox-txt placeholder:text-nox-txt3 focus:border-nox-accent focus:ring-nox-accent/40 mt-1 w-full rounded-xl border px-4 py-3 text-[14px] outline-none transition-colors focus:ring-2"
+          {...register('goalDisplayText')}
+        />
+        {errors.goalDisplayText ? (
+          <p className="text-caption text-nox-red">{errors.goalDisplayText.message}</p>
+        ) : null}
+      </div>
 
       <div className="flex flex-col gap-2">
         <label htmlFor="goalAmount" className="text-label text-nox-accent uppercase">

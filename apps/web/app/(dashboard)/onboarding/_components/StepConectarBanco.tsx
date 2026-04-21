@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { BANKS } from '../_data/bankLogos';
 import type {
   PluggyConnectConstructor,
   PluggyConnectInstance,
@@ -24,14 +25,6 @@ type ConnectionState =
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 const PLUGGY_CONNECT_CDN = 'https://cdn.pluggy.ai/pluggy-connect/v2/pluggy-connect.min.js';
-
-const SUPPORTED_BANKS = [
-  { emoji: '🟣', name: 'Nubank' },
-  { emoji: '🔵', name: 'Itaú' },
-  { emoji: '🔴', name: 'Santander' },
-  { emoji: '🟡', name: 'Bradesco' },
-  { emoji: '⬛', name: 'Banco do Brasil' },
-] as const;
 
 async function loadPluggyConnectFromCdn(): Promise<PluggyConnectConstructor> {
   if (typeof window === 'undefined') {
@@ -149,17 +142,6 @@ export function StepConectarBanco({ accessToken, onFinish, onSkip }: StepConecta
   const isLoading =
     state.status === 'loading' || state.status === 'connecting' || state.status === 'saving';
 
-  const primaryLabel =
-    state.status === 'loading'
-      ? 'Preparando conexão...'
-      : state.status === 'connecting'
-        ? 'Aguardando...'
-        : state.status === 'saving'
-          ? 'Salvando contas...'
-          : state.status === 'error'
-            ? 'Tentar novamente'
-            : 'Conectar meu banco';
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2 text-center">
@@ -175,21 +157,22 @@ export function StepConectarBanco({ accessToken, onFinish, onSkip }: StepConecta
       </div>
 
       {!isSuccess ? (
-        <div className="border-nox-border bg-nox-bg3 flex flex-col items-center gap-3 rounded-xl border p-4">
-          <ul className="text-caption text-nox-txt2 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-            {SUPPORTED_BANKS.map((bank, idx) => (
-              <li key={bank.name} className="flex items-center gap-2">
-                <span aria-hidden="true">{bank.emoji}</span>
-                <span>{bank.name}</span>
-                {idx < SUPPORTED_BANKS.length - 1 ? (
-                  <span aria-hidden="true" className="text-nox-txt3">
-                    ·
-                  </span>
-                ) : null}
-              </li>
+        <div className="flex flex-col gap-3">
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+            {BANKS.map((bank) => (
+              <button
+                key={bank.id}
+                type="button"
+                onClick={() => void handleConnect()}
+                disabled={isLoading}
+                className="bg-nox-bg2 border-nox-border hover:border-nox-accent flex flex-col items-center gap-2 rounded-xl border p-3 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {bank.logo}
+                <span className="text-nox-txt3 text-[11px]">{bank.name}</span>
+              </button>
             ))}
-          </ul>
-          <p className="text-caption text-nox-txt3">e mais de 200 instituições</p>
+          </div>
+          <p className="text-caption text-nox-txt3 text-center">e mais de 200 instituições</p>
         </div>
       ) : null}
 
@@ -204,20 +187,22 @@ export function StepConectarBanco({ accessToken, onFinish, onSkip }: StepConecta
 
       {!isSuccess ? (
         <div className="flex flex-col gap-3">
-          <button
-            type="button"
-            onClick={handleConnect}
-            disabled={isLoading}
-            className="rounded-pill bg-nox-accent text-nox-bg inline-flex items-center justify-center gap-2 px-6 py-3 text-[15px] font-medium transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {state.status === 'loading' ? (
-              <span
-                aria-hidden="true"
-                className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-              />
-            ) : null}
-            {primaryLabel}
-          </button>
+          {state.status === 'error' ? (
+            <button
+              type="button"
+              onClick={() => void handleConnect()}
+              disabled={isLoading}
+              className="rounded-pill bg-nox-accent text-nox-bg inline-flex items-center justify-center gap-2 px-6 py-3 text-[15px] font-medium transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isLoading ? (
+                <span
+                  aria-hidden="true"
+                  className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                />
+              ) : null}
+              Tentar novamente
+            </button>
+          ) : null}
 
           <button
             type="button"

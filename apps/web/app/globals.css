@@ -56,3 +56,28 @@
     @apply text-label uppercase text-nox-accent;
   }
 }
+
+/* Onboarding — orbs de gradiente coral (decoração, animação leve) */
+@keyframes nox-orb-1 {
+  0% {
+    transform: translate(0%, 0%) scale(1);
+  }
+  50% {
+    transform: translate(8%, -12%) scale(1.15);
+  }
+  100% {
+    transform: translate(0%, 0%) scale(1);
+  }
+}
+
+@keyframes nox-orb-2 {
+  0% {
+    transform: translate(0%, 0%) scale(1);
+  }
+  50% {
+    transform: translate(-10%, 8%) scale(1.1);
+  }
+  100% {
+    transform: translate(0%, 0%) scale(1);
+  }
+}

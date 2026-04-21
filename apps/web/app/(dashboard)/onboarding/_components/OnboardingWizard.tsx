@@ -89,25 +89,60 @@ export function OnboardingWizard() {
   };
 
   return (
-    <div className="bg-nox-bg flex min-h-screen flex-col items-center justify-center px-4 py-10">
-      <div className="flex w-full max-w-lg flex-col gap-8">
-        <OnboardingProgress currentStep={step} totalSteps={TOTAL_STEPS} />
+    <div className="bg-nox-bg relative min-h-screen overflow-hidden">
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '-15%',
+          right: '-10%',
+          width: '55vw',
+          height: '55vw',
+          maxWidth: 600,
+          maxHeight: 600,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(240,120,84,0.18) 0%, transparent 70%)',
+          animation: 'nox-orb-1 14s ease-in-out infinite',
+          pointerEvents: 'none',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: '-20%',
+          left: '-15%',
+          width: '50vw',
+          height: '50vw',
+          maxWidth: 520,
+          maxHeight: 520,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(240,120,84,0.10) 0%, transparent 70%)',
+          animation: 'nox-orb-2 18s ease-in-out infinite',
+          pointerEvents: 'none',
+        }}
+      />
 
-        <div
-          aria-busy={isFinishing}
-          className="border-nox-border bg-nox-bg2 rounded-2xl border p-8"
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.28, 1] }}
-            >
-              {renderStep()}
-            </motion.div>
-          </AnimatePresence>
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-10">
+        <div className="flex w-full max-w-lg flex-col gap-8">
+          <OnboardingProgress currentStep={step} totalSteps={TOTAL_STEPS} />
+
+          <div
+            aria-busy={isFinishing}
+            className="border-nox-border bg-nox-bg2 rounded-2xl border p-8"
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2, ease: [0.22, 1, 0.28, 1] }}
+              >
+                {renderStep()}
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>

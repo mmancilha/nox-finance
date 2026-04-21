@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation';
 
 import { auth } from '@/auth';
 import { greetingFromHour } from '@/lib/format';
+import type { BankTransactionApi, NormalizedTransaction } from '@/lib/normalizeBankTransaction';
+import { normalizeBankTransaction } from '@/lib/normalizeBankTransaction';
 
 // ── tipos ──────────────────────────────────────────────────────────────────
 interface BankAccount {
@@ -10,15 +12,6 @@ interface BankAccount {
   institution_name: string | null;
   account_type: string | null;
   balance: number;
-}
-
-interface Transaction {
-  id: string;
-  description: string;
-  amount: number;
-  type: 'DEBIT' | 'CREDIT';
-  category_name: string | null;
-  date: string;
 }
 
 interface AgentInsight {
@@ -37,22 +30,30 @@ async function fetchAccounts(token: string): Promise<BankAccount[]> {
       next: { revalidate: 60 },
     });
     if (!res.ok) return [];
-    const data = (await res.json()) as { accounts: BankAccount[] };
-    return data.accounts;
+    const raw = (await res.json()) as BankAccount[] | { accounts: BankAccount[] };
+    const list = Array.isArray(raw) ? raw : (raw.accounts ?? []);
+    return list.map((a) => ({
+      ...a,
+      balance: typeof a.balance === 'string' ? parseFloat(a.balance) : Number(a.balance),
+    }));
   } catch {
     return [];
   }
 }
 
-async function fetchRecentTransactions(token: string, accountId: string): Promise<Transaction[]> {
+async function fetchRecentTransactions(
+  token: string,
+  accountId: string,
+): Promise<NormalizedTransaction[]> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/banks/accounts/${accountId}/transactions?limit=5`,
       { headers: { Authorization: `Bearer ${token}` }, next: { revalidate: 60 } },
     );
     if (!res.ok) return [];
-    const data = (await res.json()) as { transactions: Transaction[] };
-    return data.transactions;
+    const raw = (await res.json()) as { transactions: unknown[]; total?: number } | unknown[];
+    const rows = Array.isArray(raw) ? raw : (raw.transactions ?? []);
+    return rows.map((row) => normalizeBankTransaction(row as BankTransactionApi));
   } catch {
     return [];
   }

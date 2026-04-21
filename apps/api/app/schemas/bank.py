@@ -40,3 +40,10 @@ class TransactionResponse(BaseModel):
     type: str
     is_recurring: bool
     tags: list[str]
+
+
+class TransactionsListResponse(BaseModel):
+    """Lista paginada de transações."""
+
+    transactions: list[TransactionResponse]
+    total: int

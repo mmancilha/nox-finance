@@ -33,6 +33,7 @@ async def bank_client(fake_user: User) -> AsyncGenerator[AsyncClient, None]:
     result_mock = MagicMock()
     result_mock.scalars.return_value.all.return_value = []
     result_mock.scalar_one_or_none.return_value = None
+    result_mock.scalar_one.return_value = 0  # COUNT(*) em list_transactions
 
     session = AsyncMock(spec=AsyncSession)
     session.execute = AsyncMock(return_value=result_mock)
@@ -79,11 +80,11 @@ async def test_list_accounts_empty(bank_client: AsyncClient) -> None:
 
 
 async def test_list_transactions_empty(bank_client: AsyncClient) -> None:
-    """GET /banks/accounts/{id}/transactions retorna lista vazia."""
+    """GET /banks/accounts/{id}/transactions retorna lista vazia e total 0."""
     account_id = uuid.uuid4()
     resp = await bank_client.get(f"/banks/accounts/{account_id}/transactions")
     assert resp.status_code == 200
-    assert resp.json() == []
+    assert resp.json() == {"transactions": [], "total": 0}
 
 
 async def test_trigger_sync_not_found(bank_client: AsyncClient) -> None:

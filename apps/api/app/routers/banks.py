@@ -7,7 +7,7 @@ resolver as anotações em tempo de execução para injeção de dependências.
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -15,7 +15,12 @@ from app.core.deps import get_current_user
 from app.models.bank_account import BankAccount
 from app.models.transaction import Transaction
 from app.models.user import User
-from app.schemas.bank import BankAccountResponse, ConnectTokenResponse, TransactionResponse
+from app.schemas.bank import (
+    BankAccountResponse,
+    ConnectTokenResponse,
+    TransactionResponse,
+    TransactionsListResponse,
+)
 from app.services.bank_service import bank_service
 from app.services.pluggy_service import pluggy_service
 from app.tasks.sync_transactions import sync_account
@@ -72,7 +77,7 @@ async def list_accounts(
 
 @router.get(
     "/accounts/{account_id}/transactions",
-    response_model=list[TransactionResponse],
+    response_model=TransactionsListResponse,
 )
 async def list_transactions(
     account_id: uuid.UUID,
@@ -80,19 +85,24 @@ async def list_transactions(
     offset: int = Query(default=0, ge=0),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-) -> list[TransactionResponse]:
+) -> TransactionsListResponse:
     """Lista transações de uma conta com paginação."""
+    filters = (
+        Transaction.bank_account_id == account_id,
+        Transaction.user_id == current_user.id,
+    )
+    count_result = await db.execute(select(func.count()).select_from(Transaction).where(*filters))
+    total = int(count_result.scalar_one() or 0)
+
     result = await db.execute(
         select(Transaction)
-        .where(
-            Transaction.bank_account_id == account_id,
-            Transaction.user_id == current_user.id,
-        )
+        .where(*filters)
         .order_by(Transaction.transaction_date.desc())
         .limit(limit)
         .offset(offset)
     )
-    return [TransactionResponse.model_validate(t) for t in result.scalars().all()]
+    rows = [TransactionResponse.model_validate(t) for t in result.scalars().all()]
+    return TransactionsListResponse(transactions=rows, total=total)
 
 
 @router.post("/accounts/{account_id}/sync", status_code=status.HTTP_202_ACCEPTED)

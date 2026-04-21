@@ -36,16 +36,16 @@ Você está desenvolvendo o **Nox**, um assistente financeiro inteligente brasil
 - Acento da marca = `#F07854`, sempre em CTAs primários e brand elements
 - Verde/vermelho SÓ para receita/gasto (semântica), nunca decorativo
 
-### Tipografia, DM Sans (via Google Fonts)
+### Tipografia, Plus Jakarta Sans (via Google Fonts)
 
 ```typescript
 // app/layout.tsx
-import { DM_Sans } from 'next/font/google'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 
-const dmSans = DM_Sans({
+const jakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '700', '800'],
-  variable: '--font-dm-sans'
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-sans'
 })
 ```
 
@@ -92,9 +92,9 @@ theme: {
         border2: '#161616'
       }
     },
-    fontFamily: {
-      sans: ['var(--font-dm-sans)', 'system-ui', 'sans-serif']
-    },
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif']
+      },
     borderRadius: {
       pill: '50px'
     }
@@ -308,7 +308,7 @@ core/       → config, db, security, encryption
 - ❌ Chamadas Pluggy/OpenAI no request do usuário, use Celery
 - ❌ `any` no TypeScript
 - ❌ Cores hardcoded, sempre via tokens `--bg`, `--accent`, etc.
-- ❌ Fontes diferentes de DM Sans
+- ❌ Fontes diferentes de Plus Jakarta Sans
 - ❌ Bordas retangulares em botões, sempre pill `border-radius: 50px`
 - ❌ Fundo `#000` ou `#0A0A0A`, o Nox é `#080808`
 - ❌ Peso 400 no body, é sempre 300 (estética premium)

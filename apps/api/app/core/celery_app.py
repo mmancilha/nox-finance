@@ -18,8 +18,9 @@ celery_app = Celery(
     broker=settings.broker_url,
     backend=settings.result_backend,
     include=[
-        # Registre aqui os módulos de task criados no Sprint 3+
         "app.tasks.heartbeat",
+        "app.tasks.sync_transactions",
+        "app.tasks.agents",
     ],
 )
 
@@ -42,17 +43,18 @@ celery_app.conf.update(
 )
 
 # ── Beat schedule ────────────────────────────────────────
-# Sprint 4: substituir as tasks dummy pelos heartbeats reais dos agentes.
 celery_app.conf.beat_schedule = {
     "oraculo-weekly-sunday-20h": {
-        "task": "app.tasks.heartbeat.heartbeat_oraculo_weekly",
+        "task": "app.tasks.agents.run_oraculo_all_users",
         "schedule": crontab(hour=20, minute=0, day_of_week=0),
     },
     "norte-daily-8h": {
-        "task": "app.tasks.heartbeat.heartbeat_norte_daily",
+        "task": "app.tasks.agents.run_norte_all_users",
         "schedule": crontab(hour=8, minute=0),
     },
 }
 
 # Carrega módulos de tasks na importação (pytest e smoke sem worker precisam dos nomes registrados).
 import_module("app.tasks.heartbeat")
+import_module("app.tasks.sync_transactions")
+import_module("app.tasks.agents")

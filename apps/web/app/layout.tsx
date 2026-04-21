@@ -8,7 +8,7 @@ import './globals.css';
 const dmSans = DM_Sans({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700', '800'],
-  variable: '--font-dm-sans',
+  variable: '--font-sans',
   display: 'swap',
 });
 

@@ -18,7 +18,7 @@ from app import __version__
 from app.core.config import get_settings
 from app.core.limiter import limiter
 from app.core.logging import configure_logging, get_logger
-from app.routers import auth, health
+from app.routers import agents, auth, banks, health, webhooks
 
 configure_logging()
 log = get_logger(__name__)
@@ -61,6 +61,9 @@ app.add_middleware(
 
 app.include_router(health.router)
 app.include_router(auth.router)
+app.include_router(banks.router)
+app.include_router(webhooks.router)
+app.include_router(agents.router)
 
 
 @app.get("/", tags=["root"])

@@ -8,4 +8,5 @@ export interface OnboardingData {
   goalDeadline?: string;
   riskProfile?: RiskProfile;
   skipBankConnection?: boolean;
+  bankConnected?: boolean;
 }

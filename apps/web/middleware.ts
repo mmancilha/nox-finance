@@ -18,12 +18,20 @@ export default auth((req) => {
   }
 
   if (isLoggedIn && AUTH_ONLY_PATHS.has(pathname)) {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
+    return NextResponse.redirect(new URL('/dashboard/visao-geral', req.url));
   }
 
   return NextResponse.next();
 });
 
+/** Dashboard/onboarding: proteção + abas. /entrar e /cadastro: redirect se já logado. */
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$).*)'],
+  matcher: [
+    '/dashboard',
+    '/dashboard/:path*',
+    '/onboarding',
+    '/onboarding/:path*',
+    '/entrar',
+    '/cadastro',
+  ],
 };

@@ -1,5 +1,7 @@
 import { FaqAccordion, type FaqItemData } from '@/components/marketing/FaqAccordion';
 import { Button } from '@/components/ui/Button';
+import { cn } from '@/lib/cn';
+import { MARKETING_LEAD, MARKETING_SECTION_EYEBROW } from '@/lib/marketingTypography';
 
 const faqItems: FaqItemData[] = [
   {
@@ -111,26 +113,20 @@ export default function MarketingHomePage() {
   return (
     <main className="bg-nox-bg text-nox-txt">
       {/* Hero */}
-      <section className="relative overflow-hidden px-6 pb-20 pt-32 md:pb-28 md:pt-40">
+      <section className="relative overflow-hidden px-6 pb-10 pt-32 md:pb-12 md:pt-40">
         <div aria-hidden className="bg-hero-glow pointer-events-none absolute inset-0" />
-        <div className="relative z-[1] mx-auto max-w-4xl text-center">
-          <div className="rounded-pill mb-7 inline-flex items-center gap-2 border border-[color:var(--accent-soft-border)] bg-[color:var(--accent-soft-bg)] px-3.5 py-1.5">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="bg-nox-accent absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" />
-              <span className="bg-nox-accent relative inline-flex h-1.5 w-1.5 rounded-full" />
-            </span>
-            <span className="text-label text-nox-accent uppercase">
-              Agentes financeiros autônomos
-            </span>
-          </div>
-
-          <h1 className="text-h1 text-nox-txt md:text-hero font-extrabold tracking-tight">
-            Enquanto você dorme,
-            <br />
-            eu cuido do seu dinheiro.
+        <div className="relative z-[1] mx-auto w-full max-w-5xl text-center">
+          <h1 className="text-h1 text-nox-txt md:text-hero mx-auto w-fit max-w-full break-words font-extrabold leading-[0.95] tracking-[-0.04em]">
+            <span className="block">Enquanto você dorme,</span>
+            <span className="block">eu cuido do seu dinheiro.</span>
           </h1>
 
-          <p className="text-body text-nox-txt2 mx-auto mt-8 max-w-xl font-light">
+          <p
+            className={cn(
+              'text-nox-txt2 mx-auto mt-8 max-w-2xl md:mt-10 md:max-w-3xl',
+              MARKETING_LEAD,
+            )}
+          >
             Conecta suas contas, entendo seus padrões e te aviso antes do problema aparecer. Sem
             planilha, sem esforço.
           </p>
@@ -139,43 +135,32 @@ export default function MarketingHomePage() {
             <Button href="/cadastro" variant="primary" size="lg">
               Começar agora
             </Button>
-            <Button href="#como-funciona" variant="ghost" size="lg">
+            <Button href="/#como-funciona" variant="ghost" size="lg">
               Ver como funciona
             </Button>
-          </div>
-
-          <div className="mt-14 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-            <div className="flex -space-x-2">
-              <span className="border-nox-bg bg-nox-accent inline-block h-8 w-8 rounded-full border-2" />
-              <span className="border-nox-bg bg-nox-txt inline-block h-8 w-8 rounded-full border-2" />
-              <span className="border-nox-bg bg-nox-txt2 inline-block h-8 w-8 rounded-full border-2" />
-              <span className="border-nox-bg bg-nox-txt3 inline-block h-8 w-8 rounded-full border-2" />
-            </div>
-            <div className="text-center sm:text-left">
-              <p className="text-caption text-nox-accent tracking-wider">★★★★★</p>
-              <p className="text-caption text-nox-txt3">
-                Mais de 2.400 usuários já conectaram seus bancos
-              </p>
-            </div>
           </div>
         </div>
       </section>
 
       {/* Como funciona */}
-      <section
-        id="como-funciona"
-        className="border-nox-border2 scroll-mt-24 border-t px-6 py-20 md:py-28"
-      >
+      <section id="como-funciona" className="scroll-mt-24 px-6 pb-20 pt-10 md:pb-28 md:pt-12">
         <div className="mx-auto max-w-6xl">
-          <span className="text-label text-nox-accent mb-4 block uppercase">Como funciona</span>
-          <h2 className="text-h2 text-nox-txt font-extrabold tracking-tight">
-            Três passos. Zero fricção.
-          </h2>
-          <p className="text-body text-nox-txt2 mt-4 max-w-2xl font-light">
-            Do consentimento ao insight, tudo automático, no ritmo da sua vida.
-          </p>
+          <div className="relative z-[1] mx-auto w-full max-w-5xl text-center">
+            <span className={cn(MARKETING_SECTION_EYEBROW, 'mb-4 block')}>Como funciona</span>
+            <h2 className="text-h2 text-nox-txt mx-auto w-fit max-w-full text-balance font-extrabold tracking-tight">
+              Três passos. Zero fricção.
+            </h2>
+            <p
+              className={cn(
+                'text-nox-txt2 mx-auto mt-4 max-w-2xl md:mt-5 md:max-w-3xl',
+                MARKETING_LEAD,
+              )}
+            >
+              Do consentimento ao insight, tudo automático, no ritmo da sua vida.
+            </p>
+          </div>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-14 grid grid-cols-1 gap-6 md:mt-16 md:grid-cols-3">
             {steps.map((step) => (
               <article
                 key={step.title}
@@ -191,17 +176,16 @@ export default function MarketingHomePage() {
       </section>
 
       {/* Agentes */}
-      <section
-        id="agentes"
-        className="border-nox-border2 scroll-mt-24 border-t px-6 py-20 md:py-28"
-      >
+      <section id="agentes" className="scroll-mt-24 px-6 py-20 md:py-28">
         <div className="mx-auto max-w-6xl">
-          <span className="text-label text-nox-accent mb-4 block uppercase">Os 4 agentes</span>
-          <h2 className="text-h2 text-nox-txt font-extrabold tracking-tight">
-            Um time trabalhando enquanto você descansa.
-          </h2>
+          <div className="relative z-[1] mx-auto w-full max-w-5xl text-center">
+            <span className={cn(MARKETING_SECTION_EYEBROW, 'mb-4 block')}>Os 4 agentes</span>
+            <h2 className="text-h2 text-nox-txt mx-auto w-fit max-w-full text-balance font-extrabold tracking-tight">
+              Um time trabalhando enquanto você descansa.
+            </h2>
+          </div>
 
-          <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 md:mt-16">
             {agents.map((agent) => (
               <article
                 key={agent.name}
@@ -221,14 +205,16 @@ export default function MarketingHomePage() {
       </section>
 
       {/* Preços */}
-      <section id="precos" className="border-nox-border2 scroll-mt-24 border-t px-6 py-20 md:py-28">
+      <section id="precos" className="scroll-mt-24 px-6 py-20 md:py-28">
         <div className="mx-auto max-w-6xl">
-          <span className="text-label text-nox-accent mb-4 block uppercase">Preços</span>
-          <h2 className="text-h2 text-nox-txt font-extrabold tracking-tight">
-            Simples. Transparente. Sem surpresa na fatura.
-          </h2>
+          <div className="relative z-[1] mx-auto w-full max-w-5xl text-center">
+            <span className={cn(MARKETING_SECTION_EYEBROW, 'mb-4 block')}>Preços</span>
+            <h2 className="text-h2 text-nox-txt mx-auto w-fit max-w-full text-balance font-extrabold tracking-tight">
+              Simples. Transparente. Sem surpresa na fatura.
+            </h2>
+          </div>
 
-          <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="mt-14 grid grid-cols-1 gap-6 md:mt-16 lg:grid-cols-3">
             {/* Grátis */}
             <article className="border-nox-border2 bg-nox-bg2 flex flex-col rounded-2xl border p-8">
               <p className="text-label text-nox-txt3 uppercase">Grátis</p>
@@ -313,7 +299,7 @@ export default function MarketingHomePage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="border-nox-border2 scroll-mt-24 border-t px-6 py-20 md:py-28">
+      <section id="faq" className="scroll-mt-24 px-6 py-20 md:py-28">
         <div className="mx-auto max-w-3xl">
           <div className="rounded-pill text-label text-nox-accent mb-6 inline-flex items-center gap-2 border border-[color:var(--accent-soft-border)] bg-[color:var(--accent-soft-bg)] px-3.5 py-1.5 uppercase">
             FAQ

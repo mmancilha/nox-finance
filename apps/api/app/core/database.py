@@ -1,6 +1,7 @@
 """SQLAlchemy 2.0 async engine + session factory."""
 
 from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -27,6 +28,9 @@ SessionLocal = async_sessionmaker(
     autoflush=False,
 )
 
+# Alias semântico para Celery tasks (contexto fora do FastAPI)
+AsyncSessionLocal = SessionLocal
+
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """FastAPI dependency que injeta uma `AsyncSession` nos routers."""
@@ -38,3 +42,10 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             raise
         finally:
             await session.close()
+
+
+@asynccontextmanager
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+    """Context manager para uso fora do FastAPI (Celery tasks, scripts)."""
+    async with SessionLocal() as session:
+        yield session

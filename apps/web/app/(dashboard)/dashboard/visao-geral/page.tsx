@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { auth } from '@/auth';
 import { greetingFromHour } from '@/lib/format';
+import { CompanheiroFloat } from '../_components/CompanheiroFloat';
 import type { BankTransactionApi, NormalizedTransaction } from '@/lib/normalizeBankTransaction';
 import { normalizeBankTransaction } from '@/lib/normalizeBankTransaction';
 
@@ -235,6 +236,8 @@ export default async function VisaoGeralPage() {
           )}
         </div>
       </div>
+
+      <CompanheiroFloat accessToken={session.accessToken} />
     </main>
   );
 }

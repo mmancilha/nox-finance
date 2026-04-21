@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { auth } from '@/auth';
 
+import { CompanheiroFloat } from '../_components/CompanheiroFloat';
 import { TransacoesClient } from './_components/TransacoesClient';
 
 interface BankAccount {
@@ -37,6 +38,8 @@ export default async function TransacoesPage() {
         <h1 className="mb-6 text-[24px] font-extrabold tracking-[-0.02em]">Transações</h1>
         <TransacoesClient accountId={account?.id ?? null} accessToken={session.accessToken} />
       </div>
+
+      <CompanheiroFloat accessToken={session.accessToken} />
     </main>
   );
 }

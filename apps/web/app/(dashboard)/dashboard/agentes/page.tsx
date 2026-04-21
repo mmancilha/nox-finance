@@ -7,6 +7,8 @@ import { AgentCard } from '../_components/AgentCard';
 import { CompanheiroChat } from '../_components/CompanheiroChat';
 import type { AgentInsightData } from '../types';
 
+export type { AgentInsightData };
+
 const AGENT_META = {
   sentinela: { label: 'Sentinela', icon: '🔰', description: 'Vigilância em tempo real' },
   oraculo: { label: 'Oráculo', icon: '🔮', description: 'Análise semanal' },
@@ -29,17 +31,15 @@ async function fetchInsights(accessToken: string): Promise<AgentInsightData[]> {
 export default async function AgentesPage() {
   const session = await auth();
   if (!session) redirect('/entrar');
-
-  const firstName =
-    session.user.name?.split(' ')[0] ?? session.user.email?.split('@')[0] ?? 'por aí';
+  if (!session.accessToken) redirect('/entrar');
 
   const hour = new Date().getHours();
   const greeting = greetingFromHour(hour);
+  const firstName =
+    session.user.name?.split(' ')[0] ?? session.user.email?.split('@')[0] ?? 'por aí';
 
   const allInsights = await fetchInsights(session.accessToken);
-
   const agentTypes = ['sentinela', 'oraculo', 'norte'] as const;
-
   const latestByAgent = agentTypes.map((type) => ({
     type,
     insight: allInsights.find((i) => i.agent_type === type) ?? null,
@@ -51,7 +51,7 @@ export default async function AgentesPage() {
         <p className="text-nox-accent mb-1 text-[11px] font-medium uppercase tracking-widest">
           {greeting}
         </p>
-        <h1 className="text-[36px] font-extrabold leading-tight tracking-[-0.03em]">
+        <h1 className="text-[30px] font-extrabold leading-tight tracking-[-0.03em]">
           {firstName} 👋
         </h1>
       </div>
